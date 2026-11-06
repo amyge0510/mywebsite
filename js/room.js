@@ -28,7 +28,7 @@
   const PLAT_W = { x: TT.cx + (PLAT.x - TT.cx) * TT.s, y: DY + TT.cy + (PLAT.y - DY - TT.cy) * TT.s };
   const LAMP = { x: 1130, base: 620, drop: 44 };     // drop = how much shorter than before
   const LAMP_GLOW = { x: 1130, y: 490 + DY + LAMP.drop };
-  const BOARD = { x: 30, y: 170, w: 452, h: 350 };
+  const BOARD = { x: 36, y: 150, w: 360, h: 470 };
   const SLEEVE = 104;                                // record sleeve size in the rack
 
   const projects = SITE.projects;
@@ -437,7 +437,7 @@
 
   // a red iPod-shaped floor mirror leaning against the wall
   function ipodMirror() {
-    const w = 132, h = 262, x = 1404, b = 946, k = 1.32;
+    const w = 132, h = 262, x = 1412, b = CAB.bot - 2, k = 1.22;   // back against the wall, base in line with the cabinet
     const red = lin([[0, "#e2333a"], [0.5, "#c41c26"], [1, "#8e0e18"]], 0, 0, 1, 0);
     const sx = 12, sy = 14, sw = w - 24, sh = 122;
     return `<g class="ipod" transform="translate(${x} ${b}) scale(${k})">
@@ -654,9 +654,9 @@
     return lines;
   }
   function renderNotes() {
-    $("#notes").innerHTML = S.notes.slice(0, 7).map((n, i) => {
+    $("#notes").innerHTML = S.notes.slice(0, 8).map((n, i) => {
       const h = hash(n.id), col = NOTE_COLS[h % NOTE_COLS.length];
-      const x = BOARD.x + 32 + (i % 4) * 104, y = BOARD.y + 88 + Math.floor(i / 4) * 106;
+      const x = BOARD.x + 30 + (i % 3) * 104, y = BOARD.y + 88 + Math.floor(i / 3) * 106;
       const rot = ((h >> 4) % 9) - 4;
       return `<g class="hot note" data-hot="note" data-i="${i}" transform="translate(${x} ${y}) rotate(${rot} 42 36) scale(.92)">
         <g class="lift">
