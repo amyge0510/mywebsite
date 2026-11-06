@@ -24,7 +24,7 @@ window.SITE = {
       year: "2026", tags: ["web", "design"],
       blurb: "Describe what you built, why, and what you learned. Edit me in js/data.js.",
       url: null,
-      cover: { image: "assets/covers/project-01.jpg", label: "PROJECT 01",
+      cover: { image: "assets/covers/project-01.jpg",
                palette: { bg: "#2b3a67", a: "#f4a259", b: "#e76f51", c: "#ffe8a3", ink: "#fff4e0" } }
     },
     {

@@ -52,8 +52,6 @@ body.lamp-off .sun { opacity: .15; }
 .beanbag .squish { transform-box: fill-box; transform-origin: 50% 100%; }
 .beanbag.wobble .squish { animation: squish .7s ease-out; }
 @keyframes squish { 20% { transform: scale(1.03, .96) rotate(-1.2deg); } 45% { transform: scale(.985, 1.02) rotate(.9deg); } 70% { transform: scale(1.01, .99) rotate(-.4deg); } }
-body.lamp-off .sunset { opacity: .55; }
-.sunset { transition: opacity .6s ease; }
 
 /* records in the rack */
 .rec .lift { transition: transform .28s cubic-bezier(.2, .8, .3, 1.3); }

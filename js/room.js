@@ -508,11 +508,7 @@
         <rect x="-1400" y="-900" width="4400" height="2600" fill="${rad([[0, "#ff8434", 0.3], [1, "#ff8434", 0]], 1530, 300, 420, true)}"/>
       </g>
       <rect x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="#ec9660" opacity=".74"/>
-      <rect x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="${rad([[0, "#ffffff", 0], [0.22, "#e8a87a", 0.38], [0.55, "#5a2410", 0.78], [1, "#080201", 0.98]], 920, 620, 1150, true)}"/>
-      <g class="sunset" style="mix-blend-mode:screen">
-        <rect x="-1400" y="-900" width="4400" height="2600" fill="${rad([[0, "#ff8a3a", 0.5], [0.35, "#e8642a", 0.22], [1, "#c84a1a", 0]], -120, 330, 760, true)}"/>
-        <ellipse cx="200" cy="${FLOOR + 60}" rx="300" ry="70" fill="#ff9a4a" opacity=".22" filter="url(#blur30)"/>
-      </g>
+      <rect x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="${rad([[0, "#ffffff", 0], [0.22, "#e8a87a", 0.36], [0.55, "#5a2410", 0.72], [1, "#080201", 0.94]], 860, 620, 1180, true)}"/>
       <rect class="night" x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="${rad([[0, "#6a5a8a"], [0.5, "#3e3458"], [1, "#1e1830"]], 300, 200, 1700, true)}"/>`;
   }
 
