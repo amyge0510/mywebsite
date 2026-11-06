@@ -136,13 +136,12 @@
     let speck = "";
     for (let i = 0; i < 330; i++) speck += `<circle cx="${b.x + 12 + r() * (b.w - 24)}" cy="${b.y + 12 + r() * (b.h - 24)}" r="${0.6 + r() * 1.3}" fill="${r() < 0.5 ? "#8e5f36" : "#d8aa74"}" opacity=".7"/>`;
     const deco = `
-      <g transform="translate(${b.x + b.w - 150} ${b.y + b.h - 150}) rotate(5)">
-        <rect x="3" y="5" width="128" height="122" fill="#1e0e05" opacity=".45" filter="url(#blur4)"/>
-        <rect width="128" height="122" fill="#fbf7ef"/>
-        <image href="assets/img/us.jpg" x="8" y="8" width="112" height="84" preserveAspectRatio="xMidYMid slice"/>
-        <rect x="8" y="8" width="112" height="84" fill="none" stroke="#000" stroke-opacity=".15"/>
-        <text x="64" y="112" text-anchor="middle" font-family="Caveat, cursive" font-size="17" fill="#5a4a40">A &amp; C ♡</text>
-        <circle cx="64" cy="5" r="5" fill="#3a7bd5"/><circle cx="62.5" cy="3.5" r="1.6" fill="#fff" opacity=".7"/>
+      <g transform="translate(${b.x + b.w - 168} ${b.y + b.h - 128}) rotate(4)">
+        <rect x="3" y="5" width="140" height="84" fill="#1e0e05" opacity=".45" filter="url(#blur4)"/>
+        <rect width="140" height="84" fill="#fbf8f2"/>
+        <image href="assets/img/us.jpg" x="7" y="7" width="126" height="70" preserveAspectRatio="xMidYMid slice"/>
+        <rect x="7" y="7" width="126" height="70" fill="none" stroke="#000" stroke-opacity=".12"/>
+        <circle cx="70" cy="4" r="5" fill="#3a7bd5"/><circle cx="68.5" cy="2.5" r="1.6" fill="#fff" opacity=".7"/>
       </g>
       <g transform="translate(${b.x + 34} ${b.y + b.h - 78}) rotate(-8) scale(.9)">
         <rect x="2" y="4" width="96" height="40" fill="#1e0e05" opacity=".3" filter="url(#blur4)"/>
@@ -216,7 +215,7 @@
       out.push({
         k, x, i: album ? o : null,
         cover: album ? music[o].cover : { motif: fillers[k % fillers.length], palette: pals[k % pals.length] },
-        vinyl: r() < 0.5, lean: -7 - r() * 6
+        vinyl: false, lean: -7 - r() * 6
       });
     });
     return out;
@@ -436,6 +435,65 @@
     };
   }
 
+  // a red iPod-shaped floor mirror leaning against the wall
+  function ipodMirror() {
+    const w = 132, h = 262, x = 1430, b = 946;
+    const red = lin([[0, "#e2333a"], [0.5, "#c41c26"], [1, "#8e0e18"]], 0, 0, 1, 0);
+    const sx = 12, sy = 14, sw = w - 24, sh = 122;
+    return `<g class="ipod" transform="translate(${x} ${b}) rotate(-3)">
+      <ellipse cx="${w / 2 + 8}" cy="0" rx="${w * 0.62}" ry="9" fill="#000" opacity=".6" filter="url(#blur6)"/>
+      <rect x="${-6}" y="${-h + 14}" width="${w}" height="${h - 8}" rx="12" fill="#1e0e05" opacity=".5" filter="url(#blur10)"/>
+      <g transform="translate(0 ${-h})">
+        <rect width="${w}" height="${h}" rx="11" fill="${red}"/>
+        <rect x="${w - 8}" y="6" width="6" height="${h - 12}" rx="3" fill="#6e0a12" opacity=".55"/>
+        <rect x="3" y="3" width="${w - 6}" height="3" rx="1.5" fill="#ff8a8a" opacity=".45"/>
+        <rect x="${sx - 2}" y="${sy - 2}" width="${sw + 4}" height="${sh + 4}" rx="3" fill="#2a0a0c"/>
+        <rect x="${sx}" y="${sy}" width="${sw}" height="${sh}" fill="${lin([[0, "#8c6a58"], [0.45, "#4e3428"], [1, "#2a1a14"]])}"/>
+        <!-- what the mirror catches: warm window light and the lamp glow -->
+        <path d="M${sx + 10} ${sy} L${sx + 34} ${sy} L${sx + 4} ${sy + sh} L${sx - 20} ${sy + sh} Z" fill="#ffd2a0" opacity=".35" filter="url(#blur4)"/>
+        <ellipse cx="${sx + sw * 0.25}" cy="${sy + sh * 0.7}" rx="26" ry="18" fill="#ff9a50" opacity=".35" filter="url(#blur8)"/>
+        <rect x="${sx}" y="${sy}" width="${sw}" height="${sh}" fill="${lin([[0, "#fff", 0.22], [0.4, "#fff", 0], [0.8, "#fff", 0.06], [1, "#fff", 0]], 0, 0, 1, 1)}"/>
+        <text x="${sx + sw / 2}" y="${sy + 10}" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-size="6.4" fill="#f4efe8">Now Living</text>
+        <path d="M${sx + sw - 22} ${sy + 5} l4 2.6 l-4 2.6 Z" fill="#f4efe8"/>
+        <rect x="${sx + sw - 14}" y="${sy + 5}" width="9" height="5" rx="1" fill="none" stroke="#f4efe8" stroke-width=".7"/><rect x="${sx + sw - 13}" y="${sy + 6}" width="5" height="3" fill="#f4efe8"/>
+        <text x="${sx + sw / 2}" y="${sy + sh - 22}" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-weight="700" font-size="8" fill="#f4efe8">Find</text>
+        <text x="${sx + sw / 2}" y="${sy + sh - 13}" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-size="6.2" fill="#f4efe8">Yourself</text>
+        <rect x="${sx + 12}" y="${sy + sh - 8}" width="${sw - 24}" height="3.4" rx="1" fill="none" stroke="#f4efe8" stroke-width=".7"/>
+        <rect x="${sx + 12.5}" y="${sy + sh - 7.5}" width="${(sw - 25) * 0.36}" height="2.4" fill="#f4efe8"/>
+        <!-- click wheel -->
+        <g transform="translate(${w / 2} ${sy + sh + 66})">
+          <circle r="47" fill="${rad([[0, "#ffffff"], [0.8, "#f1ede6"], [1, "#d6d0c6"]], 0.4, 0.35, 0.7)}"/>
+          <circle r="20" fill="${red}"/>
+          <circle r="20" fill="none" stroke="#8e0e18" stroke-opacity=".35" stroke-width="1.5"/>
+          <text y="-31" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-weight="700" font-size="7.4" fill="#5a5450">MENU</text>
+          <path d="M-36 -3 v6 M-35 0 l5 -3 v6 Z M-30 0 l5 -3 v6 Z" fill="#3a3634" stroke="#3a3634" stroke-width=".8"/>
+          <path d="M36 -3 v6 M35 0 l-5 -3 v6 Z M30 0 l-5 -3 v6 Z" fill="#3a3634" stroke="#3a3634" stroke-width=".8"/>
+          <path d="M-6 30 l6 3.6 l-6 3.6 Z" fill="#3a3634"/><rect x="2" y="30" width="1.8" height="7.2" fill="#3a3634"/><rect x="5" y="30" width="1.8" height="7.2" fill="#3a3634"/>
+        </g>
+      </g>
+    </g>`;
+  }
+
+  // a slim bar sconce above the bulletin board, washing light down over it
+  function barSconce() {
+    const cx = BOARD.x + BOARD.w / 2, y = BOARD.y - 30, half = 150;
+    const bronze = lin([[0, "#5a4636"], [0.5, "#2e241c"], [1, "#1a140e"]]);
+    return {
+      fixture: `<g class="sconce">
+        <rect x="${cx - 20}" y="${y - 22}" width="40" height="15" rx="1.5" fill="${bronze}"/>
+        <rect x="${cx - 4}" y="${y - 8}" width="8" height="9" fill="#241c16"/>
+        <rect x="${cx - half + 6}" y="${y + 5}" width="${half * 2}" height="9" fill="#000" opacity=".35" filter="url(#blur4)"/>
+        <rect x="${cx - half}" y="${y}" width="${half * 2}" height="8" rx="1.5" fill="${bronze}"/>
+        <rect x="${cx - half}" y="${y}" width="${half * 2}" height="1.5" fill="#8a7058" opacity=".7"/>
+      </g>`,
+      glow: `<g class="sconce-glow" style="mix-blend-mode:screen">
+        <path d="M${cx - half} ${y + 8} L${cx + half} ${y + 8} L${cx + half + 30} ${y + 190} L${cx - half - 30} ${y + 190} Z" fill="${lin([[0, "#ffc27e", 0.26], [0.45, "#ffa860", 0.07], [1, "#ffa860", 0]])}" filter="url(#blur14)"/>
+        <path d="M${cx - half + 10} ${y} L${cx + half - 10} ${y} L${cx + half - 40} ${y - 70} L${cx - half + 40} ${y - 70} Z" fill="${lin([[0, "#ffb070", 0], [1, "#ffc888", 0.2]])}" filter="url(#blur14)"/>
+        <rect x="${cx - half + 2}" y="${y + 7}" width="${half * 2 - 4}" height="1.4" fill="#ffe8c4" opacity=".75"/>
+      </g>`
+    };
+  }
+
   /* ---------------- lighting ---------------- */
   function lighting() {
     const L = LAMP_GLOW;
@@ -460,13 +518,14 @@
   REC_SHADE = lin([[0, "#fff", 0.12], [0.5, "#000", 0.05], [1, "#000", 0.42]], 0, 0, 1, 0.4);
   const NOTE_SHEEN = lin([[0, "#fff", 0.35], [1, "#000", 0.1]], 0, 0, 1, 1);
   const vinyls = music.map((m) => vinylMarkup(m, "spin"));
-  const donut = donutLamp();
+  const donut = donutLamp(), sconce = barSconce();
 
   const body = `
     ${wall()}
     ${donut.wall}
     ${sunlight()}
     ${board()}
+    ${sconce.fixture}
     ${Array.from({ length: Math.min(SITE.wallSlots, 8) }, (_, i) => record(i)).join("")}
     ${floor()}
     ${rug()}
@@ -479,11 +538,13 @@
     </g>
     <g id="curtains" pointer-events="none"></g>
     ${beanbag()}
+    ${ipodMirror()}
     <g id="flydisc" opacity="0"></g>
     <g id="overlay" pointer-events="none">${lighting()}</g>
     <g id="emissive" pointer-events="none">
       ${lampEmissive()}
       ${donut.emit}
+      ${sconce.glow}
       <g id="fx"></g>
     </g>`;
 
