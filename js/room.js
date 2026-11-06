@@ -1129,6 +1129,25 @@
     const link = document.getElementById("project-link");
     if (p.url) { link.href = p.url; link.classList.remove("disabled"); link.textContent = "open project →"; }
     else { link.removeAttribute("href"); link.classList.add("disabled"); link.textContent = "full project page coming soon"; }
+    // a custom two-page design for the inside of the sleeve, if the project has one
+    gate.classList.toggle("spread", !!p.spread);
+    if (p.spread) {
+      const abs = (u) => `url("${new URL(u, location.href).href}")`;   // resolve against the page, not the stylesheet
+      gate.style.setProperty("--sp-left", abs(p.spread.left));
+      gate.style.setProperty("--sp-right", abs(p.spread.right));
+      const links = p.links || {};
+      [["sp-gh", links.github], ["sp-web", links.site], ["sp-link", p.url]].forEach(([id, href]) => {
+        const a = document.getElementById(id);
+        if (href) { a.href = href; a.target = "_blank"; a.rel = "noopener"; a.classList.remove("off"); } else { a.removeAttribute("href"); a.classList.add("off"); }
+      });
+    }
+    // a demo video on the right page, if the project has one
+    const video = document.getElementById("sp-video");
+    video.pause();
+    video.hidden = !(p.spread && p.video);
+    if (p.spread && p.video) {
+      if (video.getAttribute("src") !== p.video.src) { video.src = p.video.src; video.poster = p.video.poster || ""; }
+    } else video.removeAttribute("src");
     gate.classList.remove("opened");
     openModal("project-modal");
     clearTimeout(gateT);
@@ -1136,6 +1155,7 @@
     AE.sfx("thump");
   }
   function closeProject() {
+    document.getElementById("sp-video").pause();
     gate.classList.remove("opened");
     clearTimeout(gateT);
     gateT = setTimeout(() => { const m = document.getElementById("project-modal"); m.classList.remove("open"); m.setAttribute("aria-hidden", "true"); }, 520);
