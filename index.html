@@ -10,7 +10,7 @@
   <meta name="description" content="A cozy little room: the records on the wall are my projects.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Special+Elite&family=Yellowtail&family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Special+Elite&family=Yellowtail&family=Satisfy&family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -83,10 +83,13 @@
       <div class="pad" id="pad">
         <div class="pad-depth"></div>
         <form class="pad-page" id="note-form" autocomplete="off">
-          <label class="pad-name"><span>NAME</span><input name="name" maxlength="24" aria-label="Your name"></label>
+          <label class="pad-name"><span>NAME</span><input name="name" maxlength="24" aria-label="Your name" spellcheck="false" data-gramm="false"></label>
           <h2 class="pad-hey">Hey there!</h2>
           <p class="pad-sub">THANKS FOR VISITING</p>
-          <textarea name="message" maxlength="140" rows="6" aria-label="Your note" required></textarea>
+          <div class="pad-lower">
+            <textarea name="message" maxlength="140" rows="6" aria-label="Your note" required spellcheck="false" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"></textarea>
+            <p class="pad-hint">let me know what to build next, or just leave a note :)</p>
+          </div>
         </form>
         <div class="pad-flip f3"></div>
         <div class="pad-flip f2"></div>

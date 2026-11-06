@@ -28,7 +28,7 @@ window.Cat = (() => {
 
   function sit() {
     return `<g class="pose pose-sit">
-      <ellipse cx="0" cy="0" rx="120" ry="10" fill="#000" opacity=".35"/>
+      <ellipse cx="8" cy="2" rx="140" ry="20" fill="#000" opacity=".45" filter="url(#blur14)"/><ellipse cx="0" cy="0" rx="110" ry="9" fill="#120804" opacity=".6" filter="url(#blur4)"/>
       <g class="c-tail"><path d="M50 -26 C100 -16 132 -40 140 -84 L150 -86 L142 -96 C146 -120 140 -150 124 -172 L128 -186 L116 -180 L112 -192 L108 -178 C112 -160 112 -144 106 -128 C96 -96 80 -70 46 -58 Z" fill="${O}"/>
         ${line("M120 -150 Q126 -130 122 -112", 1.4)}${line("M132 -96 Q130 -78 120 -64", 1.4)}</g>
       <path d="M-74 -118 C-112 -86 -122 -24 -104 0 L104 0 C122 -24 112 -86 74 -118 Z" fill="${O}"/>
@@ -43,7 +43,7 @@ window.Cat = (() => {
 
   function sleep() {
     return `<g class="pose pose-sleep">
-      <ellipse cx="0" cy="0" rx="130" ry="10" fill="#000" opacity=".35"/>
+      <ellipse cx="8" cy="2" rx="150" ry="20" fill="#000" opacity=".45" filter="url(#blur14)"/><ellipse cx="0" cy="0" rx="120" ry="9" fill="#120804" opacity=".6" filter="url(#blur4)"/>
       <g class="c-breathe">
         <path d="M-112 -6 C-124 -56 -80 -100 -10 -100 C60 -100 104 -74 108 -40 C110 -14 96 -2 80 0 L-100 0 C-108 -1 -112 -3 -112 -6 Z" fill="${O}"/>
         ${line("M-74 -10 C-84 -50 -54 -78 -18 -72", 1.5)}${line("M-20 -96 Q10 -92 34 -86", 1.3)}${line("M40 -80 Q56 -70 64 -58", 1.3)}
@@ -63,7 +63,7 @@ window.Cat = (() => {
       <path d="M-12 0 C-13 26 -11 52 -11 66 C-11 73 11 73 11 66 C11 52 13 26 12 0 Z" fill="${far ? O2 : O}"/>
       ${line("M-6 71 V66 M0 72 V66 M6 71 V66", 1.2)}</g></g>`;
     return `<g class="pose pose-walk">
-      <ellipse cx="10" cy="0" rx="130" ry="10" fill="#000" opacity=".35"/>
+      <ellipse cx="18" cy="2" rx="148" ry="20" fill="#000" opacity=".45" filter="url(#blur14)"/><ellipse cx="10" cy="0" rx="118" ry="9" fill="#120804" opacity=".6" filter="url(#blur4)"/>
       <g class="c-bob">
         <g class="c-wtail"><path d="M-62 -106 C-108 -106 -150 -140 -140 -196 L-150 -206 L-136 -206 L-134 -218 L-124 -206 C-116 -200 -118 -186 -120 -176 C-126 -144 -98 -116 -60 -90 Z" fill="${O}"/>
           ${line("M-132 -170 Q-136 -150 -128 -134", 1.3)}</g>
