@@ -15,10 +15,10 @@
   const clipShape = (shapes) => A.clip(shapes);
 
   /* ---------------- layout ---------------- */
-  const COVER = 135, GAP = 60;                      // 10% smaller records, to make room for the lightbox
+  const COVER = 122, GAP = 62;                      // 10% smaller records, to make room for the lightbox
   const COLS = [0, 1, 2, 3].map((i) => 900 - (4 * COVER + 3 * GAP) / 2 + i * (COVER + GAP));
-  const ROWS = [176, 372];
-  const SIGN = { x0: 640, x1: 1160, y0: 44, y1: 128 };
+  const ROWS = [190, 378];
+  const SIGN = { x0: 720, x1: 1080, y0: 82, y1: 142 };
   const CAB = { x0: 560, x1: 1240, top: 730, k: 0.1 };
   CAB.bot = (FLOOR - VP.y * CAB.k) / (1 - CAB.k);
   const CUBL = { x0: 580, x1: 896, y0: CAB.top + 28, y1: CAB.bot - 24 };
@@ -372,7 +372,6 @@
     const grille = (x) => `<rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="#cfcac4"/><rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="url(#grille)"/>
       <rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="none" stroke="#000" stroke-opacity=".25"/>`;
     return `<g class="hot beckon" data-hot="turntable" transform="translate(${TT.cx} ${TT.cy}) scale(${TT.s}) translate(${-TT.cx} ${-TT.cy})">
-      <rect class="tt-halo" x="${fl - 26}" y="${tl[1] - 34}" width="${fr - fl + 52}" height="${fb - tl[1] + 46}" rx="26" fill="#ffc06a" filter="url(#blur14)"/>
       <ellipse cx="${(fl + fr) / 2 - 6}" cy="${fb + 2}" rx="${(fr - fl) / 2 + 20}" ry="7" fill="#000" opacity=".6" filter="url(#blur4)"/>
       <!-- lid when it's raised (behind the deck); points are animated -->
       <g id="lid-back">${lidShapes(velvet, chrome)}</g>
@@ -499,8 +498,8 @@
         <rect x="${cx - half}" y="${y}" width="${half * 2}" height="1.5" fill="#8a7058" opacity=".7"/>
       </g>`,
       glow: `<g class="sconce-glow" style="mix-blend-mode:screen">
-        <path d="M${cx - half} ${y + 8} L${cx + half} ${y + 8} L${cx + half + 70} ${y + 200} L${cx - half - 70} ${y + 200} Z" fill="${lin([[0, "#ff9a40", 0.34], [0.45, "#ff7e2a", 0.09], [1, "#ff7e2a", 0]])}" filter="url(#blur14)"/>
-        <path d="M${cx - half + 10} ${y} L${cx + half - 10} ${y} L${cx + half - 40} ${y - 70} L${cx - half + 40} ${y - 70} Z" fill="${lin([[0, "#ff9a40", 0], [1, "#ffae5a", 0.22]])}" filter="url(#blur14)"/>
+        <ellipse cx="${cx}" cy="${y + 70}" rx="${half + 110}" ry="130" fill="${rad([[0, "#ffa04a", 0.3], [0.5, "#ff8a36", 0.12], [1, "#ff8a36", 0]], 0.5, 0.12, 0.62, false, 0.5, 0.02)}" filter="url(#blur14)"/>
+        <ellipse cx="${cx}" cy="${y + 14}" rx="${half + 10}" ry="16" fill="#ffb460" opacity=".22" filter="url(#blur10)"/>
         <rect x="${cx - half + 2}" y="${y + 5}" width="${half * 2 - 4}" height="1.4" fill="#ffc27a" opacity=".85"/>
       </g>`
     };
@@ -508,21 +507,20 @@
 
   // a glowing "PROJECTS" lightbox above the record wall
   function lightbox() {
-    const { x0, x1, y0, y1 } = SIGN, d = 14;
+    const { x0, x1, y0, y1 } = SIGN, d = 10;
     const sideR = [[x1, y0], [x1 + d * 0.5, y0 + d * 0.6], [x1 + d * 0.5, y1 + d * 0.6], [x1, y1]];
     const bottom = [[x0, y1], [x1, y1], [x1 + d * 0.5, y1 + d * 0.6], [x0 + d * 0.5, y1 + d * 0.6]];
     return {
       body: `<g class="lightbox">
-        <rect x="${x0 + 14}" y="${y0 + 22}" width="${x1 - x0}" height="${y1 - y0}" fill="#1e0e05" opacity=".45" filter="url(#blur14)"/>
+        <rect x="${x0 + 8}" y="${y0 + 12}" width="${x1 - x0}" height="${y1 - y0}" fill="#1e0e05" opacity=".4" filter="url(#blur8)"/>
         ${poly(sideR, lin([[0, "#d8d0c4"], [1, "#a89e90"]], 0, 0, 1, 0))}
         ${poly(bottom, "#b8ae9e")}
         <rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="2" fill="#f2ece0"/>
       </g>`,
       glow: `<g class="lightbox-glow">
-        <rect x="${x0 - 30}" y="${y0 - 26}" width="${x1 - x0 + 60}" height="${y1 - y0 + 70}" rx="30" fill="#ffe8c0" opacity=".28" filter="url(#blur30)"/>
         <rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="2" fill="${lin([[0, "#fffdf6"], [0.55, "#fff5e2"], [1, "#f6e6c8"]])}"/>
         <rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="2" fill="none" stroke="#e6d8c0" stroke-width="1.5"/>
-        <text x="${(x0 + x1) / 2}" y="${(y0 + y1) / 2 + 20}" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="58" letter-spacing="3" fill="#c8202a">PROJECTS</text>
+        <text x="${(x0 + x1) / 2}" y="${(y0 + y1) / 2 + 14}" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="40" letter-spacing="2.4" fill="#c8202a">PROJECTS</text>
         <rect x="${x0}" y="${y1 - 3}" width="${x1 - x0}" height="3" fill="#fff" opacity=".7"/>
       </g>`
     };
@@ -591,6 +589,13 @@
     <pattern id="grille" width="3" height="3" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".7" fill="#7a746e"/></pattern>
     <pattern id="velvet-nap" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="2" r=".6" fill="#fff" opacity=".07"/><circle cx="4" cy="5" r=".6" fill="#000" opacity=".12"/></pattern>
     <pattern id="cam-mesh" width="2.4" height="2.4" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".6" fill="#3a2a10" opacity=".8"/></pattern>
+    <filter id="outline-glow" x="-15%" y="-30%" width="130%" height="160%">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="2.4" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="2" result="b"/>
+      <feFlood flood-color="#fff0c8"><animate attributeName="flood-opacity" values=".3;1;.3" dur="1.8s" repeatCount="indefinite"/></feFlood>
+      <feComposite in2="b" operator="in" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
     <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="b"/>
       <feFlood flood-color="#ffc47e" flood-opacity=".9"/><feComposite in2="b" operator="in" result="g"/>
