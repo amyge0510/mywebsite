@@ -226,6 +226,25 @@ button:disabled { opacity: .6; cursor: wait; }
 .gf-back .sub { margin: 0 0 4px; color: var(--muted); }
 .gf-back #project-blurb { line-height: 1.5; margin: 4px 0 8px; font-size: 15px; }
 .gf-back .btn { align-self: flex-start; margin-top: auto; }
+/* projects with their own sleeve design */
+.gf-spread-links { display: none; }
+.gatefold.spread .gf-pocket { background: var(--sp-right) center / cover, #f4e8ec; }
+.gatefold.spread .gf-pocket::after { display: none; }
+.gatefold.spread .gf-back { background: var(--sp-left) center / cover, #f4e8ec; padding: 0; box-shadow: inset -14px 0 24px -16px rgba(60, 20, 40, .35); }
+.gatefold.spread .gf-back > :not(#project-blurb) { display: none; }
+.gatefold.spread #project-blurb {
+  /* written on the ruled lines, starting below the torn plaid strip and clear of the camera */
+  position: absolute; left: 20%; right: 9%; top: 59%; margin: 0; padding: 0;
+  font: calc(var(--S) * .036)/calc(var(--S) * .0672) "Special Elite", "Courier New", monospace; color: #3a2630;
+  max-height: calc(var(--S) * .0672 * 4); overflow: hidden;
+}
+.gatefold.spread .gf-spread-links { display: block; position: absolute; inset: 0; z-index: 2; }
+.gf-spread-links a { position: absolute; border-radius: 50%; cursor: pointer; transition: transform .2s, filter .2s; }
+.gf-spread-links a.off { cursor: default; pointer-events: none; }
+.gf-spread-links a:not(.off):hover { filter: drop-shadow(0 0 6px rgba(240, 80, 150, .8)); transform: scale(1.08); }
+.sp-gh { left: 8.2%; top: 88.4%; width: 5.6%; height: 5.6%; }
+.sp-web { left: 14.5%; top: 88.4%; width: 5.6%; height: 5.6%; }
+.sp-link { left: 64%; top: 74%; width: 31%; height: 22%; border-radius: 30%; }
 .gatefold .x { position: absolute; top: -16px; right: -16px; z-index: 3; box-shadow: var(--shadow); }
 @media (max-width: 640px) { .gatefold { --S: 44vw; } .gf-back #project-blurb { font-size: 12px; } .gf-label { font-size: 15px; } }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }

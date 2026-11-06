@@ -1129,6 +1129,18 @@
     const link = document.getElementById("project-link");
     if (p.url) { link.href = p.url; link.classList.remove("disabled"); link.textContent = "open project →"; }
     else { link.removeAttribute("href"); link.classList.add("disabled"); link.textContent = "full project page coming soon"; }
+    // a custom two-page design for the inside of the sleeve, if the project has one
+    gate.classList.toggle("spread", !!p.spread);
+    if (p.spread) {
+      const abs = (u) => `url("${new URL(u, location.href).href}")`;   // resolve against the page, not the stylesheet
+      gate.style.setProperty("--sp-left", abs(p.spread.left));
+      gate.style.setProperty("--sp-right", abs(p.spread.right));
+      const links = p.links || {};
+      [["sp-gh", links.github], ["sp-web", links.site], ["sp-link", p.url]].forEach(([id, href]) => {
+        const a = document.getElementById(id);
+        if (href) { a.href = href; a.classList.remove("off"); } else { a.removeAttribute("href"); a.classList.add("off"); }
+      });
+    }
     gate.classList.remove("opened");
     openModal("project-modal");
     clearTimeout(gateT);

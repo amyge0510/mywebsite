@@ -20,10 +20,14 @@ window.SITE = {
      url:   set this when the project page exists (e.g. "projects/01.html") */
   projects: [
     {
-      id: "project-01", title: "Project 01", subtitle: "a short tagline",
+      id: "project-01", title: "Cher's Closet", subtitle: "a short tagline",
       year: "2026", tags: ["web", "design"],
       blurb: "Describe what you built, why, and what you learned. Edit me in js/data.js.",
       url: null,
+      /* the inside of the sleeve: a two-page design (left page holds the blurb on its lines);
+         github / site fill in the two round icons on the right page, url fills in "link" */
+      spread: { left: "assets/spreads/clueless-left.jpg", right: "assets/spreads/clueless-right.jpg" },
+      links: { github: null, site: null },
       cover: { image: "assets/covers/project-01.jpg",
                palette: { bg: "#2b3a67", a: "#f4a259", b: "#e76f51", c: "#ffe8a3", ink: "#fff4e0" } }
     },
