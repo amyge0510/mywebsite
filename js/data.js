@@ -28,6 +28,8 @@ window.SITE = {
          github / site fill in the two round icons on the right page, url fills in "link" */
       spread: { left: "assets/spreads/clueless-left.jpg", right: "assets/spreads/clueless-right.jpg" },
       links: { github: "https://github.com/amyge0510/cher-closet", site: "https://cher-closet.vercel.app/" },
+      /* a demo video at the top of the right page (poster: the still before it plays) */
+      video: { src: "assets/video/chers-closet.mp4", poster: "assets/video/chers-closet-poster.jpg" },
       cover: { image: "assets/covers/project-01.jpg",
                palette: { bg: "#2b3a67", a: "#f4a259", b: "#e76f51", c: "#ffe8a3", ink: "#fff4e0" } }
     },

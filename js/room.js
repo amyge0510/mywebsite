@@ -1141,6 +1141,13 @@
         if (href) { a.href = href; a.target = "_blank"; a.rel = "noopener"; a.classList.remove("off"); } else { a.removeAttribute("href"); a.classList.add("off"); }
       });
     }
+    // a demo video on the right page, if the project has one
+    const video = document.getElementById("sp-video");
+    video.pause();
+    video.hidden = !(p.spread && p.video);
+    if (p.spread && p.video) {
+      if (video.getAttribute("src") !== p.video.src) { video.src = p.video.src; video.poster = p.video.poster || ""; }
+    } else video.removeAttribute("src");
     gate.classList.remove("opened");
     openModal("project-modal");
     clearTimeout(gateT);
@@ -1148,6 +1155,7 @@
     AE.sfx("thump");
   }
   function closeProject() {
+    document.getElementById("sp-video").pause();
     gate.classList.remove("opened");
     clearTimeout(gateT);
     gateT = setTimeout(() => { const m = document.getElementById("project-modal"); m.classList.remove("open"); m.setAttribute("aria-hidden", "true"); }, 520);
