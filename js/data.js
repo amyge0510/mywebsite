@@ -84,6 +84,12 @@ window.SITE = {
     { id: "little-lion-man", title: "Little Lion Man", artist: "Mumford & Sons",
       cover: "assets/covers/sigh-no-more.jpg", spotify: "37jCwWbb32w46aS5pKZZbe" },
     { id: "doo-wops", title: "Doo-Wops & Hooligans", artist: "Bruno Mars",
-      cover: "assets/covers/doo-wops.jpg", spotify: "3w3y8KPTfNeOKPiqUTakBh" }
+      cover: "assets/covers/doo-wops.jpg", spotify: "3w3y8KPTfNeOKPiqUTakBh" },
+    { id: "a-bar-song", title: "A Bar Song (Tipsy)", artist: "Shaboozey",
+      cover: "assets/covers/a-bar-song.jpg", spotify: "5fZJQrFKWQLb7FpJXZ1g7K" },
+    { id: "jazz-is-for-ordinary-people", title: "Jazz Is for Ordinary People", artist: "berlioz",
+      cover: "assets/covers/jazz-is-for-ordinary-people.jpg", spotify: "06SYfhYSo9iY3txHE6W9Dl" },
+    { id: "her-eyes", title: "her eyes", artist: "",
+      cover: "assets/covers/her-eyes.jpg", spotify: "2JCZkX4VIhV0SvCvqtreS1" }
   ]
 };

@@ -200,7 +200,7 @@
   /* records standing in a wavy chrome rack (left cubby) */
   const RACK = (() => {
     const r = rng(77), out = [];
-    const order = [0, "f", "f", 1, "f", 2, "f", "f", 3, "f", 4, "f"];
+    const order = [0, 1, 2, "f", 3, 4, 5, "f", 6, 7];
     const fillers = ["sunset", "bauhaus", "dots", "waves", "planet", "flower", "face"];
     const pals = [
       { bg: "#1d2a3a", a: "#e8a25a", b: "#c0563a", c: "#f6e3b0", ink: "#fff" },
@@ -212,7 +212,7 @@
     let x = CUBL.x0 + 18;
     order.forEach((o, k) => {
       const album = o !== "f";
-      if (k > 0) x += album ? 30 : 11 + r() * 4;   // albums get a wider gap so more of their cover shows
+      if (k > 0) x += album ? 26 : 12 + r() * 3;   // albums get a wider gap so more of their cover shows
       out.push({
         k, x, i: album ? o : null,
         cover: album ? music[o].cover : { motif: fillers[k % fillers.length], palette: pals[k % pals.length] },
@@ -1001,7 +1001,7 @@
   }
   function hud(m) {
     if (!m) return hudEl.classList.remove("show");
-    hudEl.querySelector(".title").textContent = `${m.title} — ${m.artist}`;
+    hudEl.querySelector(".title").textContent = m.artist ? `${m.title} — ${m.artist}` : m.title;
     hudEl.classList.add("show");
   }
   hudEl.querySelector("button").addEventListener("click", returnDisc);
@@ -1080,7 +1080,7 @@
 
   const nav = document.getElementById("a11y-nav");
   nav.innerHTML = "<h2>Projects</h2>" + projects.map((p, i) => `<button data-p="${i}">${esc(p.title)}</button>`).join("") +
-    "<h2>Music</h2>" + music.map((m, i) => `<button data-m="${i}">Play ${esc(m.title)} by ${esc(m.artist)}</button>`).join("") +
+    "<h2>Music</h2>" + music.map((m, i) => `<button data-m="${i}">Play ${esc(m.title)}${m.artist ? " by " + esc(m.artist) : ""}</button>`).join("") +
     `<button data-a="lamp">Toggle lamp</button><button data-a="notes">Leave a note</button><button data-a="camera">Take an instant photo</button>`;
   nav.addEventListener("click", (e) => {
     const b = e.target.closest("button"); if (!b) return;
