@@ -215,6 +215,20 @@ window.AudioEngine = (() => {
       a.frequency.setValueAtTime(90, t); a.frequency.exponentialRampToValueAtTime(40, t + 0.15);
       g1.gain.setValueAtTime(0.4, t); g1.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
       a.connect(g1); g1.connect(out); a.start(t); a.stop(t + 0.25);
+    } else if (name === "whoosh") {
+      const src = ctx.createBufferSource(); src.buffer = noiseBuf;
+      const f = ctx.createBiquadFilter(); f.type = "bandpass"; f.Q.value = 0.8;
+      f.frequency.setValueAtTime(400, t); f.frequency.exponentialRampToValueAtTime(2400, t + 0.35); f.frequency.exponentialRampToValueAtTime(600, t + 0.8);
+      const g1 = gn(); g1.gain.setValueAtTime(0.0001, t); g1.gain.linearRampToValueAtTime(0.14, t + 0.3); g1.gain.linearRampToValueAtTime(0.0001, t + 0.85);
+      src.connect(f); f.connect(g1); g1.connect(out); src.start(t); src.stop(t + 0.9);
+    } else if (name === "lumos") {
+      // a rising shimmer of soft bells
+      [1046, 1318, 1568, 2093, 2637, 3136].forEach((fq, i) => {
+        const a = o(), g1 = gn(), tt = t + i * 0.07;
+        a.type = "sine"; a.frequency.value = fq;
+        g1.gain.setValueAtTime(0.0001, tt); g1.gain.linearRampToValueAtTime(0.07, tt + 0.02); g1.gain.exponentialRampToValueAtTime(0.0001, tt + 1.2);
+        a.connect(g1); g1.connect(out); a.start(tt); a.stop(tt + 1.3);
+      });
     } else if (name === "pin") {
       [1320, 1760].forEach((f, i) => {
         const a = o(), g1 = gn(); a.type = "sine"; a.frequency.value = f;

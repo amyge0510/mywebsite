@@ -313,7 +313,7 @@
         <rect x="${x + len - 9}" y="${y + t / 2 - 1.8}" width="5" height="3.6" fill="#d8302a"/>`;
       y += t;
     });
-    return frame + out;
+    return frame + `<g class="hot" data-hot="books">${out}</g>`;
   }
   let BOOK_SHEEN = "";
 
@@ -497,12 +497,37 @@
         <rect x="${cx - half}" y="${y}" width="${half * 2}" height="6" rx="1.5" fill="${bronze}"/>
         <rect x="${cx - half}" y="${y}" width="${half * 2}" height="1.5" fill="#8a7058" opacity=".7"/>
       </g>`,
-      glow: `<g class="sconce-glow" style="mix-blend-mode:screen">
+      glow: `<g class="sconce-glow" style="mix-blend-mode:screen" clip-path="${A.clip(`<rect x="${cx - 600}" y="${y + 4}" width="1200" height="600"/>`)}">
         <ellipse cx="${cx}" cy="${y + 70}" rx="${half + 110}" ry="130" fill="${rad([[0, "#ffa04a", 0.3], [0.5, "#ff8a36", 0.12], [1, "#ff8a36", 0]], 0.5, 0.12, 0.62, false, 0.5, 0.02)}" filter="url(#blur14)"/>
         <ellipse cx="${cx}" cy="${y + 14}" rx="${half + 10}" ry="16" fill="#ffb460" opacity=".22" filter="url(#blur10)"/>
         <rect x="${cx - half + 2}" y="${y + 5}" width="${half * 2 - 4}" height="1.4" fill="#ffc27a" opacity=".85"/>
       </g>`
     };
+  }
+
+  // the wand (hidden until the books are tapped). Drawn standing up, handle at (0,0)
+  function wandMarkup() {
+    const wood = lin([[0, "#2a160c"], [0.45, "#6a4024"], [0.6, "#4a2a16"], [1, "#1e0e06"]], 0, 0, 1, 0);
+    return `<g id="wand" transform="translate(800 640)" pointer-events="visiblePainted" style="cursor:pointer">
+      <g class="wand-move">
+        <g class="wand-light">
+          <circle cx="0" cy="-232" r="260" fill="${rad([[0, "#fff6dc", 0.55], [0.25, "#ffe2a8", 0.25], [1, "#ffcf8a", 0]])}" style="mix-blend-mode:screen"/>
+          <circle cx="0" cy="-232" r="60" fill="#fffaf0" opacity=".55" filter="url(#blur30)"/>
+        </g>
+        <ellipse cx="6" cy="10" rx="40" ry="6" fill="#000" opacity=".35" filter="url(#blur6)"/>
+        <path d="M-6 0 L6 0 L3.2 -230 L-3.2 -230 Z" fill="${wood}"/>
+        <path d="M-8 0 C-9 -20 -7 -40 -6 -64 L6 -64 C7 -40 9 -20 8 0 Z" fill="${wood}"/>
+        ${[-14, -30, -46, -62].map((y) => `<ellipse cx="0" cy="${y}" rx="7.6" ry="2.6" fill="#1a0c04"/><ellipse cx="0" cy="${y - 1.2}" rx="7" ry="1.6" fill="#8a5a34" opacity=".55"/>`).join("")}
+        <ellipse cx="0" cy="0" rx="8" ry="3" fill="#160a04"/>
+        <path d="M-1 -70 L1 -70 L.8 -226 L-.8 -226 Z" fill="#c89a6a" opacity=".35"/>
+        <g class="wand-tip">
+          <circle cx="0" cy="-232" r="14" fill="#fffdf2" filter="url(#blur6)"/>
+          <circle cx="0" cy="-232" r="5" fill="#fff"/>
+          ${[0, 1, 2, 3, 4, 5].map((i) => `<circle class="spark" style="animation-delay:${i * 0.12}s;--a:${i * 60}deg" cx="0" cy="-232" r="2.4" fill="#fff4cc"/>`).join("")}
+        </g>
+      </g>
+      <text class="wand-word" x="0" y="-300" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="34" fill="#fff4dc">Lumos!</text>
+    </g>`;
   }
 
   // a glowing "PROJECTS" lightbox above the record wall
@@ -555,7 +580,6 @@
   const body = `
     ${wall()}
     ${donut.wall}
-    ${sunlight()}
     ${board()}
     ${sconce.fixture}
     ${sign.body}
@@ -578,6 +602,7 @@
       ${lampEmissive()}
       ${donut.emit}
       ${sign.glow}
+      ${wandMarkup()}
       ${sconce.glow}
       <g id="fx"></g>
     </g>`;
@@ -869,6 +894,7 @@
       case "lamp": return toggleLamp();
       case "camera": openModal("camera-modal"); return window.InstantCamera.start();
       case "beanbag": return rustle();
+      case "books": return lumos();
       case "note": case "board": return openNotes();
     }
   }
@@ -883,6 +909,36 @@
     AE.sfx("rustle");
   }
   bag.addEventListener("pointerenter", rustle);
+
+  /* ---------------- tap the books: a wand appears, swishes, and casts Lumos ---------------- */
+  const wandEl = $("#wand");
+  let lumosT = null, lampBefore = true;
+  function lumos() {
+    if (wandEl.classList.contains("on")) return nox();
+    lampBefore = S.lamp;
+    wandEl.classList.remove("cast", "lit", "leaving");
+    void wandEl.getBBox();
+    wandEl.classList.add("on");
+    AE.sfx("whoosh");
+    clearTimeout(lumosT);
+    lumosT = setTimeout(() => {
+      wandEl.classList.add("cast");
+      AE.sfx("lumos");
+      // the room goes dark and the wand becomes the light
+      S.lamp = false; document.body.classList.add("lamp-off", "lumos");
+      setTimeout(() => wandEl.classList.add("lit"), 250);
+      lumosT = setTimeout(nox, 11000);
+    }, 1150);
+  }
+  function nox() {
+    clearTimeout(lumosT);
+    wandEl.classList.add("leaving");
+    wandEl.classList.remove("lit");
+    document.body.classList.remove("lumos");
+    if (lampBefore) { S.lamp = true; document.body.classList.remove("lamp-off"); }
+    lumosT = setTimeout(() => wandEl.classList.remove("on", "cast", "leaving"), 600);
+  }
+  wandEl.addEventListener("click", nox);
 
   function toggleLamp() {
     S.lamp = !S.lamp;
