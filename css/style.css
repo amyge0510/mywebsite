@@ -213,7 +213,7 @@ button:disabled { opacity: .6; cursor: wait; }
 .gf-disc svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 10px 20px rgba(0,0,0,.55)); }
 .gatefold.opened .gf-disc { transform: translateX(46%) rotate(140deg); }
 .gf-cover { transform-origin: left center; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.3, .7, .2, 1); }
-.gatefold.opened .gf-cover { transform: rotateY(-180deg); }
+.gatefold.opened .gf-cover { transform: translateZ(1px) rotateY(-180deg); }
 .gf-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 2px; overflow: hidden; }
 .gf-front svg { width: 100%; height: 100%; display: block; }
 .gf-front { box-shadow: 0 30px 60px -20px rgba(0,0,0,.8); }
@@ -251,7 +251,8 @@ button:disabled { opacity: .6; cursor: wait; }
 /* the video is part of the right page: the cover always stacks above it, so it's revealed as the cover swings away */
 .gf-inside { z-index: 1; isolation: isolate; }
 .gf-cover { z-index: 3; }
-.gatefold:not(.opened) .gf-cover { transform: translateZ(1px); }
+.gf-cover { transform: translateZ(1px) rotateY(0deg); }
+.gatefold.opened .gf-cover { transform: translateZ(1px) rotateY(-180deg); }
 .gatefold .x { position: absolute; top: -16px; right: -16px; z-index: 3; box-shadow: var(--shadow); }
 @media (max-width: 640px) { .gatefold { --S: 44vw; } .gf-back #project-blurb { font-size: 12px; } .gf-label { font-size: 15px; } }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
