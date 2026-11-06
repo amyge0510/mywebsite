@@ -70,41 +70,41 @@ window.SITE = {
     }
   ],
 
-  /* MUSIC — the records in the cabinet.
-     src:   path/URL to an audio file you have the rights to (e.g. "assets/music/song.mp3").
-            While src is null, a built-in lo-fi synth plays the `synth` recipe instead. */
+  /* MUSIC — the records in the cabinet, stored spine-out like books.
+     cover: path to the album art. spine/ink: spine colour and its text colour.
+     spineLabel: optional shorter title for the spine.
+     src:   an audio file you have the rights to (e.g. "assets/music/song.mp3").
+            While src is null, a built-in lo-fi synth plays a stand-in tune. */
   music: [
     {
-      id: "warm-static", title: "Warm Static", artist: "built-in lo-fi synth",
-      src: null, vinyl: "#d9622b",
-      cover: { motif: "waves", palette: { bg: "#3d405b", a: "#e07a5f", b: "#f2cc8f", c: "#81b29a", ink: "#f4f1de" } },
+      id: "melophobia", title: "Melophobia", artist: "Cage the Elephant",
+      cover: "assets/covers/melophobia.jpg", spine: "#1f1c1a", ink: "#f3ede2", src: null,
+      synth: { bpm: 92, seed: 5, lead: "square", density: 0.45,
+               chords: [[52,55,59,62],[48,52,55,59],[50,53,57,60],[47,50,55,59]], scale: [64,67,69,71,74,76] }
+    },
+    {
+      id: "la-la-land", title: "La La Land (Score)", spineLabel: "La La Land", artist: "Justin Hurwitz",
+      cover: "assets/covers/la-la-land.jpg", spine: "#3aa9a6", ink: "#f6efe0", src: null,
+      synth: { bpm: 72, seed: 27, lead: "triangle", density: 0.4,
+               chords: [[45,48,52,55],[41,45,48,52],[50,53,57,60],[52,56,59,62]], scale: [69,72,74,76,79,81] }
+    },
+    {
+      id: "doo-wops", title: "Doo-Wops & Hooligans", spineLabel: "Doo-Wops", artist: "Bruno Mars",
+      cover: "assets/covers/doo-wops.jpg", spine: "#e8b23f", ink: "#2a2018", src: null,
+      synth: { bpm: 84, seed: 11, lead: "triangle", density: 0.45,
+               chords: [[50,54,57,61],[47,50,54,57],[43,47,50,54],[45,50,52,55]], scale: [74,76,78,81,83,86] }
+    },
+    {
+      id: "i-must-be-dreaming", title: "I Must Be Dreaming", artist: "Alabama Shakes",
+      cover: "assets/covers/i-must-be-dreaming.jpg", spine: "#d23f4c", ink: "#f8d66a", src: null,
       synth: { bpm: 76, seed: 3, lead: "triangle", density: 0.45,
-               chords: [[53,57,60,64],[52,55,59,62],[50,53,57,60],[48,52,55,59]],
-               scale: [72,74,76,79,81,84] }
+               chords: [[53,57,60,64],[52,55,59,62],[50,53,57,60],[48,52,55,59]], scale: [72,74,76,79,81,84] }
     },
     {
-      id: "matcha-morning", title: "Matcha Morning", artist: "built-in lo-fi synth",
-      src: null, vinyl: "#7fa65a",
-      cover: { motif: "dots", palette: { bg: "#dde5b6", a: "#6a994e", b: "#386641", c: "#f2e8cf", ink: "#283618" } },
-      synth: { bpm: 86, seed: 11, lead: "square", density: 0.4,
-               chords: [[50,54,57,61],[47,50,54,57],[43,47,50,54],[45,50,52,55]],
-               scale: [74,76,78,81,83,86] }
-    },
-    {
-      id: "late-night-loop", title: "Late Night Loop", artist: "built-in lo-fi synth",
-      src: null, vinyl: "#1d1a22",
-      cover: { motif: "planet", palette: { bg: "#0b132b", a: "#c6a0f6", b: "#5bc0be", c: "#f6f0a0", ink: "#ffffff" } },
-      synth: { bpm: 70, seed: 27, lead: "triangle", density: 0.35,
-               chords: [[45,48,52,55],[41,45,48,52],[50,53,57,60],[52,56,59,62]],
-               scale: [69,72,74,76,79,81] }
-    },
-    {
-      id: "rainy-window", title: "Rainy Window", artist: "built-in lo-fi synth",
-      src: null, vinyl: "#4b7bb5", rain: true,
-      cover: { motif: "sunset", palette: { bg: "#264653", a: "#8ab4d6", b: "#5a7fa8", c: "#e9c46a", ink: "#ffffff" } },
-      synth: { bpm: 72, seed: 42, lead: "triangle", density: 0.4,
-               chords: [[51,55,58,62],[48,51,55,58],[44,48,51,55],[46,50,53,55]],
-               scale: [75,77,79,82,84,87] }
+      id: "head-first", title: "Head First", artist: "The Babys",
+      cover: "assets/covers/head-first.jpg", spine: "#9fd4df", ink: "#b8232c", src: null,
+      synth: { bpm: 70, seed: 42, lead: "triangle", density: 0.4,
+               chords: [[51,55,58,62],[48,51,55,58],[44,48,51,55],[46,50,53,55]], scale: [75,77,79,82,84,87] }
     }
   ]
 };

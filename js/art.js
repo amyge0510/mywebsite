@@ -1,4 +1,4 @@
-/* Shared SVG helpers + generated album covers + the cat. */
+/* Shared SVG helpers + generated album covers for the project records. */
 window.Art = (() => {
   "use strict";
   let uid = 0;
@@ -127,115 +127,8 @@ window.Art = (() => {
     return s;
   }
 
-  /* -------- the cat (seal-point, blue eyes) --------
-     Each pose is drawn around (0,0) = ground under the cat, facing right. */
-  const C = {
-    cream: "#f5ebdd", creamD: "#e3cfb4", tan: "#c6a47e", point: "#3a261d", pointM: "#6e4c3a"
-  };
-  let catGrads = null;
-  function catDefs() {
-    if (catGrads) return catGrads;
-    catGrads = {
-      body: lin([[0, "#cfb08a"], [0.45, C.cream], [1, "#ead8c0"]], 0, 0, 1, 0),
-      bodyV: lin([[0, "#fff6ea"], [0.6, C.cream], [1, "#c9a882"]]),
-      leg: lin([[0, C.creamD], [0.35, "#a58065"], [0.7, C.point], [1, "#24160f"]]),
-      legFar: lin([[0, "#c8ad8c"], [0.35, "#7a5a46"], [0.7, "#2a1a12"], [1, "#1a0e09"]]),
-      tail: lin([[0, C.pointM], [1, "#22140e"]], 0, 0, 1, 1),
-      mask: rad([[0, "#1c100b"], [0.5, "#2e1d15", 0.97], [0.78, "#5e4232", 0.55], [1, "#c6a47e", 0]], 0.5, 0.6, 0.55),
-      ear: lin([[0, "#22140e"], [1, "#5a3e30"]]),
-      eye: rad([[0, "#d6efff"], [0.45, "#7db8e8"], [1, "#2b5d8f"]], 0.45, 0.4, 0.6),
-      ruff: rad([[0, "#fffaf2"], [1, "#f1e4d2", 0]], 0.5, 0.4, 0.6)
-    };
-    return catGrads;
-  }
-  function eye(x, y, rot, look = 0) {
-    const g = catDefs();
-    return `<g class="eye" transform="translate(${x} ${y}) rotate(${rot})">
-      <ellipse rx="7.2" ry="5.2" fill="#1a0f0a"/>
-      <ellipse rx="6.2" ry="4.4" fill="${g.eye}"/>
-      <ellipse cx="${look}" rx="2.2" ry="4" fill="#0b0b10"/>
-      <circle cx="${look - 2}" cy="-1.6" r="1.4" fill="#fff"/>
-    </g>`;
-  }
-  function head(closed = false, side = false) {
-    const g = catDefs();
-    const eyes = closed
-      ? `<path d="M-20 4 q7 5 13 0" stroke="#14090500" fill="none"/><path d="M-20 3 q7 5 13 0" stroke="#100805" stroke-width="2" fill="none" stroke-linecap="round"/>
-         <path d="M7 3 q7 5 13 0" stroke="#100805" stroke-width="2" fill="none" stroke-linecap="round"/>`
-      : side ? eye(-6, 1, -6, 1.5) + eye(16, 1, 6, 1.5) : eye(-14, 1, -8) + eye(14, 1, 8);
-    const nx = side ? 6 : 0;
-    return `
-      <g filter="url(#fur)">
-        <path d="M-40 -36 L-34 -86 L-4 -50 Z" fill="${g.ear}"/>
-        <path d="M40 -36 L34 -86 L4 -50 Z" fill="${g.ear}"/>
-        <path d="M-46 2 C-50 -28 -30 -50 0 -52 C30 -50 50 -28 46 2 C44 26 24 40 0 42 C-24 40 -44 26 -46 2 Z" fill="${g.bodyV}"/>
-        <ellipse cx="${nx}" cy="4" rx="38" ry="38" fill="${g.mask}"/>
-      </g>
-      <path d="M-30 -48 L-28 -68 L-14 -52 Z" fill="#8a6452" opacity=".55"/>
-      <path d="M30 -48 L28 -68 L14 -52 Z" fill="#8a6452" opacity=".55"/>
-      <g class="${closed ? "" : "blink"}">${eyes}</g>
-      <path d="M${nx - 4.5} 15 L${nx + 4.5} 15 L${nx} 20.5 Z" fill="#120a07"/>
-      <path d="M${nx} 20.5 q-4 4 -8 2 M${nx} 20.5 q4 4 8 2" stroke="#120a07" stroke-width="1.2" fill="none"/>
-      <g stroke="#fff" stroke-opacity=".55" stroke-width=".8" fill="none">
-        <path d="M${nx - 10} 20 q-18 -3 -34 -1"/><path d="M${nx - 10} 23 q-18 1 -32 6"/>
-        <path d="M${nx + 10} 20 q18 -3 34 -1"/><path d="M${nx + 10} 23 q18 1 32 6"/>
-      </g>`;
-  }
-  function catPose(pose) {
-    const g = catDefs();
-    if (pose === "sit" || pose === "paw") {
-      const rightLeg = pose === "paw"
-        ? `<g class="paw-swat"><rect x="14" y="-66" width="19" height="52" rx="9" fill="${g.leg}" transform="rotate(-62 23 -66)"/></g>`
-        : `<rect x="12" y="-66" width="19" height="66" rx="9" fill="${g.leg}"/><ellipse cx="22" cy="-3" rx="13" ry="6.5" fill="#1f130d"/>`;
-      return `
-        <ellipse cx="0" cy="0" rx="78" ry="9" fill="#000" opacity=".28" filter="url(#blur6)"/>
-        <g filter="url(#fur)">
-          <path d="M-34 -10 C-80 -2 -112 -14 -106 -42 C-102 -60 -86 -60 -84 -46 C-82 -30 -62 -24 -34 -28 Z" fill="${g.tail}"/>
-          <path d="M-60 0 C-76 -48 -66 -104 -32 -126 C-8 -138 30 -136 50 -114 C68 -90 68 -40 58 0 Z" fill="${g.body}"/>
-          <ellipse cx="-32" cy="-42" rx="34" ry="40" fill="${g.bodyV}" opacity=".55"/>
-          <path d="M-22 -124 C-34 -96 -26 -70 -6 -60 C12 -54 30 -62 36 -82 C42 -104 30 -126 8 -132 Z" fill="${g.ruff}"/>
-          <rect x="-14" y="-66" width="19" height="66" rx="9" fill="${g.leg}"/>
-          ${rightLeg}
-          <ellipse cx="-5" cy="-3" rx="13" ry="6.5" fill="#1f130d"/>
-        </g>
-        <g class="cat-head" transform="translate(8 -156)">${head(false, false)}</g>`;
-    }
-    if (pose === "walk" || pose === "crouch") {
-      const crouch = pose === "crouch";
-      const by = crouch ? -50 : -78, lh = crouch ? 48 : 74;
-      const hx = crouch ? 70 : 74, hy = crouch ? -44 : -112;
-      const tail = crouch ? "M-62 -56 C-96 -50 -112 -26 -102 -10" : "M-64 -92 C-98 -104 -108 -136 -92 -160";
-      const leg = (x, cls, fill) => `<g class="${cls}"><rect x="${x}" y="${by + 10}" width="17" height="${lh - 6}" rx="8" fill="${fill}"/><ellipse cx="${x + 9}" cy="-3" rx="11" ry="5" fill="#1a0f0a"/></g>`;
-      return `
-        <ellipse cx="0" cy="0" rx="92" ry="9" fill="#000" opacity=".28" filter="url(#blur6)"/>
-        <g filter="url(#fur)">
-          <path d="${tail}" stroke="${g.tail}" stroke-width="17" stroke-linecap="round" fill="none"/>
-          ${leg(-52, "leg-b", g.legFar)}${leg(32, "leg-a", g.legFar)}
-          <ellipse cx="-4" cy="${by}" rx="70" ry="${crouch ? 30 : 33}" fill="${g.bodyV}"/>
-          <ellipse cx="-46" cy="${by + 6}" rx="30" ry="${crouch ? 28 : 32}" fill="${g.body}" opacity=".7"/>
-          <ellipse cx="44" cy="${by + 6}" rx="26" ry="24" fill="${g.ruff}"/>
-          ${leg(-40, "leg-a", g.leg)}${leg(44, "leg-b", g.leg)}
-        </g>
-        <g class="${crouch ? "cat-head bob" : "cat-head"}" transform="translate(${hx} ${hy}) scale(.82) rotate(${crouch ? 16 : 0})">${head(false, true)}</g>`;
-    }
-    if (pose === "sleep") {
-      return `
-        <ellipse cx="0" cy="0" rx="96" ry="10" fill="#000" opacity=".28" filter="url(#blur6)"/>
-        <g class="breathe">
-          <g filter="url(#fur)">
-            <ellipse cx="8" cy="-36" rx="82" ry="36" fill="${g.bodyV}"/>
-            <ellipse cx="30" cy="-40" rx="50" ry="30" fill="${g.body}" opacity=".6"/>
-            <path d="M80 -24 C78 0 20 8 -46 -4" stroke="${g.tail}" stroke-width="19" stroke-linecap="round" fill="none"/>
-            <ellipse cx="-34" cy="-8" rx="20" ry="8" fill="#26170f"/>
-          </g>
-          <g transform="translate(-58 -42) scale(.86) rotate(-12)">${head(true, false)}</g>
-        </g>`;
-    }
-    return "";
-  }
-
   function defsMarkup() { return DEFS.join(""); }
   function resetDefs() { DEFS.length = 0; }
 
-  return { lin, rad, clip, rng, hash, esc, cover, catPose, catDefs, defsMarkup, resetDefs, nid };
+  return { lin, rad, clip, rng, hash, esc, cover, defsMarkup, resetDefs, nid };
 })();

@@ -12,11 +12,15 @@
 </head>
 <body>
   <main id="stage-wrap">
-    <svg id="room" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" role="img"
-      aria-label="A warm room with a wall of records, a record player, a lamp, a coffee station, a bulletin board and a fluffy cat."></svg>
+    <svg id="room" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid meet" role="img"
+      aria-label="A warm room with a wall of records, a record player, a lamp, a coffee station, a bulletin board and a fluffy seal-point cat."></svg>
   </main>
   <div id="grain" aria-hidden="true"></div>
   <div id="tooltip" role="status" aria-live="polite"></div>
+  <div id="record-card" aria-live="polite">
+    <img alt="">
+    <div class="meta"><b class="t"></b><span class="a"></span><button type="button">▶  play</button><small class="n"></small></div>
+  </div>
   <div id="coffee-menu" class="pop">
     <p>what are we having?</p>
     <button data-drink="matcha"><i style="background:#8db45a"></i>matcha latte</button>
