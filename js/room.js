@@ -1131,6 +1131,9 @@
     else { link.removeAttribute("href"); link.classList.add("disabled"); link.textContent = "full project page coming soon"; }
     // a custom two-page design for the inside of the sleeve, if the project has one
     gate.classList.toggle("spread", !!p.spread);
+    gate.classList.toggle("text-right", !!(p.spread && p.spread.text === "right"));
+    gate.dataset.project = p.id;
+    document.getElementById("sp-text").textContent = p.blurb || "";
     if (p.spread) {
       const abs = (u) => `url("${new URL(u, location.href).href}")`;   // resolve against the page, not the stylesheet
       gate.style.setProperty("--sp-left", abs(p.spread.left));
