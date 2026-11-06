@@ -217,6 +217,10 @@ window.AudioEngine = (() => {
       a.frequency.setValueAtTime(90, t); a.frequency.exponentialRampToValueAtTime(40, t + 0.15);
       g1.gain.setValueAtTime(0.4, t); g1.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
       a.connect(g1); g1.connect(out); a.start(t); a.stop(t + 0.25);
+    } else if (name === "rip") {
+      // paper tearing along a perforation: a quick run of crackly noise bursts
+      for (let i = 0; i < 14; i++) noise(t + i * 0.018, 0.03, "bandpass", 2400 + Math.random() * 2400, 1.2, 0.08 + Math.random() * 0.06, out);
+      noise(t, 0.28, "highpass", 3000, 0.6, 0.05, out);
     } else if (name === "whoosh") {
       const src = ctx.createBufferSource(); src.buffer = noiseBuf;
       const f = ctx.createBiquadFilter(); f.type = "bandpass"; f.Q.value = 0.8;

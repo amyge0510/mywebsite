@@ -458,9 +458,6 @@
         <rect x="3" y="3" width="${w - 6}" height="3" rx="1.5" fill="#ff8a8a" opacity=".45"/>
         <rect x="${sx - 2}" y="${sy - 2}" width="${sw + 4}" height="${sh + 4}" rx="3" fill="#2a0a0c"/>
         <rect x="${sx}" y="${sy}" width="${sw}" height="${sh}" fill="${lin([[0, "#8c6a58"], [0.45, "#4e3428"], [1, "#2a1a14"]])}"/>
-        <!-- what the mirror catches: warm window light and the lamp glow -->
-        <path d="M${sx + 10} ${sy} L${sx + 34} ${sy} L${sx + 4} ${sy + sh} L${sx - 20} ${sy + sh} Z" fill="#ffd2a0" opacity=".35" filter="url(#blur4)"/>
-        <ellipse cx="${sx + sw * 0.25}" cy="${sy + sh * 0.7}" rx="26" ry="18" fill="#ff9a50" opacity=".35" filter="url(#blur8)"/>
         <rect x="${sx}" y="${sy}" width="${sw}" height="${sh}" fill="${lin([[0, "#fff", 0.22], [0.4, "#fff", 0], [0.8, "#fff", 0.06], [1, "#fff", 0]], 0, 0, 1, 1)}"/>
         <text x="${sx + sw / 2}" y="${sy + 10}" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-size="6.4" fill="#f4efe8">Now Living</text>
         <path d="M${sx + sw - 22} ${sy + 5} l4 2.6 l-4 2.6 Z" fill="#f4efe8"/>
@@ -813,7 +810,7 @@
       const h = hash(n.id), col = NOTE_COLS[h % NOTE_COLS.length];
       const x = BOARD.x + 30 + (i % 3) * 104, y = BOARD.y + 88 + Math.floor(i / 3) * 106;
       const rot = ((h >> 4) % 9) - 4;
-      return `<g class="hot note" data-hot="note" data-i="${i}" transform="translate(${x} ${y}) rotate(${rot} 42 36) scale(.92)">
+      return `<g class="hot note${n.id === S.freshId ? " fresh" : ""}" data-hot="note" data-i="${i}" transform="translate(${x} ${y}) rotate(${rot} 42 36) scale(.92)">
         <g class="lift">
         <rect x="3" y="6" width="92" height="78" fill="#1e0e05" opacity=".45" filter="url(#blur4)"/>
         <rect width="92" height="78" fill="${col}"/><rect width="92" height="78" fill="${NOTE_SHEEN}"/>
@@ -904,6 +901,21 @@
 
   /* ---------------- DOM wiring ---------------- */
   const hudEl = document.getElementById("hud");
+  hudEl.classList.add("dock");
+  // keep the player docked in the gap between the record player and the lamp, at any screen size
+  const DOCK = { x: 944, y: CAB.top - 8, w: 250 };
+  let hudKey = "";
+  function placeHud() {
+    if (!hudEl.classList.contains("show")) return;
+    const m = svg.getScreenCTM(); if (!m) return;
+    const k = m.a, x = m.e + k * DOCK.x, y = m.f + m.d * DOCK.y, w = DOCK.w * k;
+    const key = `${x | 0},${y | 0},${w | 0}`;
+    if (key === hudKey) return;
+    hudKey = key;
+    const ew = Math.max(150, w - 12 - 34), s = ew / 290;
+    hudEl.style.setProperty("--x", `${x}px`); hudEl.style.setProperty("--y", `${y}px`);
+    hudEl.style.setProperty("--ew", `${ew}px`); hudEl.style.setProperty("--s", s.toFixed(4));
+  }
   const toastEl = document.getElementById("toast");
 
   let last = performance.now();
@@ -911,6 +923,7 @@
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     S.t += dt;
     updateDisc(dt); updateLid(dt); updateParts(dt); updateCurtains(S.t); cat.update(dt);
+    placeHud();
     requestAnimationFrame(loop);
   }
 
@@ -1059,12 +1072,28 @@
   let padT = [];
   function openNotes() {
     padT.forEach(clearTimeout); padT = [];
-    pad.classList.remove("flipped", "sent");
+    pad.classList.remove("flipped", "tearing", "flying"); pad.style.removeProperty("--fly");
     openModal("note-modal");
     padT.push(setTimeout(() => { pad.classList.add("flipped"); AE.sfx("whoosh"); }, 380));
     padT.push(setTimeout(() => form.querySelector("input[name=name]").focus({ preventScroll: true }), 1250));
   }
   async function refreshNotes() { S.notes = await Notes.list(40); renderNotes(); }
+  // rip the top sheet off the pad and send it flying to its spot on the board
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  async function tearOff() {
+    AE.sfx("rip");
+    pad.classList.add("tearing");
+    await wait(320);
+    const from = form.getBoundingClientRect();
+    const ctm = svg.getScreenCTM();
+    const tx = ctm.e + ctm.a * (BOARD.x + 30 + 42), ty = ctm.f + ctm.d * (BOARD.y + 88 + 36);
+    const s = (ctm.a * 92 * 0.92) / from.width;
+    const dx = tx - (from.left + from.width / 2), dy = ty - (from.top + from.height / 2);
+    pad.style.setProperty("--fly", `translate(${dx.toFixed(0)}px, ${dy.toFixed(0)}px) rotate(-8deg) scale(${s.toFixed(3)})`);
+    document.getElementById("note-modal").classList.add("landing");
+    pad.classList.add("flying");
+    await wait(820);
+  }
   form.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && e.target.name === "name") { e.preventDefault(); form.querySelector("textarea").focus(); }
   });
@@ -1073,11 +1102,14 @@
     const data = new FormData(form), btn = document.getElementById("pad-pin");
     btn.disabled = true;
     try {
-      await Notes.add({ name: data.get("name"), topic: "hello", message: data.get("message") });
-      pad.classList.add("sent");                    // the sheet tears off and flies to the board
+      const note = await Notes.add({ name: data.get("name"), topic: "hello", message: data.get("message") });
+      await tearOff();
+      S.freshId = note && note.id;
       await refreshNotes(); AE.sfx("pin");
-      await new Promise((r) => setTimeout(r, 650));
-      form.reset(); toast("pinned to the board ♡"); closeModals();
+      const m = document.getElementById("note-modal");
+      m.classList.remove("open", "landing"); m.setAttribute("aria-hidden", "true");
+      pad.classList.remove("tearing", "flying", "flipped"); pad.style.removeProperty("--fly");
+      form.reset(); toast("pinned to the board ♡");
     } catch (err) {
       toast(err.message === "empty note" ? "write something first :)" : "couldn't pin that — try again?");
     } finally { btn.disabled = false; }
