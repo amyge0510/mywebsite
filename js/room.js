@@ -226,12 +226,12 @@
     let x = CUBL.x0 + 18;
     order.forEach((o, k) => {
       const album = o !== "f";
+      if (k > 0) x += album ? 30 : 11 + r() * 4;   // albums get a wider gap so more of their cover shows
       out.push({
         k, x, i: album ? o : null,
         cover: album ? music[o].cover : { motif: fillers[k % fillers.length], palette: pals[k % pals.length] },
         vinyl: r() < 0.5, lean: -7 - r() * 6
       });
-      x += album ? 30 : 15 + r() * 5;
     });
     return out;
   })();
@@ -251,7 +251,7 @@
         <rect x="0" y="${-SLEEVE}" width="${SLEEVE}" height="${SLEEVE}" fill="#000" opacity="${depth.toFixed(3)}"/>
       </g></g>`;
     const shadow = `<ellipse cx="${SLEEVE * SQ * 0.6}" cy="1" rx="${SLEEVE * SQ * 0.7}" ry="4" fill="#000" opacity=".55" filter="url(#blur4)"/>`;
-    if (rc.i === null) return `<g transform="translate(${rc.x} ${REC_BASE})">${shadow}${inner}</g>`;
+    if (rc.i === null) return `<g transform="translate(${rc.x} ${REC_BASE})" pointer-events="none">${shadow}${inner}</g>`;
     return `<g class="hot rec" data-hot="music" data-i="${rc.i}" transform="translate(${rc.x} ${REC_BASE})">${shadow}<g class="lift">${inner}</g></g>`;
   }
   function rackWire() {
@@ -261,10 +261,10 @@
       const a = x0 + k * w;
       d += ` C${a} ${top - 6} ${a + w} ${top - 6} ${a + w} ${base}`;
     }
-    return `<path d="${d}" stroke="#1a1410" stroke-width="5" fill="none" opacity=".45" filter="url(#blur2)" transform="translate(3 3)"/>
+    return `<g pointer-events="none"><path d="${d}" stroke="#1a1410" stroke-width="5" fill="none" opacity=".45" filter="url(#blur2)" transform="translate(3 3)"/>
       <path d="${d}" stroke="#8a847c" stroke-width="3.2" fill="none" stroke-linecap="round"/>
       <path d="${d}" stroke="#f4efe6" stroke-width="1" fill="none" opacity=".7" transform="translate(-.8 -.8)"/>
-      <ellipse cx="${x0}" cy="${base + 2}" rx="11" ry="3" fill="#cfc9c0"/><ellipse cx="${x1}" cy="${base + 2}" rx="11" ry="3" fill="#cfc9c0"/>`;
+      <ellipse cx="${x0}" cy="${base + 2}" rx="11" ry="3" fill="#cfc9c0"/><ellipse cx="${x1}" cy="${base + 2}" rx="11" ry="3" fill="#cfc9c0"/></g>`;
   }
   let REC_SHADE = "";
 
