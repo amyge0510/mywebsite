@@ -636,9 +636,9 @@
       <feMerge><feMergeNode in="g"/><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="outline-only" x="-20%" y="-20%" width="140%" height="140%">
-      <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/>
-      <feGaussianBlur in="d" stdDeviation="4" result="b"/>
-      <feFlood flood-color="#ffd890"><animate attributeName="flood-opacity" values=".35;.95;.35" dur="2s" repeatCount="indefinite"/></feFlood>
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="7" result="b"/>
+      <feFlood flood-color="#ff9e48"><animate attributeName="flood-opacity" values=".18;.55;.18" dur="2.4s" repeatCount="indefinite"/></feFlood>
       <feComposite in2="b" operator="in" result="g"/>
       <feComposite in="g" in2="SourceAlpha" operator="out"/>
     </filter>

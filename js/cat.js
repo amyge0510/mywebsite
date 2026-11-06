@@ -1,4 +1,4 @@
-/* The cat: a flat-illustrated orange cat in a red scarf.
+/* The cat: a flat-illustrated orange cat.
    Poses (all drawn with the ground at y=0, facing right):
      sit   – front-on, like the reference; yawns, meows, wags her tail
      sleep – curled up, breathing
@@ -38,10 +38,6 @@ window.Cat = (() => {
       <path d="M-42 0 C-42 -14 -2 -14 -2 0 Z" fill="${O}"/><path d="M2 0 C2 -14 42 -14 42 0 Z" fill="${O}"/>
       ${line("M-42 0 C-42 -14 -2 -14 -2 0", 1.8)}${line("M2 0 C2 -14 42 -14 42 0", 1.8)}${line("M-28 0 V-6 M-16 0 V-6 M16 0 V-6 M28 0 V-6", 1.4)}
       <g class="c-headwrap" transform="translate(0 -160)">${head()}</g>
-      <path d="M-90 -122 C-60 -104 60 -104 90 -122 C98 -104 94 -82 84 -74 C44 -58 -44 -58 -84 -74 C-96 -84 -98 -106 -90 -122 Z" fill="${S}"/>
-      ${line("M-82 -102 C-40 -88 40 -88 82 -102", 1.6, S2)}${line("M-72 -86 C-30 -76 30 -76 72 -88", 1.6, S2)}${line("M-50 -110 C-20 -98 10 -100 30 -104", 1.4, S2)}
-      <path d="M28 -76 C32 -48 28 -26 34 -10 C44 -6 56 -10 60 -16 C54 -40 56 -62 54 -82 Z" fill="${S}"/>
-      ${line("M40 -64 V-22 M48 -60 V-18", 1.4, S2)}
     </g>`;
   }
 
@@ -57,7 +53,6 @@ window.Cat = (() => {
       <path d="M-104 -12 C-96 12 0 14 62 4 C76 2 86 -4 90 -10" stroke="${O}" stroke-width="26" fill="none" stroke-linecap="round"/>
       ${line("M-60 4 Q-20 10 20 6", 1.3)}
       <g transform="translate(80 -52) rotate(12) scale(.74)">
-        <path d="M-60 40 C-40 64 40 64 60 40 C64 56 56 74 40 80 C10 90 -10 90 -40 80 C-56 74 -64 56 -60 40 Z" fill="${S}"/>
         ${head()}
       </g>
     </g>`;
@@ -70,7 +65,7 @@ window.Cat = (() => {
     return `<g class="pose pose-walk">
       <ellipse cx="10" cy="0" rx="130" ry="10" fill="#000" opacity=".35"/>
       <g class="c-bob">
-        <g class="c-wtail"><path d="M-90 -96 C-130 -108 -152 -150 -140 -196 L-150 -206 L-136 -206 L-134 -218 L-124 -206 C-116 -200 -118 -186 -120 -176 C-126 -150 -112 -124 -84 -110 Z" fill="${O}"/>
+        <g class="c-wtail"><path d="M-62 -106 C-108 -106 -150 -140 -140 -196 L-150 -206 L-136 -206 L-134 -218 L-124 -206 C-116 -200 -118 -186 -120 -176 C-126 -144 -98 -116 -60 -90 Z" fill="${O}"/>
           ${line("M-132 -170 Q-136 -150 -128 -134", 1.3)}</g>
         ${leg("lf1", -52, true)}${leg("lf2", 70, true)}
         <path d="M-96 -92 C-70 -116 50 -116 82 -104 C104 -96 112 -66 96 -50 C60 -36 -50 -36 -90 -50 C-110 -60 -110 -82 -96 -92 Z" fill="${O}"/>
@@ -78,9 +73,6 @@ window.Cat = (() => {
         ${line("M-70 -104 Q-30 -112 20 -108", 1.3)}${line("M-92 -60 Q-80 -50 -60 -46", 1.3)}
         ${leg("ln1", -78, false)}${leg("ln2", 46, false)}
         <g class="c-whead" transform="translate(104 -126) scale(.78)">${head()}</g>
-        <path d="M62 -108 C78 -126 112 -130 132 -110 C136 -96 130 -84 120 -80 C102 -92 80 -94 62 -84 C56 -94 56 -102 62 -108 Z" fill="${S}"/>
-        ${line("M68 -100 C88 -112 110 -112 126 -100", 1.4, S2)}
-        <path d="M82 -90 C84 -70 82 -56 86 -44 C94 -42 102 -44 104 -50 C100 -66 102 -80 100 -94 Z" fill="${S}"/>
       </g>
     </g>`;
   }
@@ -172,7 +164,7 @@ window.Cat = (() => {
         const s = Math.sin(cat.phase);
         [s, -s, -s, s].forEach((v, k) => parts.legs[k].setAttribute("transform", `rotate(${(v * 22).toFixed(1)})`));
         parts.bob.setAttribute("transform", `translate(0 ${(-Math.abs(Math.cos(cat.phase)) * 3).toFixed(1)})`);
-        parts.wtail.setAttribute("transform", `rotate(${(Math.sin(cat.phase * 0.5) * 7).toFixed(1)} -90 -96)`);
+        parts.wtail.setAttribute("transform", `rotate(${(Math.sin(cat.phase * 0.5) * 7).toFixed(1)} -80 -98)`);
         parts.whead.setAttribute("transform", `translate(104 ${(-126 + Math.sin(cat.phase * 2) * 1.5).toFixed(1)}) scale(.78)`);
         if (d <= 0.5) { parts.legs.forEach((l) => l.setAttribute("transform", "")); const f = cat.next; cat.next = null; f && f(); }
       } else if (cat.mode === "drink") {
@@ -180,7 +172,7 @@ window.Cat = (() => {
         const lap = Math.max(0, Math.sin(cat.t * 9)) * 2.5;
         parts.whead.setAttribute("transform", `translate(122 ${(-74 + lap).toFixed(1)}) rotate(14) scale(.78)`);
         parts.bob.setAttribute("transform", "translate(0 6)");
-        parts.wtail.setAttribute("transform", `rotate(${(Math.sin(cat.t * 1.2) * 5).toFixed(1)} -90 -96)`);
+        parts.wtail.setAttribute("transform", `rotate(${(Math.sin(cat.t * 1.2) * 5).toFixed(1)} -80 -98)`);
         if (cat.timer <= 0) {
           el.classList.remove("drinking");
           parts.bob.setAttribute("transform", "");
