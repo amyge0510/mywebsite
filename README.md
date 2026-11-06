@@ -11,7 +11,7 @@ index.html        page shell, modals
 css/style.css     UI styling (tooltips, modals, HUD)
 js/data.js        ← YOUR CONTENT: projects, music, cat name, Supabase keys
 js/art.js         SVG helpers, generated covers for the project records
-js/cat.js         the cat: shapes, generated fur, sleep + walk poses
+js/camera.js      the instant camera: webcam, signature filter, printed frame
 js/room.js        the room: layout, perspective, lighting, interactions, cat AI
 js/audio.js       record playback + built-in lo-fi synth + sound effects
 js/notes.js       bulletin-board storage (localStorage or Supabase)

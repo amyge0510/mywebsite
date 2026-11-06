@@ -4,7 +4,6 @@
 ------------------------------------------------------------------- */
 window.SITE = {
   title: "my little room",
-  catName: "Mochi",
 
   /* Backend for the bulletin board. Leave blank to keep notes in the
      visitor's browser only (localStorage). Fill both in to share notes
