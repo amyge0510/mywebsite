@@ -413,7 +413,7 @@
 
   function lampMarkup() {
     const x = LAMP.x, b = LAMP.base, d = LAMP.drop;
-    return `<g class="hot" data-hot="lamp">
+    return `<g class="hot" data-hot="lamp" id="lamp">
       <ellipse cx="${x - 8}" cy="${b + 3}" rx="60" ry="9" fill="#000" opacity=".5" filter="url(#blur4)"/>
       <ellipse cx="${x}" cy="${b - 3}" rx="44" ry="9" fill="${lin([[0, "#f6c9a0"], [1, "#b8704a"]])}"/>
       <ellipse cx="${x}" cy="${b - 6}" rx="40" ry="6" fill="#f8d4b0"/>
@@ -429,7 +429,6 @@
   function lampEmissive() {
     const x = LAMP.x;
     return `<g class="lamp-emit" transform="translate(0 ${DY + LAMP.drop})">
-      <ellipse cx="${x}" cy="494" rx="96" ry="36" fill="#ffd090" opacity=".55" filter="url(#blur14)"/>
       <path d="M${x - 58} 480 Q${x - 60} 500 ${x - 40} 504 L${x + 40} 504 Q${x + 60} 500 ${x + 58} 478 Z" fill="${lin([[0, "#fffdf4"], [1, "#ffd896"]])}"/>
       <ellipse cx="${x}" cy="481" rx="62" ry="4" fill="#3e1606"/>
     </g>`;
@@ -514,7 +513,6 @@
           <circle cx="0" cy="-232" r="260" fill="${rad([[0, "#fff6dc", 0.55], [0.25, "#ffe2a8", 0.25], [1, "#ffcf8a", 0]])}" style="mix-blend-mode:screen"/>
           <circle cx="0" cy="-232" r="60" fill="#fffaf0" opacity=".55" filter="url(#blur30)"/>
         </g>
-        <ellipse cx="6" cy="10" rx="40" ry="6" fill="#000" opacity=".35" filter="url(#blur6)"/>
         <path d="M-6 0 L6 0 L3.2 -230 L-3.2 -230 Z" fill="${wood}"/>
         <path d="M-8 0 C-9 -20 -7 -40 -6 -64 L6 -64 C7 -40 9 -20 8 0 Z" fill="${wood}"/>
         ${[-14, -30, -46, -62].map((y) => `<ellipse cx="0" cy="${y}" rx="7.6" ry="2.6" fill="#1a0c04"/><ellipse cx="0" cy="${y - 1.2}" rx="7" ry="1.6" fill="#8a5a34" opacity=".55"/>`).join("")}
@@ -606,7 +604,10 @@
       ${turntable()}
       ${lampMarkup()}
     </g>
-    <g id="curtains" pointer-events="none"></g>
+    <mask id="curtain-fade" maskUnits="userSpaceOnUse" x="-600" y="-200" width="1400" height="1400">
+      <rect x="-600" y="-200" width="1400" height="1400" fill="${lin([[0, "#fff"], [0.86, "#fff"], [1, "#000"]], 0, -200, 0, FLOOR + 40, true)}"/>
+    </mask>
+    <g id="curtains" pointer-events="none" mask="url(#curtain-fade)"></g>
     ${beanbag()}
     ${ipodMirror()}
     ${waterBowl()}
@@ -617,6 +618,7 @@
       ${lampEmissive()}
       ${donut.emit}
       ${sign.glow}
+      <use id="lamp-halo" href="#lamp" transform="translate(0 ${DY})" filter="url(#outline-only)"/>
       ${wandMarkup()}
       ${sconce.glow}
       <g id="fx"></g>
@@ -635,6 +637,13 @@
       <feFlood flood-color="#fff0c8"><animate attributeName="flood-opacity" values=".3;1;.3" dur="1.8s" repeatCount="indefinite"/></feFlood>
       <feComposite in2="b" operator="in" result="g"/>
       <feMerge><feMergeNode in="g"/><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="outline-only" x="-20%" y="-20%" width="140%" height="140%">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="4" result="b"/>
+      <feFlood flood-color="#ffd890"><animate attributeName="flood-opacity" values=".35;.95;.35" dur="2s" repeatCount="indefinite"/></feFlood>
+      <feComposite in2="b" operator="in" result="g"/>
+      <feComposite in="g" in2="SourceAlpha" operator="out"/>
     </filter>
     <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="b"/>
@@ -819,7 +828,8 @@
 
   /* ---------------- sheer curtains drifting in from the window ---------------- */
   const curtainsEl = $("#curtains"), sunEl = svg.querySelector(".sun");
-  const CURTAIN = { top: -80, bot: 960, rows: 24, strips: 12 };
+  const CURTAIN = { top: -80, bot: FLOOR + 26, rows: 24, strips: 12 };
+  const hemY = (L, u, y, t) => (y < CURTAIN.bot - 1 ? y : y + 9 * Math.sin(u * 11 + t * 0.9 + L.phase) + 5 * Math.sin(u * 23 + L.phase * 3));
   const layers = [
     { x0: -150, w: 190, amp: 175, phase: 0, a: [0.5, 0.34] },
     { x0: -195, w: 190, amp: 125, phase: 1.9, a: [0.36, 0.24] }
@@ -852,8 +862,8 @@
       L.paths.forEach((p, i) => {
         const u0 = i / CURTAIN.strips, u1 = (i + 1) / CURTAIN.strips;
         let d = "";
-        ys.forEach((y, j) => { d += (j ? "L" : "M") + curtainX(L, u0, y, t, gust).toFixed(1) + " " + y.toFixed(1); });
-        for (let j = ys.length - 1; j >= 0; j--) d += "L" + curtainX(L, u1, ys[j], t, gust).toFixed(1) + " " + ys[j].toFixed(1);
+        ys.forEach((y, j) => { d += (j ? "L" : "M") + curtainX(L, u0, y, t, gust).toFixed(1) + " " + hemY(L, u0, y, t).toFixed(1); });
+        for (let j = ys.length - 1; j >= 0; j--) d += "L" + curtainX(L, u1, ys[j], t, gust).toFixed(1) + " " + hemY(L, u1, ys[j], t).toFixed(1);
         p.setAttribute("d", d + "Z");
       });
     });
@@ -879,6 +889,7 @@
     bowl: BOWL, xMin: 90, xMax: 1520, yMin: 952, yMax: 992, scale: 0.5, AE,
     onZ: (x, y) => spawn(x, y, "z")
   });
+  window.Cat.maybePeek(AE);
   function petCat() {
     const st = cat.state;
     for (let i = 0; i < 4; i++) setTimeout(() => spawn(st.x - 25 + Math.random() * 50, st.y - 80), i * 150);
@@ -943,10 +954,9 @@
 
   /* ---------------- tap the books: a wand appears, swishes, and casts Lumos ---------------- */
   const wandEl = $("#wand");
-  let lumosT = null, lampBefore = true;
+  let lumosT = null;
   function lumos() {
     if (wandEl.classList.contains("on")) return nox();
-    lampBefore = S.lamp;
     wandEl.classList.remove("cast", "lit", "leaving");
     void wandEl.getBBox();
     wandEl.classList.add("on");
@@ -958,22 +968,24 @@
       // the room goes dark and the wand becomes the light
       S.lamp = false; document.body.classList.add("lamp-off", "lumos");
       setTimeout(() => wandEl.classList.add("lit"), 250);
-      lumosT = setTimeout(nox, 11000);
+      lumosT = setTimeout(hideWand, 2200);
     }, 1150);
   }
-  function nox() {
+  // the wand slips away; the room stays dark and the lamp glows to be switched back on
+  function hideWand() {
     clearTimeout(lumosT);
     wandEl.classList.add("leaving");
     wandEl.classList.remove("lit");
-    document.body.classList.remove("lumos");
-    if (lampBefore) { S.lamp = true; document.body.classList.remove("lamp-off"); }
+    document.body.classList.add("lamp-beckon");
     lumosT = setTimeout(() => wandEl.classList.remove("on", "cast", "leaving"), 600);
   }
-  wandEl.addEventListener("click", nox);
+  function nox() { hideWand(); }
+  wandEl.addEventListener("click", hideWand);
 
   function toggleLamp() {
     S.lamp = !S.lamp;
     document.body.classList.toggle("lamp-off", !S.lamp);
+    if (S.lamp) document.body.classList.remove("lumos", "lamp-beckon");
     AE.sfx("click");
   }
 
