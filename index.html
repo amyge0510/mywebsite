@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>my little room</title>
+  <meta name="description" content="A cozy pixel room: records on the wall are my projects.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="stage-wrap">
+    <div id="stage">
+      <canvas id="scene" width="640" height="360" aria-label="A cozy pixel-art room with a wall of records, a record player, a lamp, a coffee station, a bulletin board and a white cat."></canvas>
+      <div id="tooltip" role="status" aria-live="polite"></div>
+
+      <div id="coffee-menu" class="pop">
+        <p>what are we having?</p>
+        <button data-drink="matcha"><i style="background:#8db45a"></i>matcha</button>
+        <button data-drink="cappuccino"><i style="background:#c99a70"></i>cappuccino</button>
+        <button data-drink="coffee"><i style="background:#4a2c18"></i>coffee</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="hint">✦ hover &amp; click around ✦</div>
+
+  <div id="hud" aria-live="polite">
+    <span class="eq"><i></i><i></i><i></i></span>
+    <span class="title"></span>
+    <button type="button">stop</button>
+  </div>
+
+  <div id="toast" aria-live="polite"></div>
+
+  <!-- project modal -->
+  <div class="modal" id="project-modal" aria-hidden="true" role="dialog" aria-labelledby="project-title">
+    <div class="backdrop" data-close></div>
+    <div class="card">
+      <button class="x" data-close aria-label="Close">×</button>
+      <div class="project">
+        <div id="project-cover"></div>
+        <div>
+          <h2 id="project-title"></h2>
+          <p class="sub" id="project-sub"></p>
+          <div class="tags" id="project-tags"></div>
+          <p id="project-blurb"></p>
+          <a id="project-link" class="btn">open project →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- notes modal -->
+  <div class="modal" id="note-modal" aria-hidden="true" role="dialog" aria-labelledby="note-heading">
+    <div class="backdrop" data-close></div>
+    <div class="card">
+      <button class="x" data-close aria-label="Close">×</button>
+      <h2 id="note-heading">leave a note</h2>
+      <form id="note-form">
+        <div class="chips">
+          <label><input type="radio" name="topic" value="project idea" checked><span>project idea</span></label>
+          <label><input type="radio" name="topic" value="about the wall"><span>about the wall</span></label>
+          <label><input type="radio" name="topic" value="hello"><span>just saying hi</span></label>
+        </div>
+        <textarea name="message" maxlength="140" rows="3" placeholder="what would you like to see next?" required></textarea>
+        <div class="row">
+          <input name="name" maxlength="24" placeholder="your name (optional)">
+          <span id="note-count">0/140</span>
+          <button type="submit" class="btn">pin it</button>
+        </div>
+        <small id="note-shared"></small>
+      </form>
+      <h3>on the board</h3>
+      <ul id="note-list"></ul>
+    </div>
+  </div>
+
+  <nav id="a11y-nav" class="sr-only" aria-label="Room controls"></nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/notes.js"></script>
+  <script src="js/scene.js"></script>
+</body>
+</html>
