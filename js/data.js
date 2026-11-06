@@ -3,7 +3,7 @@
    Everything here is plain data; no build step needed.
 ------------------------------------------------------------------- */
 window.SITE = {
-  title: "my little room",
+  title: "my small corner",
 
   /* Backend for the bulletin board. Leave blank to keep notes in the
      visitor's browser only (localStorage). Fill both in to share notes
