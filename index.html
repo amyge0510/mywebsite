@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>my little room</title>
+  <meta name="description" content="A cozy little room: the records on the wall are my projects.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="stage-wrap">
+    <svg id="room" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid meet" role="img"
+      aria-label="A warm room with a wall of records, a record player, a lamp, a framed photo, a bulletin board, an orange beanbag and an instant camera."></svg>
+  </main>
+  <div id="grain" aria-hidden="true"></div>
+  <button class="pan-arrow" id="pan-left" aria-label="Look left"><span></span></button>
+  <button class="pan-arrow" id="pan-right" aria-label="Look right"><span></span></button>
+
+
+  <div id="hud" aria-live="polite">
+    <span class="eq"><i></i><i></i><i></i></span>
+    <span class="title"></span>
+    <button type="button">stop</button>
+  </div>
+
+  <div id="toast" aria-live="polite"></div>
+
+  <!-- project modal: the record opens like a gatefold sleeve -->
+  <div class="modal" id="project-modal" aria-hidden="true" role="dialog" aria-labelledby="project-title">
+    <div class="backdrop" data-close></div>
+    <div class="gatefold" id="gatefold">
+      <div class="gf-inside">
+        <div class="gf-disc" id="gf-disc"></div>
+        <div class="gf-pocket"></div>
+      </div>
+      <div class="gf-cover">
+        <div class="gf-face gf-front" id="project-cover"></div>
+        <div class="gf-face gf-back">
+          <h2 class="gf-label" id="project-title"></h2>
+          <p class="sub" id="project-sub"></p>
+          <div class="tags" id="project-tags"></div>
+          <p id="project-blurb"></p>
+          <a id="project-link" class="btn">open project →</a>
+        </div>
+      </div>
+      <button class="x" data-close aria-label="Close">×</button>
+    </div>
+  </div>
+
+  <!-- camera modal: take an instant photo -->
+  <div class="modal" id="camera-modal" aria-hidden="true" role="dialog" aria-labelledby="camera-heading">
+    <div class="backdrop" data-close></div>
+    <div class="card cam-card">
+      <button class="x" data-close aria-label="Close">×</button>
+      <h2 id="camera-heading" class="label-font">say cheese</h2>
+      <div class="cam-stage">
+        <div class="viewfinder" id="viewfinder">
+          <video id="cam-video" playsinline autoplay muted></video>
+          <div class="cam-msg" id="cam-msg">starting the camera…</div>
+          <div class="flash" id="cam-flash"></div>
+        </div>
+        <div class="print-slot"><img id="polaroid" alt="Your instant photo"></div>
+      </div>
+      <div class="cam-actions">
+        <button type="button" id="cam-snap">● snap</button>
+        <a class="btn" id="cam-save" download="my-little-room-polaroid.png" hidden>save photo</a>
+        <button type="button" id="cam-again" class="ghost" hidden>take another</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- notes modal -->
+  <div class="modal" id="note-modal" aria-hidden="true" role="dialog" aria-labelledby="note-heading">
+    <div class="backdrop" data-close></div>
+    <div class="card">
+      <button class="x" data-close aria-label="Close">×</button>
+      <h2 id="note-heading" class="label-font">leave a note</h2>
+      <form id="note-form">
+        <div class="chips">
+          <label><input type="radio" name="topic" value="project idea" checked><span>project idea</span></label>
+          <label><input type="radio" name="topic" value="about the wall"><span>about the wall</span></label>
+          <label><input type="radio" name="topic" value="hello"><span>just saying hi</span></label>
+        </div>
+        <textarea name="message" maxlength="140" rows="3" placeholder="what would you like to see next?" required></textarea>
+        <div class="row">
+          <input name="name" maxlength="24" placeholder="your name (optional)">
+          <span id="note-count">0/140</span>
+          <button type="submit" class="btn">pin it</button>
+        </div>
+        <small id="note-shared"></small>
+      </form>
+      <h3>on the board</h3>
+      <ul id="note-list"></ul>
+    </div>
+  </div>
+
+  <nav id="a11y-nav" class="sr-only" aria-label="Room controls"></nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/notes.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/cat.js"></script>
+  <script src="js/room.js"></script>
+</body>
+</html>
