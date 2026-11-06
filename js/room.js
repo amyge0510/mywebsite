@@ -530,6 +530,19 @@
     </g>`;
   }
 
+  // the cat's water bowl
+  const BOWL = { x: 1310, y: 978 };
+  function waterBowl() {
+    const { x, y } = BOWL;
+    return `<g class="bowl">
+      <ellipse cx="${x - 3}" cy="${y + 2}" rx="34" ry="7" fill="#000" opacity=".5" filter="url(#blur4)"/>
+      <path d="M${x - 28} ${y - 14} L${x - 22} ${y} Q${x} ${y + 5} ${x + 22} ${y} L${x + 28} ${y - 14} Z" fill="${lin([[0, "#3e6e96"], [0.45, "#8cbfe4"], [1, "#2a4e70"]], 0, 0, 1, 0)}"/>
+      <ellipse cx="${x}" cy="${y - 14}" rx="28" ry="6.5" fill="${lin([[0, "#f6f0e6"], [1, "#c8bfb2"]])}"/>
+      <ellipse cx="${x}" cy="${y - 13.5}" rx="23" ry="4.6" fill="#9fd0ee"/>
+      <ellipse cx="${x - 6}" cy="${y - 14.5}" rx="8" ry="1.4" fill="#fff" opacity=".6"/>
+    </g>`;
+  }
+
   // a glowing "PROJECTS" lightbox above the record wall
   function lightbox() {
     const { x0, x1, y0, y1 } = SIGN, d = 10;
@@ -596,6 +609,8 @@
     <g id="curtains" pointer-events="none"></g>
     ${beanbag()}
     ${ipodMirror()}
+    ${waterBowl()}
+    <g id="cat" class="hot" data-hot="cat" data-pose="sleep">${window.Cat.markup()}</g>
     <g id="flydisc" opacity="0"></g>
     <g id="overlay" pointer-events="none">${lighting()}</g>
     <g id="emissive" pointer-events="none">
@@ -848,11 +863,26 @@
 
   /* ---------------- hearts ---------------- */
   const fxEl = $("#fx"), parts = [];
-  function spawn(x, y) {
+  function spawn(x, y, kind) {
     const g = document.createElementNS(SVGNS, "g");
-    g.innerHTML = `<path d="M0 6 C-14 -4 -8 -16 0 -8 C8 -16 14 -4 0 6 Z" fill="#ff7096"/>`;
+    g.innerHTML = kind === "z"
+      ? `<text font-family="Fraunces, Georgia, serif" font-style="italic" font-size="20" fill="#fff0dc">z</text>`
+      : `<path d="M0 6 C-14 -4 -8 -16 0 -8 C8 -16 14 -4 0 6 Z" fill="#ff7096"/>`;
     fxEl.appendChild(g);
-    parts.push({ g, x, y, vx: (Math.random() - 0.5) * 30, vy: -60, life: 1.4, max: 1.4 });
+    const z = kind === "z";
+    parts.push({ g, x, y, vx: z ? 8 : (Math.random() - 0.5) * 30, vy: z ? -18 : -60, life: z ? 2.6 : 1.4, max: z ? 2.6 : 1.4 });
+  }
+
+  /* ---------------- the cat ---------------- */
+  const catEl = $("#cat");
+  const cat = window.Cat.start(catEl, {
+    bowl: BOWL, xMin: 90, xMax: 1520, yMin: 952, yMax: 992, scale: 0.5, AE,
+    onZ: (x, y) => spawn(x, y, "z")
+  });
+  function petCat() {
+    const st = cat.state;
+    for (let i = 0; i < 4; i++) setTimeout(() => spawn(st.x - 25 + Math.random() * 50, st.y - 80), i * 150);
+    cat.pet();
   }
   function updateParts(dt) {
     for (let i = parts.length - 1; i >= 0; i--) {
@@ -872,7 +902,7 @@
   function loop(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     S.t += dt;
-    updateDisc(dt); updateLid(dt); updateParts(dt); updateCurtains(S.t);
+    updateDisc(dt); updateLid(dt); updateParts(dt); updateCurtains(S.t); cat.update(dt);
     requestAnimationFrame(loop);
   }
 
@@ -894,6 +924,7 @@
       case "lamp": return toggleLamp();
       case "camera": openModal("camera-modal"); return window.InstantCamera.start();
       case "beanbag": return rustle();
+      case "cat": return petCat();
       case "books": return lumos();
       case "note": case "board": return openNotes();
     }
@@ -1067,5 +1098,5 @@
   drawLid(0);
   centerScroll();
   requestAnimationFrame(loop);
-  window.__room = { S };
+  window.__room = { S, cat };
 })();

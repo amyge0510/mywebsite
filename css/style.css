@@ -84,6 +84,13 @@ body.lamp-off .sun { opacity: .15; }
 /* on arrival the record player glows, inviting a click */
 .beckon { filter: url(#outline-glow); }
 
+/* the cat */
+#cat .pose { opacity: 0; transition: opacity .3s ease; }
+#cat[data-pose="sit"] .pose-sit, #cat[data-pose="sleep"] .pose-sleep, #cat[data-pose="walk"] .pose-walk { opacity: 1; }
+#cat .ear-r { transform-box: fill-box; transform-origin: 30% 100%; }
+#cat .ear-r.twitch { animation: twitch .5s ease-in-out; }
+@keyframes twitch { 30% { transform: rotate(-14deg); } 65% { transform: rotate(6deg); } }
+
 /* the wand */
 #wand { opacity: 0; pointer-events: none; transition: opacity .5s; }
 #wand.on { opacity: 1; pointer-events: auto; }
