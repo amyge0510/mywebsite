@@ -60,8 +60,10 @@ window.AudioEngine = (() => {
   }
 
   /* ---------------- synth track ---------------- */
+  const DEFAULT_SYNTH = { bpm: 76, seed: 3, lead: "triangle", density: 0.45,
+    chords: [[53,57,60,64],[52,55,59,62],[50,53,57,60],[48,52,55,59]], scale: [72,74,76,79,81,84] };
   function startSynth(track) {
-    const sp = track.synth;
+    const sp = track.synth || { ...DEFAULT_SYNTH, seed: (track.id || "x").length * 7 };
     const s = { sp, step: 0, next: ctx.currentTime + 0.15 };
     const beat = 60 / sp.bpm;
 

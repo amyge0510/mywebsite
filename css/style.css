@@ -165,6 +165,11 @@ button:disabled { opacity: .6; cursor: wait; }
   max-width: calc(100vw - 32px); white-space: nowrap;
 }
 #hud .title { overflow: hidden; text-overflow: ellipsis; }
+#spotify-embed { display: none; width: min(380px, calc(100vw - 140px)); height: 80px; border-radius: 12px; overflow: hidden; }
+#spotify-embed iframe { display: block; border: 0; border-radius: 12px; }
+#hud.spotify { padding: 6px 8px 6px 6px; border-radius: 18px; }
+#hud.spotify .eq, #hud.spotify .title { display: none; }
+#hud.spotify #spotify-embed { display: block; }
 #hud.show { transform: translate(-50%, 0); }
 #hud button { padding: 5px 14px; }
 .eq { display: inline-flex; gap: 2px; align-items: flex-end; height: 14px; }
