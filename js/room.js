@@ -500,27 +500,36 @@
     };
   }
 
-  // the wand (hidden until the books are tapped). Drawn standing up, handle at (0,0)
-  function wandMarkup() {
-    const wood = lin([[0, "#2a160c"], [0.45, "#6a4024"], [0.6, "#4a2a16"], [1, "#1e0e06"]], 0, 0, 1, 0);
-    return `<g id="wand" transform="translate(800 640)" pointer-events="visiblePainted" style="cursor:pointer">
-      <g class="wand-move">
-        <g class="wand-light">
-          <circle cx="0" cy="-232" r="260" fill="${rad([[0, "#fff6dc", 0.55], [0.25, "#ffe2a8", 0.25], [1, "#ffcf8a", 0]])}" style="mix-blend-mode:screen"/>
-          <circle cx="0" cy="-232" r="60" fill="#fffaf0" opacity=".55" filter="url(#blur30)"/>
-        </g>
-        <path d="M-6 0 L6 0 L3.2 -230 L-3.2 -230 Z" fill="${wood}"/>
-        <path d="M-8 0 C-9 -20 -7 -40 -6 -64 L6 -64 C7 -40 9 -20 8 0 Z" fill="${wood}"/>
-        ${[-14, -30, -46, -62].map((y) => `<ellipse cx="0" cy="${y}" rx="7.6" ry="2.6" fill="#1a0c04"/><ellipse cx="0" cy="${y - 1.2}" rx="7" ry="1.6" fill="#8a5a34" opacity=".55"/>`).join("")}
-        <ellipse cx="0" cy="0" rx="8" ry="3" fill="#160a04"/>
-        <path d="M-1 -70 L1 -70 L.8 -226 L-.8 -226 Z" fill="#c89a6a" opacity=".35"/>
-        <g class="wand-tip">
-          <circle cx="0" cy="-232" r="14" fill="#fffdf2" filter="url(#blur6)"/>
-          <circle cx="0" cy="-232" r="5" fill="#fff"/>
-          ${[0, 1, 2, 3, 4, 5].map((i) => `<circle class="spark" style="animation-delay:${i * 0.12}s;--a:${i * 60}deg" cx="0" cy="-232" r="2.4" fill="#fff4cc"/>`).join("")}
-        </g>
+  // the deluminator (hidden until the books are tapped). Drawn upright, centred on its body;
+  // the nozzle is at (0,-104) and the cap hinges at (15,-98)
+  const DELUM = { x: 800, y: 470, rot: 28, k: 1.45 };
+  function deluminatorMarkup() {
+    const r = rng(42);
+    let veins = "";
+    for (let i = 0; i < 9; i++) {
+      let x = -13 + r() * 26, y = -78, d = `M${x.toFixed(1)} ${y}`;
+      while (y < 76) { y += 6 + r() * 8; x = Math.max(-14, Math.min(14, x + (r() - 0.5) * 9)); d += ` L${x.toFixed(1)} ${y.toFixed(1)}`; }
+      veins += `<path d="${d}" stroke="#7fd0b0" stroke-width="${(0.5 + r() * 0.5).toFixed(2)}" fill="none" opacity="${(0.45 + r() * 0.4).toFixed(2)}"/>`;
+      for (let j = 0; j < 4; j++) { const yy = -70 + r() * 140, xx = -13 + r() * 26; veins += `<path d="M${xx.toFixed(1)} ${yy.toFixed(1)} q${(r() * 6 - 3).toFixed(1)} 4 ${(r() * 8 - 4).toFixed(1)} 9" stroke="#9fe2c4" stroke-width=".45" fill="none" opacity=".5"/>`; }
+    }
+    const silver = lin([[0, "#6e6862"], [0.3, "#f6f2ea"], [0.55, "#b8b0a6"], [0.8, "#ece6dc"], [1, "#5a544e"]], 0, 0, 1, 0);
+    const body = lin([[0, "#062218"], [0.35, "#1e5a44"], [0.55, "#2e7a5e"], [0.8, "#123c2e"], [1, "#04140e"]], 0, 0, 1, 0);
+    const ring = (y, h, w) => `<rect x="${-w / 2}" y="${y}" width="${w}" height="${h}" rx="${h / 2.4}" fill="${silver}"/><rect x="${-w / 2}" y="${y + h - 1.2}" width="${w}" height="1.2" fill="#3a342e" opacity=".5"/>`;
+    return `<g id="delum" transform="translate(${DELUM.x} ${DELUM.y}) rotate(${DELUM.rot}) scale(${DELUM.k})" opacity="0" pointer-events="none">
+      <g class="delum-glow" opacity="0"><circle cx="0" cy="-108" r="34" fill="url(#orb-halo)"/></g>
+      <rect x="-15" y="-80" width="30" height="160" rx="4" fill="${body}"/>
+      ${veins}
+      <rect x="-15" y="-80" width="30" height="160" rx="4" fill="${lin([[0, "#fff", 0], [0.45, "#fff", 0.16], [0.55, "#fff", 0], [1, "#000", 0.25]], 0, 0, 1, 0)}"/>
+      ${ring(76, 10, 36)}${ring(86, 6, 30)}<ellipse cx="0" cy="93" rx="13" ry="3.5" fill="${silver}"/>
+      ${ring(-90, 11, 36)}${ring(-84, 5, 32)}
+      <rect x="-7" y="-106" width="14" height="17" rx="2" fill="${silver}"/>
+      <ellipse cx="0" cy="-106" rx="7" ry="2.4" fill="#2a2622"/>
+      <g class="delum-cap">
+        <path d="M-15 -97 C-17 -114 -9 -122 0 -122 C9 -122 17 -114 15 -97 Z" fill="${silver}"/>
+        <rect x="-16" y="-100" width="32" height="5" rx="2" fill="${silver}"/>
+        <path d="M-9 -112 C-7 -117 -2 -119 3 -119" stroke="#fff" stroke-width="2" fill="none" opacity=".8" stroke-linecap="round"/>
+        <circle cx="15" cy="-98" r="3" fill="#8a847c"/>
       </g>
-      <text class="wand-word" x="0" y="-300" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="34" fill="#fff4dc">Lumos!</text>
     </g>`;
   }
 
@@ -567,7 +576,7 @@
         <ellipse cx="${L.x}" cy="${L.y - 20}" rx="290" ry="240" fill="${rad([[0, "#ffc27a", 0.55], [1, "#ff9a40", 0]])}"/>
       </g>
       <g style="mix-blend-mode:screen">
-        <rect x="-1400" y="-900" width="4400" height="2600" fill="${rad([[0, "#ff8434", 0.3], [1, "#ff8434", 0]], 1530, 300, 420, true)}"/>
+        <rect class="donut-light" x="-1400" y="-900" width="4400" height="2600" fill="${rad([[0, "#ff8434", 0.3], [1, "#ff8434", 0]], 1530, 300, 420, true)}"/>
       </g>
       <rect x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="#ec9660" opacity=".74"/>
       <rect x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="${rad([[0, "#ffffff", 0], [0.22, "#e8a87a", 0.36], [0.55, "#5a2410", 0.72], [1, "#080201", 0.94]], 860, 620, 1180, true)}"/>
@@ -614,13 +623,16 @@
       ${sign.glow}
       <use id="notes-lit" href="#notes" pointer-events="none"/>
       <use id="lamp-halo" href="#lamp" transform="translate(0 ${DY})" filter="url(#outline-only)"/>
-      ${wandMarkup()}
+      ${deluminatorMarkup()}
+      <g id="orbs"></g>
       ${sconce.glow}
       <g id="fx"></g>
     </g>`;
 
   const filters = `
     ${[2, 4, 6, 8, 10, 14, 30].map((d) => `<filter id="blur${d}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${d / 2}"/></filter>`).join("")}
+    <radialGradient id="orb-core"><stop offset="0" stop-color="#fffaf0"/><stop offset=".45" stop-color="#ffd690"/><stop offset="1" stop-color="#ff9a40" stop-opacity="0"/></radialGradient>
+    <radialGradient id="orb-halo"><stop offset="0" stop-color="#ffcf8a" stop-opacity=".7"/><stop offset=".5" stop-color="#ffa050" stop-opacity=".22"/><stop offset="1" stop-color="#ff8a36" stop-opacity="0"/></radialGradient>
     <clipPath id="labelclip"><circle r="17"/></clipPath>
     <pattern id="hp-diamonds" width="14" height="10" patternUnits="userSpaceOnUse"><path d="M7 0 L14 5 L7 10 L0 5 Z" fill="#000" opacity=".16"/><path d="M7 1.5 L12 5 L7 8.5 L2 5 Z" fill="#fff" opacity=".06"/></pattern>
     <pattern id="note-paper" width="88" height="113" patternUnits="userSpaceOnUse"><rect width="88" height="113" fill="#faf8f2"/><image href="assets/img/paper.jpg" width="88" height="113" preserveAspectRatio="none"/></pattern>
@@ -941,7 +953,7 @@
   function loop(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     S.t += dt;
-    updateDisc(dt); updateLid(dt); updateParts(dt); updateCurtains(S.t); cat.update(dt);
+    updateDisc(dt); updateLid(dt); updateDelum(dt); updateParts(dt); updateCurtains(S.t); cat.update(dt);
     placeHud();
     requestAnimationFrame(loop);
   }
@@ -965,7 +977,7 @@
       case "camera": openModal("camera-modal"); return window.InstantCamera.start();
       case "beanbag": return rustle();
       case "cat": return petCat();
-      case "books": return lumos();
+      case "books": return deluminate();
       case "note": case "board": return openNotes();
     }
   }
@@ -981,40 +993,84 @@
   }
   bag.addEventListener("pointerenter", rustle);
 
-  /* ---------------- tap the books: a wand appears, swishes, and casts Lumos ---------------- */
-  const wandEl = $("#wand");
-  let lumosT = null;
-  function lumos() {
-    if (wandEl.classList.contains("on")) return nox();
-    wandEl.classList.remove("cast", "lit", "leaving");
-    void wandEl.getBBox();
-    wandEl.classList.add("on");
+  /* ---------------- tap the books: the deluminator pockets every light ---------------- */
+  // the four lights, in the order they're drawn in; each has a body class that switches it off
+  const LIGHTS = [
+    { cls: "d-sconce", x: BOARD.x + BOARD.w / 2, y: BOARD.y - 20 },
+    { cls: "d-sign", x: (SIGN.x0 + SIGN.x1) / 2, y: (SIGN.y0 + SIGN.y1) / 2 },
+    { cls: "lamp-off", x: LAMP_GLOW.x, y: LAMP_GLOW.y - 10 },
+    { cls: "d-donut", x: 1530, y: 300 }
+  ];
+  const delumEl = $("#delum"), capEl = delumEl.querySelector(".delum-cap"), delumGlow = delumEl.querySelector(".delum-glow"), orbsEl = $("#orbs");
+  const D = { t: -1, orbs: [] };
+  const nozzle = () => {
+    const a = (DELUM.rot * Math.PI) / 180, lx = 0, ly = -108 * DELUM.k;
+    return { x: DELUM.x + lx * Math.cos(a) - ly * Math.sin(a), y: DELUM.y + lx * Math.sin(a) + ly * Math.cos(a) };
+  };
+  const easeOutBack = (t) => 1 + 2.2 * Math.pow(t - 1, 3) + 1.2 * Math.pow(t - 1, 2);
+  const T = { appear: 0, open: 0.6, first: 1.35, gap: 1.0, fly: 0.95 };
+  T.close = T.first + 3 * T.gap + T.fly + 0.25; T.leave = T.close + 0.55; T.end = T.leave + 0.55;
+  function deluminate() {
+    if (D.t >= 0) return;
+    if (document.body.classList.contains("deluminated")) return restoreLights();
+    D.t = 0; D.orbs = []; D.sent = 0;
     AE.sfx("whoosh");
-    clearTimeout(lumosT);
-    lumosT = setTimeout(() => {
-      wandEl.classList.add("cast");
-      AE.sfx("lumos");
-      // the room goes dark and the wand becomes the light
-      S.lamp = false; document.body.classList.add("lamp-off", "lumos");
-      setTimeout(() => wandEl.classList.add("lit"), 250);
-      lumosT = setTimeout(hideWand, 2200);
-    }, 1150);
   }
-  // the wand slips away; the room stays dark and the lamp glows to be switched back on
-  function hideWand() {
-    clearTimeout(lumosT);
-    wandEl.classList.add("leaving");
-    wandEl.classList.remove("lit");
-    document.body.classList.add("lamp-beckon");
-    lumosT = setTimeout(() => wandEl.classList.remove("on", "cast", "leaving"), 600);
+  function launchOrb(i) {
+    const L = LIGHTS[i];
+    document.body.classList.add(L.cls);
+    if (L.cls === "lamp-off") S.lamp = false;
+    const g = document.createElementNS(SVGNS, "g");
+    g.innerHTML = `<circle r="90" fill="url(#orb-halo)"/><circle r="30" fill="url(#orb-core)"/><circle r="9" fill="#fffdf6"/>`;
+    orbsEl.appendChild(g);
+    D.orbs.push({ g, x0: L.x, y0: L.y, t: 0 });
+    AE.sfx("whoosh");
   }
-  function nox() { hideWand(); }
-  wandEl.addEventListener("click", hideWand);
+  function updateDelum(dt) {
+    if (D.t < 0) return;
+    D.t += dt;
+    const t = D.t;
+    // appear, cap swings back, cap closes, vanish
+    const app = Math.min(1, t / 0.5), out = t > T.leave ? Math.min(1, (t - T.leave) / 0.5) : 0;
+    const sc = 0.7 + 0.3 * easeOutBack(app) - 0.15 * out;
+    delumEl.setAttribute("opacity", (Math.min(1, app * 1.6) * (1 - out)).toFixed(3));
+    delumEl.setAttribute("transform", `translate(${DELUM.x} ${DELUM.y - 14 * out}) rotate(${DELUM.rot}) scale(${(DELUM.k * sc).toFixed(3)})`);
+    let cap = 0;
+    if (t > T.open) cap = easeOutBack(Math.min(1, (t - T.open) / 0.55));
+    if (t > T.close) cap = 1 - ease(Math.min(1, (t - T.close) / 0.4));
+    capEl.setAttribute("transform", `rotate(${(cap * 118).toFixed(1)} 15 -98)`);
+    if (t > T.open && !D.clicked) { D.clicked = true; AE.sfx("latch"); }
+    while (D.sent < 4 && t >= T.first + D.sent * T.gap) launchOrb(D.sent++);
+    // orbs arc into the nozzle, shrinking as they go in
+    const nz = nozzle();
+    D.orbs.forEach((o) => {
+      if (o.done) return;
+      o.t = Math.min(1, o.t + dt / T.fly);
+      const e = o.t * o.t * (3 - 2 * o.t);
+      const cx = (o.x0 + nz.x) / 2, cy = Math.min(o.y0, nz.y) - 140;
+      const x = (1 - e) ** 2 * o.x0 + 2 * (1 - e) * e * cx + e * e * nz.x, y = (1 - e) ** 2 * o.y0 + 2 * (1 - e) * e * cy + e * e * nz.y;
+      const s = o.t < 0.12 ? 0.4 + 0.6 * (o.t / 0.12) : 1 - 0.95 * Math.pow((o.t - 0.12) / 0.88, 2.2);
+      o.g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${s.toFixed(3)})`);
+      if (o.t >= 1) { o.done = true; o.g.remove(); AE.sfx("absorb"); D.flash = 1; }
+    });
+    D.flash = Math.max(0, (D.flash || 0) - dt * 2.5);
+    delumGlow.setAttribute("opacity", D.flash.toFixed(3));
+    if (t >= T.end) {
+      D.t = -1; D.clicked = false;
+      document.body.classList.add("deluminated", "lamp-beckon");
+    }
+  }
+  function restoreLights() {
+    S.lamp = true;
+    document.body.classList.remove("deluminated", "lamp-beckon", "lamp-off", "d-sconce", "d-sign", "d-donut");
+    AE.sfx("click");
+  }
 
   function toggleLamp() {
+    if (document.body.classList.contains("deluminated")) return restoreLights();
     S.lamp = !S.lamp;
     document.body.classList.toggle("lamp-off", !S.lamp);
-    if (S.lamp) document.body.classList.remove("lumos", "lamp-beckon");
+    if (S.lamp) document.body.classList.remove("lamp-beckon");
     AE.sfx("click");
   }
 

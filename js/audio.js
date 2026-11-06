@@ -257,6 +257,14 @@ window.AudioEngine = (() => {
       f.frequency.setValueAtTime(400, t); f.frequency.exponentialRampToValueAtTime(2400, t + 0.35); f.frequency.exponentialRampToValueAtTime(600, t + 0.8);
       const g1 = gn(); g1.gain.setValueAtTime(0.0001, t); g1.gain.linearRampToValueAtTime(0.14, t + 0.3); g1.gain.linearRampToValueAtTime(0.0001, t + 0.85);
       src.connect(f); f.connect(g1); g1.connect(out); src.start(t); src.stop(t + 0.9);
+    } else if (name === "absorb") {
+      // the light is sucked into the nozzle: a quick falling shimmer and a soft pop
+      [1568, 1046, 784].forEach((fq, i) => {
+        const a = o(), g1 = gn(), tt = t + i * 0.05;
+        a.type = "sine"; a.frequency.setValueAtTime(fq, tt); a.frequency.exponentialRampToValueAtTime(fq * 0.6, tt + 0.25);
+        g1.gain.setValueAtTime(0.0001, tt); g1.gain.linearRampToValueAtTime(0.06, tt + 0.01); g1.gain.exponentialRampToValueAtTime(0.0001, tt + 0.3);
+        a.connect(g1); g1.connect(out); a.start(tt); a.stop(tt + 0.32);
+      });
     } else if (name === "lumos") {
       // a rising shimmer of soft bells
       [1046, 1318, 1568, 2093, 2637, 3136].forEach((fq, i) => {
