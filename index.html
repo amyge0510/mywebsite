@@ -32,21 +32,25 @@
 
   <div id="toast" aria-live="polite"></div>
 
-  <!-- project modal -->
+  <!-- project modal: the record opens like a gatefold sleeve -->
   <div class="modal" id="project-modal" aria-hidden="true" role="dialog" aria-labelledby="project-title">
     <div class="backdrop" data-close></div>
-    <div class="card">
-      <button class="x" data-close aria-label="Close">×</button>
-      <div class="project">
-        <div id="project-cover"></div>
-        <div>
-          <h2 id="project-title"></h2>
+    <div class="gatefold" id="gatefold">
+      <div class="gf-inside">
+        <div class="gf-disc" id="gf-disc"></div>
+        <div class="gf-pocket"></div>
+      </div>
+      <div class="gf-cover">
+        <div class="gf-face gf-front" id="project-cover"></div>
+        <div class="gf-face gf-back">
+          <h2 class="gf-label" id="project-title"></h2>
           <p class="sub" id="project-sub"></p>
           <div class="tags" id="project-tags"></div>
           <p id="project-blurb"></p>
           <a id="project-link" class="btn">open project →</a>
         </div>
       </div>
+      <button class="x" data-close aria-label="Close">×</button>
     </div>
   </div>
 
@@ -72,15 +76,6 @@
       </form>
       <h3>on the board</h3>
       <ul id="note-list"></ul>
-    </div>
-  </div>
-
-  <!-- photo modal -->
-  <div class="modal" id="photo-modal" aria-hidden="true" role="dialog" aria-label="A and C">
-    <div class="backdrop" data-close></div>
-    <div class="card photo-card">
-      <button class="x" data-close aria-label="Close">×</button>
-      <img src="assets/img/us.jpg" alt="The two of us at a café, framed by red cross-stitched initials A and C">
     </div>
   </div>
 
