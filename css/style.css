@@ -20,9 +20,37 @@ body {
 #stage-wrap { position: fixed; inset: 0; overflow: hidden; }
 #room { display: block; width: 100%; height: 100%; overflow: visible; touch-action: manipulation; user-select: none; }
 @media (orientation: portrait) {
-  #stage-wrap { overflow-x: auto; overflow-y: hidden; display: flex; align-items: center; }
-  #room { width: calc(82vh * 1.6); height: 82vh; flex: none; }
+  #stage-wrap { overflow-x: auto; overflow-y: hidden; display: flex; align-items: center; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  #stage-wrap::-webkit-scrollbar { display: none; }
+  #room { width: calc(88svh * 1.6); height: 88svh; flex: none; }
 }
+
+/* phones: translucent arrows painted on the floor, inviting a look around */
+.pan-arrow {
+  position: fixed; z-index: 4; top: calc(50svh + 37svh); width: 64px; height: 64px; padding: 0;
+  background: none; box-shadow: none; border-radius: 50%;
+  opacity: 0; pointer-events: none; transition: opacity .4s;
+}
+.pan-arrow.show { opacity: 1; pointer-events: auto; }
+#pan-left { left: 14px; }
+#pan-right { right: 14px; }
+.pan-arrow span {
+  display: block; width: 100%; height: 100%; border-radius: 50%;
+  background: rgba(255, 236, 214, .16); border: 1.5px solid rgba(255, 240, 222, .45);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  transform: perspective(160px) rotateX(52deg); position: relative;
+  animation: nudge-r 1.6s ease-in-out infinite;
+}
+#pan-left span { animation-name: nudge-l; }
+.pan-arrow span::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 18px; height: 18px;
+  border-right: 3px solid rgba(255, 244, 230, .85); border-top: 3px solid rgba(255, 244, 230, .85);
+  transform: translate(-65%, -50%) rotate(45deg); border-radius: 2px;
+}
+#pan-left span::after { transform: translate(-35%, -50%) rotate(-135deg); }
+@keyframes nudge-r { 50% { translate: 6px 0; } }
+@keyframes nudge-l { 50% { translate: -6px 0; } }
+.pan-arrow:hover, .pan-arrow:active { filter: none; transform: none; }
 #grain {
   position: fixed; inset: 0; pointer-events: none; z-index: 2;
   opacity: .07; mix-blend-mode: overlay;
@@ -52,6 +80,13 @@ body.lamp-off .sun { opacity: .15; }
 .beanbag .squish { transform-box: fill-box; transform-origin: 50% 100%; }
 .beanbag.wobble .squish { animation: squish .7s ease-out; }
 @keyframes squish { 20% { transform: scale(1.03, .96) rotate(-1.2deg); } 45% { transform: scale(.985, 1.02) rotate(.9deg); } 70% { transform: scale(1.01, .99) rotate(-.4deg); } }
+
+/* a record glows to invite a hover once the lid is open */
+.rec .rec-halo { opacity: 0; pointer-events: none; transition: opacity .5s; }
+.rec.halo .rec-halo { animation: halo 1.8s ease-in-out infinite; }
+@keyframes halo { 0%, 100% { opacity: .35; } 50% { opacity: .95; } }
+.rec.halo .lift { animation: invite 1.8s ease-in-out infinite; }
+@keyframes invite { 50% { transform: translateY(-8px); } }
 
 /* records in the rack */
 .rec .lift { transition: transform .28s cubic-bezier(.2, .8, .3, 1.3); }

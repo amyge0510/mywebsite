@@ -237,7 +237,8 @@
       </g></g>`;
     const shadow = `<ellipse cx="${SLEEVE * SQ * 0.6}" cy="1" rx="${SLEEVE * SQ * 0.7}" ry="4" fill="#000" opacity=".55" filter="url(#blur4)"/>`;
     if (rc.i === null) return `<g transform="translate(${rc.x} ${REC_BASE})" pointer-events="none">${shadow}${inner}</g>`;
-    return `<g class="hot rec" data-hot="music" data-i="${rc.i}" transform="translate(${rc.x} ${REC_BASE})">${shadow}<g class="lift">${inner}</g></g>`;
+    const halo = `<g class="rec-halo" transform="rotate(${rc.lean})"><rect x="-10" y="${-SLEEVE - 12}" width="${SLEEVE * SQ + 20}" height="${SLEEVE + 18}" rx="14" fill="#ffc87a" filter="url(#blur14)"/></g>`;
+    return `<g class="hot rec" data-hot="music" data-i="${rc.i}" transform="translate(${rc.x} ${REC_BASE})">${halo}${shadow}<g class="lift">${inner}</g></g>`;
   }
   function rackWire() {
     const x0 = CUBL.x0 + 10, x1 = CUBL.x1 - 14, base = REC_BASE - 2, top = CUBL.y0 + 6, w = (x1 - x0) / 5;
@@ -343,15 +344,25 @@
     </g>`;
   }
 
-  // a burgundy velvet suitcase record player with its lid open
+  // the suitcase lid: outer velvet, inner lining (shown as it opens) and the clasp
+  const LID = { geo: null, t: 0, target: 0 };
+  function lidShapes(velvet, chrome) {
+    return `<polygon class="lid-out" fill="${velvet}"/>
+      <polygon class="lid-out" fill="url(#velvet-nap)"/>
+      <polygon class="lid-in" fill="${lin([[0, "#7a1a28"], [1, "#5a1020"]])}"/>
+      <polygon class="lid-in" fill="url(#velvet-nap)"/>
+      <polygon class="lid-edge" fill="#b8485a" opacity=".55"/>
+      <rect class="lid-clasp" width="16" height="8" rx="1.5" fill="${chrome}"/>`;
+  }
+
+  // a burgundy velvet suitcase record player; it starts closed and flips open when clicked
   function turntable() {
     const fl = 588, fr = 832, ft = 590, fb = 634, k = 0.1;
     const tl = P(fl, ft, k), tr = P(fr, ft, k);
     const sc = PLAT.ry / PLAT.rx, py = PLAT.y - DY;
     const velvet = lin([[0, "#8e2230"], [0.5, "#6e1622"], [1, "#4a0c16"]]);
     const lidTop = 108;
-    const lid = [[tl[0] - 2, tl[1] + 2], [tr[0] + 2, tr[1] + 2], [tr[0] + 6, tr[1] - lidTop], [tl[0] - 6, tl[1] - lidTop]];
-    const lidIn = [[tl[0] + 9, tl[1] - 4], [tr[0] - 9, tr[1] - 4], [tr[0] - 6, tr[1] - lidTop + 12], [tl[0] + 6, tl[1] - lidTop + 12]];
+    LID.geo = { fl, fr, ft, tl, tr, lidTop };
     const inset = (pts, d) => [P(pts[0][0] + d, pts[0][1] - 3, 0.02), P(pts[1][0] - d, pts[1][1] - 3, 0.02)];
     const deckIn = [[fl + 8, ft - 3], [fr - 8, ft - 3], [tr[0] - 6, tr[1] + 3], [tl[0] + 6, tl[1] + 3]];
     void inset;
@@ -361,11 +372,8 @@
       <rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="none" stroke="#000" stroke-opacity=".25"/>`;
     return `<g class="hot" data-hot="turntable" transform="translate(${TT.cx} ${TT.cy}) scale(${TT.s}) translate(${-TT.cx} ${-TT.cy})">
       <ellipse cx="${(fl + fr) / 2 - 6}" cy="${fb + 2}" rx="${(fr - fl) / 2 + 20}" ry="7" fill="#000" opacity=".6" filter="url(#blur4)"/>
-      <!-- lid, standing open behind the deck -->
-      ${poly(lid, velvet)}
-      ${poly(lidIn, lin([[0, "#7a1a28"], [1, "#5a1020"]]))}
-      ${poly(lidIn, "url(#velvet-nap)")}
-      <rect x="${(tl[0] + tr[0]) / 2 - 8}" y="${tl[1] - lidTop - 2}" width="16" height="8" rx="1.5" fill="${chrome}"/>
+      <!-- lid when it's raised (behind the deck); points are animated -->
+      <g id="lid-back">${lidShapes(velvet, chrome)}</g>
       <!-- deck -->
       ${poly([[fl, ft], [fr, ft], tr, tl], velvet)}
       ${poly(deckIn, lin([[0, "#121010"], [1, "#2a2626"]], 0, 1, 0, 0))}
@@ -397,6 +405,8 @@
       <rect x="${PLAT.x + 104}" y="${py - 70 * sc - 16}" width="16" height="14" rx="3" fill="#121010"/>
       <rect x="${PLAT.x + 108}" y="${py - 70 * sc - 22}" width="8" height="8" rx="2" fill="#2a2626"/>
       <circle cx="${PLAT.x + 136}" cy="${py + 6}" r="5" fill="#2a2626"/><circle cx="${PLAT.x + 136}" cy="${py + 5}" r="3" fill="#4a4442"/>
+      <!-- lid when it's lowered (covers the deck) -->
+      <g id="lid-front">${lidShapes(velvet, chrome)}</g>
     </g>`;
   }
 
@@ -580,7 +590,71 @@
   const DISC0 = 0.58;
   const recEl = (i) => svg.querySelector(`[data-hot=music][data-i="${i}"]`);
 
+  /* ---------------- the lid: closed on arrival, flips open on click ---------------- */
+  const lidBack = $("#lid-back"), lidFront = $("#lid-front"), platterGroup = $("#platter-disc").parentNode;
+  const armGroup = armEl.closest("g[transform^='scale']");
+  let afterOpen = null, prompted = false;
+  function drawLid(t) {
+    const { fl, fr, ft, tl, tr, lidTop } = LID.geo;
+    const a = ease(t) * Math.PI * 0.5;                  // 0 = lying on the deck, 1 = standing up
+    const hy = (tl[1] + tr[1]) / 2 + 2;
+    const reach = Math.hypot(lidTop, ft - hy);          // lid length
+    const ey = hy + Math.cos(a) * (ft - hy) - Math.sin(a) * lidTop;
+    const spread = 1 - t;                               // the free edge is wider when it's down at the front
+    const ex0 = lerp(tl[0] - 6, fl - 2, spread), ex1 = lerp(tr[0] + 6, fr + 2, spread);
+    const outer = [[tl[0] - 2, hy], [tr[0] + 2, hy], [ex1, ey], [ex0, ey]];
+    const inset = (p, d) => [[p[0][0] + 9, p[0][1] - 4 * (t > 0.5 ? 1 : -1)], [p[1][0] - 9, p[1][1] - 4 * (t > 0.5 ? 1 : -1)], [p[2][0] - 8, p[2][1] + d], [p[3][0] + 8, p[3][1] + d]];
+    const inner = inset(outer, 12);
+    const edge = [[ex0, ey], [ex1, ey], [ex1, ey + 7 * (1 - t)], [ex0, ey + 7 * (1 - t)]];
+    const up = ey < hy;
+    const g = up ? lidBack : lidFront;
+    lidBack.style.display = up ? "" : "none";
+    lidFront.style.display = up ? "none" : "";
+    const pts = (p) => p.map((q) => q.map((v) => v.toFixed(1)).join(",")).join(" ");
+    g.querySelectorAll(".lid-out").forEach((e) => e.setAttribute("points", pts(outer)));
+    g.querySelectorAll(".lid-in").forEach((e) => { e.setAttribute("points", pts(inner)); e.setAttribute("opacity", up ? Math.min(1, (hy - ey) / 30).toFixed(2) : 0); });
+    g.querySelector(".lid-edge").setAttribute("points", pts(edge));
+    const clasp = g.querySelector(".lid-clasp");
+    clasp.setAttribute("x", ((ex0 + ex1) / 2 - 8).toFixed(1)); clasp.setAttribute("y", (ey - 2).toFixed(1));
+    // the platter and arm are hidden under the closed lid
+    const show = up || t > 0.02 ? "" : "none";
+    platterGroup.style.visibility = up ? "visible" : "hidden";
+    if (armGroup) armGroup.style.visibility = up ? "visible" : "hidden";
+    void reach; void show;
+  }
+  function setLid(open, then) {
+    LID.target = open ? 1 : 0;
+    afterOpen = then || null;
+    AE.sfx(open ? "latch" : "thump");
+  }
+  function updateLid(dt) {
+    if (LID.t === LID.target) return;
+    LID.t = LID.target > LID.t ? Math.min(1, LID.t + dt / 0.75) : Math.max(0, LID.t - dt / 0.6);
+    drawLid(LID.t);
+    if (LID.t === 1) {
+      if (afterOpen) { const f = afterOpen; afterOpen = null; f(); }
+      else if (!prompted) promptRecord();
+    }
+  }
+  // after the lid opens, one record glows to invite a hover
+  function promptRecord() {
+    prompted = true;
+    const el = recEl(0);
+    if (!el) return;
+    el.classList.add("halo");
+    el.addEventListener("pointerenter", () => el.classList.remove("halo"), { once: true });
+  }
+  function clickTurntable() {
+    if (S.disc) return returnDisc();
+    setLid(LID.target !== 1);
+  }
+
   function pickRecord(i) {
+    if (LID.t < 1) {                                    // open the lid first, then play
+      prompted = true; svg.querySelectorAll(".rec.halo").forEach((e) => e.classList.remove("halo"));
+      return setLid(true, () => pickRecord(i));
+    }
+    svg.querySelectorAll(".rec.halo").forEach((e) => e.classList.remove("halo"));
     const d = S.disc;
     if (d) {
       if (d.id === i && (d.phase === "play" || d.phase === "arm")) return returnDisc();
@@ -739,7 +813,7 @@
   function loop(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     S.t += dt;
-    updateDisc(dt); updateParts(dt); updateCurtains(S.t);
+    updateDisc(dt); updateLid(dt); updateParts(dt); updateCurtains(S.t);
     requestAnimationFrame(loop);
   }
 
@@ -757,7 +831,7 @@
     switch (kind) {
       case "project": return openProject(projects[i]);
       case "music": return pickRecord(i);
-      case "turntable": return S.disc && returnDisc();
+      case "turntable": return clickTurntable();
       case "lamp": return toggleLamp();
       case "camera": openModal("camera-modal"); return window.InstantCamera.start();
       case "beanbag": return rustle();
@@ -875,8 +949,19 @@
   });
 
   const wrapEl = document.getElementById("stage-wrap");
-  function centerScroll() { if (wrapEl.scrollWidth > wrapEl.clientWidth) wrapEl.scrollLeft = (wrapEl.scrollWidth - wrapEl.clientWidth) * 0.5; }
+  const arrowL = document.getElementById("pan-left"), arrowR = document.getElementById("pan-right");
+  function updateArrows() {
+    const max = wrapEl.scrollWidth - wrapEl.clientWidth;
+    const pannable = max > 4;
+    arrowL.classList.toggle("show", pannable && wrapEl.scrollLeft > 8);
+    arrowR.classList.toggle("show", pannable && wrapEl.scrollLeft < max - 8);
+  }
+  function centerScroll() { if (wrapEl.scrollWidth > wrapEl.clientWidth) wrapEl.scrollLeft = (wrapEl.scrollWidth - wrapEl.clientWidth) * 0.5; updateArrows(); }
   window.addEventListener("resize", centerScroll);
+  wrapEl.addEventListener("scroll", updateArrows, { passive: true });
+  const pan = (dir) => wrapEl.scrollBy({ left: dir * wrapEl.clientWidth * 0.6, behavior: "smooth" });
+  arrowL.addEventListener("click", () => pan(-1));
+  arrowR.addEventListener("click", () => pan(1));
 
   (function grain() {
     const c = document.createElement("canvas"); c.width = c.height = 160;
@@ -889,6 +974,7 @@
   /* ---------------- boot ---------------- */
   document.title = SITE.title;
   refreshNotes();
+  drawLid(0);
   centerScroll();
   requestAnimationFrame(loop);
   window.__room = { S };

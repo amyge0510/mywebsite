@@ -238,12 +238,28 @@ window.AudioEngine = (() => {
         a.connect(g2); g2.connect(out); a.start(tt); a.stop(tt + 0.12);
       }
     } else if (name === "rustle") {
-      // leather + beans shifting: a few soft, filtered noise crunches
-      for (let i = 0; i < 7; i++) {
-        const tt = t + i * 0.05 + Math.random() * 0.04;
-        noise(tt, 0.07 + Math.random() * 0.08, "bandpass", 1800 + Math.random() * 2600, 1.4, 0.07 + Math.random() * 0.06, out);
+      // a soft fabric-and-beans shuffle: overlapping, gently swelling swishes
+      for (let i = 0; i < 4; i++) {
+        const tt = t + i * 0.11 + Math.random() * 0.05, len = 0.28 + Math.random() * 0.18;
+        const src = ctx.createBufferSource(); src.buffer = noiseBuf;
+        const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 220;
+        const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.Q.value = 0.3;
+        lp.frequency.setValueAtTime(700 + Math.random() * 300, tt);
+        lp.frequency.linearRampToValueAtTime(1300 + Math.random() * 500, tt + len * 0.5);
+        lp.frequency.linearRampToValueAtTime(600, tt + len);
+        const g1 = gn(), peak = 0.05 + Math.random() * 0.03;
+        g1.gain.setValueAtTime(0.0001, tt);
+        g1.gain.linearRampToValueAtTime(peak, tt + len * 0.35);
+        g1.gain.linearRampToValueAtTime(0.0001, tt + len);
+        src.connect(hp); hp.connect(lp); lp.connect(g1); g1.connect(out);
+        src.start(tt, Math.random()); src.stop(tt + len + 0.05);
       }
-      noise(t, 0.35, "lowpass", 500, 0.7, 0.08, out);
+    } else if (name === "latch") {
+      noise(t, 0.04, "bandpass", 1600, 1, 0.12, out);
+      const a = o(), g1 = gn();
+      a.frequency.setValueAtTime(140, t + 0.05); a.frequency.exponentialRampToValueAtTime(70, t + 0.2);
+      g1.gain.setValueAtTime(0.18, t + 0.05); g1.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+      a.connect(g1); g1.connect(out); a.start(t + 0.05); a.stop(t + 0.3);
     } else if (name === "sip") {
       noise(t, 0.12, "bandpass", 900, 2, 0.12, out);
       noise(t + 0.18, 0.12, "bandpass", 700, 2, 0.1, out);
