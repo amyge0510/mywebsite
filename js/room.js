@@ -901,6 +901,21 @@
 
   /* ---------------- DOM wiring ---------------- */
   const hudEl = document.getElementById("hud");
+  hudEl.classList.add("dock");
+  // keep the player docked in the gap between the record player and the lamp, at any screen size
+  const DOCK = { x: 944, y: CAB.top - 8, w: 250 };
+  let hudKey = "";
+  function placeHud() {
+    if (!hudEl.classList.contains("show")) return;
+    const m = svg.getScreenCTM(); if (!m) return;
+    const k = m.a, x = m.e + k * DOCK.x, y = m.f + m.d * DOCK.y, w = DOCK.w * k;
+    const key = `${x | 0},${y | 0},${w | 0}`;
+    if (key === hudKey) return;
+    hudKey = key;
+    const ew = Math.max(150, w - 12 - 34), s = ew / 290;
+    hudEl.style.setProperty("--x", `${x}px`); hudEl.style.setProperty("--y", `${y}px`);
+    hudEl.style.setProperty("--ew", `${ew}px`); hudEl.style.setProperty("--s", s.toFixed(4));
+  }
   const toastEl = document.getElementById("toast");
 
   let last = performance.now();
@@ -908,6 +923,7 @@
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     S.t += dt;
     updateDisc(dt); updateLid(dt); updateParts(dt); updateCurtains(S.t); cat.update(dt);
+    placeHud();
     requestAnimationFrame(loop);
   }
 
