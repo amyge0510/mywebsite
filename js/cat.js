@@ -208,42 +208,5 @@ window.Cat = (() => {
     return { update, pet, says, state: cat };
   }
 
-  /* ---------------- the close-up peek (a quarter of visits) ---------------- */
-  function peekMarkup() {
-    const paw = (x) => `<g transform="translate(${x} 96)"><ellipse rx="34" ry="24" fill="${O}"/>${line("M-12 -10 V6 M0 -12 V8 M12 -10 V6", 2.2)}</g>`;
-    return `<svg viewBox="-130 -118 260 230" aria-hidden="true">
-      <g class="peek-head">${head()}</g>
-      <path d="M-90 52 C-60 70 60 70 90 52 C96 72 92 94 84 104 C44 118 -44 118 -84 104 C-94 94 -96 72 -90 52 Z" fill="${S}"/>
-      ${line("M-80 70 C-40 84 40 84 80 70", 2, S2)}
-      ${paw(-62)}${paw(62)}
-    </svg>`;
-  }
-  function peek(AE) {
-    const el = document.getElementById("cat-peek");
-    if (!el) return;
-    el.innerHTML = peekMarkup();
-    el.classList.toggle("right", Math.random() < 0.5);
-    el.classList.add("up");
-    setTimeout(() => AE && AE.sfx("purr"), 900);
-    setTimeout(() => AE && AE.sfx("purr"), 2600);
-    const ear = el.querySelector(".ear-r");
-    setTimeout(() => ear && ear.classList.add("twitch"), 2000);
-    const hide = () => el.classList.remove("up");
-    el.onclick = () => { AE && AE.sfx("purr"); hide(); };
-    setTimeout(hide, 5200);
-  }
-  // decide once per visit; wait for the visitor to be around (so the purr can be heard)
-  function maybePeek(AE) {
-    const force = /[?&]peek\b/.test(location.search);
-    if (!force && Math.random() >= 0.25) return;
-    let interacted = false;
-    window.addEventListener("pointerdown", () => (interacted = true), { once: true });
-    const when = force ? 1500 : 18000 + Math.random() * 42000;
-    setTimeout(function go() {
-      if (interacted || force) return peek(AE);
-      window.addEventListener("pointerdown", () => setTimeout(() => peek(AE), 3000), { once: true });
-    }, when);
-  }
-
-  return { markup, start, maybePeek };
+  return { markup, start };
 })();

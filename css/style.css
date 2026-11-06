@@ -91,22 +91,6 @@ body.lamp-off .sun { opacity: .15; }
 #cat .ear-r.twitch { animation: twitch .5s ease-in-out; }
 @keyframes twitch { 30% { transform: rotate(-14deg); } 65% { transform: rotate(6deg); } }
 
-/* the cat peeking in, close to the "camera" */
-#cat-peek {
-  position: fixed; z-index: 8; bottom: 0; left: 5vw; width: min(34vw, 54svh); aspect-ratio: 260 / 230;
-  transform: translateY(105%) rotate(6deg); transform-origin: 50% 100%;
-  transition: transform 1.1s cubic-bezier(.3, 1.3, .5, 1); cursor: pointer;
-  filter: brightness(.66) sepia(.18) saturate(1.1) drop-shadow(0 -10px 30px rgba(20, 8, 2, .45)) blur(.5px);
-}
-#cat-peek.right { left: auto; right: 5vw; transform: translateY(105%) rotate(-6deg); }
-#cat-peek.up { transform: translateY(14%) rotate(4deg); }
-#cat-peek.right.up { transform: translateY(14%) rotate(-4deg); }
-#cat-peek svg { width: 100%; height: 100%; display: block; overflow: visible; }
-#cat-peek .peek-head { transform-box: fill-box; transform-origin: 50% 90%; animation: peek-tilt 3.6s ease-in-out infinite; }
-@keyframes peek-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(5deg); } }
-#cat-peek .ear-r { transform-box: fill-box; transform-origin: 30% 100%; }
-#cat-peek .ear-r.twitch { animation: twitch .5s ease-in-out; }
-
 #lamp-halo { opacity: 0; transition: opacity .6s; }
 body.lamp-beckon #lamp-halo { opacity: 1; }
 

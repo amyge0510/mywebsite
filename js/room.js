@@ -259,7 +259,6 @@
     const c = CAB, k = c.k, ft = c.top, fb = c.bot, fl = c.x0, fr = c.x1;
     const bl = P(fl - 8, ft, k), br = P(fr + 8, ft, k);
     let s = `<ellipse cx="${(fl + fr) / 2 + 30}" cy="${fb + 4}" rx="${(fr - fl) / 2 + 60}" ry="22" fill="#000" opacity=".6" filter="url(#blur10)"/>`;
-    s += `<path d="M${fl + 10} ${bl[1]} L${fl + 40} ${bl[1] - 120} L${LAMP.x - 80} ${bl[1] - 70} L${LAMP.x - 60} ${bl[1]} Z" fill="#1e0e05" opacity=".35" filter="url(#blur30)"/>`;
     s += `<rect x="${fl + 14}" y="${fb - 14}" width="16" height="14" fill="#140c08"/><rect x="${fr - 30}" y="${fb - 14}" width="16" height="14" fill="#140c08"/>`;
     s += `<rect x="${fl}" y="${ft + 14}" width="${fr - fl}" height="${fb - ft - 28}" fill="${lin([[0, "#4a3326"], [1, "#22160f"]])}"/>`;
     s += `<rect x="${fl}" y="${ft + 14}" width="${fr - fl}" height="${fb - ft - 28}" fill="${lin([[0, "#000", 0.25], [0.5, "#000", 0], [1, "#000", 0.3]], 0, 0, 1, 0)}"/>`;
@@ -569,8 +568,6 @@
       <g class="light-lamp" style="mix-blend-mode:screen">
         <rect x="-1400" y="-900" width="4400" height="2600" fill="${rad([[0, "#ff7a26", 0.62], [0.26, "#d8521a", 0.3], [0.6, "#a03a10", 0.08], [1, "#a03a10", 0]], L.x, L.y, 900, true)}"/>
         <ellipse cx="${L.x}" cy="${L.y - 20}" rx="290" ry="240" fill="${rad([[0, "#ffc27a", 0.55], [1, "#ff9a40", 0]])}"/>
-        <ellipse cx="${L.x - 20}" cy="${CAB.top - 14}" rx="340" ry="32" fill="#ffcf8a" opacity=".45" filter="url(#blur14)"/>
-        <path d="M${CAB.x1 - 140} ${CAB.top} L${CAB.x1 + 8} ${CAB.top}" stroke="#ffd9a0" stroke-width="3" opacity=".6"/>
       </g>
       <g style="mix-blend-mode:screen">
         <rect x="-1400" y="-900" width="4400" height="2600" fill="${rad([[0, "#ff8434", 0.3], [1, "#ff8434", 0]], 1530, 300, 420, true)}"/>
@@ -889,7 +886,6 @@
     bowl: BOWL, xMin: 90, xMax: 1520, yMin: 952, yMax: 992, scale: 0.5, AE,
     onZ: (x, y) => spawn(x, y, "z")
   });
-  window.Cat.maybePeek(AE);
   function petCat() {
     const st = cat.state;
     for (let i = 0; i < 4; i++) setTimeout(() => spawn(st.x - 25 + Math.random() * 50, st.y - 80), i * 150);
