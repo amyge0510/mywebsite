@@ -248,10 +248,10 @@ button:disabled { opacity: .6; cursor: wait; }
 /* the demo video, across the top of the right page */
 .sp-video { position: absolute; left: 8%; top: 7.5%; width: 84%; aspect-ratio: 1920 / 1426; object-fit: cover; border-radius: 3% / 4%; background: #1d1930; box-shadow: 0 6px 18px rgba(60, 20, 40, .35); }
 .sp-video[hidden] { display: none; }
-/* only shown once the cover has finished swinging open; gone the instant it starts closing */
-.sp-video { opacity: 0; visibility: hidden; transition: none; }
-.gatefold.opened .sp-video { opacity: 1; visibility: visible; transition: opacity .4s ease .9s, visibility 0s linear .9s; }
+/* the video is part of the right page: the cover always stacks above it, so it's revealed as the cover swings away */
+.gf-inside { z-index: 1; isolation: isolate; }
 .gf-cover { z-index: 3; }
+.gatefold:not(.opened) .gf-cover { transform: translateZ(1px); }
 .gatefold .x { position: absolute; top: -16px; right: -16px; z-index: 3; box-shadow: var(--shadow); }
 @media (max-width: 640px) { .gatefold { --S: 44vw; } .gf-back #project-blurb { font-size: 12px; } .gf-label { font-size: 15px; } }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
