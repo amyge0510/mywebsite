@@ -30,10 +30,10 @@ window.SpotifyPlayer = (() => {
       await new Promise((res) => api.createController(host.firstChild, { uri: uri(id), width: "100%", height: 80 }, (c) => { ctrl = c; res(); }));
       ctrl.addListener("ready", () => { if (want) ctrl.play(); });
     } else {
-      ctrl.loadUri(uri(id));
+      ctrl.loadUri(uri(id), false, 0);   // always from the top
     }
     ctrl.play();
   }
-  function stop() { want = null; if (ctrl) ctrl.pause(); }
+  function stop() { want = null; if (ctrl) { ctrl.pause(); ctrl.seek(0); } }
   return { play, stop, warm };
 })();

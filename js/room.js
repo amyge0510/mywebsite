@@ -1015,7 +1015,7 @@
   function openModal(id) {
     const m = document.getElementById(id);
     m.classList.add("open"); m.setAttribute("aria-hidden", "false");
-    const f = m.querySelector("textarea, .x"); if (f) setTimeout(() => f.focus(), 50);
+    const f = m.querySelector("textarea, .x"); if (f && id !== "note-modal") setTimeout(() => f.focus(), 50);
   }
   function closeModals() {
     document.querySelectorAll(".modal.open").forEach((m) => {
@@ -1053,26 +1053,31 @@
     gateT = setTimeout(() => { const m = document.getElementById("project-modal"); m.classList.remove("open"); m.setAttribute("aria-hidden", "true"); }, 520);
   }
 
-  const form = document.getElementById("note-form"), listEl = document.getElementById("note-list");
-  function renderNoteList() {
-    listEl.innerHTML = S.notes.map((n) => `<li><span class="topic">${esc(n.topic)}</span><p>${esc(n.message)}</p><small>— ${esc(n.name)}</small></li>`).join("") || "<li><p>no notes yet — be the first!</p></li>";
-  }
+  // the order pad: pops up with its cardboard cover, which flips back (with a
+  // couple of pages) to a fresh sheet
+  const form = document.getElementById("note-form"), pad = document.getElementById("pad");
+  let padT = [];
   function openNotes() {
-    renderNoteList();
-    document.getElementById("note-shared").textContent = Notes.isShared() ? "notes are public — everyone who visits can read them." : "notes are saved in this browser for now.";
+    padT.forEach(clearTimeout); padT = [];
+    pad.classList.remove("flipped", "sent");
     openModal("note-modal");
+    padT.push(setTimeout(() => { pad.classList.add("flipped"); AE.sfx("whoosh"); }, 380));
+    padT.push(setTimeout(() => form.querySelector("input[name=name]").focus({ preventScroll: true }), 1250));
   }
-  async function refreshNotes() { S.notes = await Notes.list(40); renderNotes(); renderNoteList(); }
-  const msg = form.querySelector("textarea"), count = document.getElementById("note-count");
-  msg.addEventListener("input", () => (count.textContent = `${msg.value.length}/140`));
+  async function refreshNotes() { S.notes = await Notes.list(40); renderNotes(); }
+  form.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target.name === "name") { e.preventDefault(); form.querySelector("textarea").focus(); }
+  });
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const data = new FormData(form), btn = form.querySelector("button[type=submit]");
+    const data = new FormData(form), btn = document.getElementById("pad-pin");
     btn.disabled = true;
     try {
-      await Notes.add({ name: data.get("name"), topic: data.get("topic"), message: data.get("message") });
-      form.reset(); count.textContent = "0/140";
-      await refreshNotes(); AE.sfx("pin"); toast("pinned to the board ♡"); closeModals();
+      await Notes.add({ name: data.get("name"), topic: "hello", message: data.get("message") });
+      pad.classList.add("sent");                    // the sheet tears off and flies to the board
+      await refreshNotes(); AE.sfx("pin");
+      await new Promise((r) => setTimeout(r, 650));
+      form.reset(); toast("pinned to the board ♡"); closeModals();
     } catch (err) {
       toast(err.message === "empty note" ? "write something first :)" : "couldn't pin that — try again?");
     } finally { btn.disabled = false; }

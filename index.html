@@ -10,7 +10,7 @@
   <meta name="description" content="A cozy little room: the records on the wall are my projects.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Special+Elite&family=Yellowtail&family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -27,7 +27,7 @@
     <span class="eq"><i></i><i></i><i></i></span>
     <span class="title"></span>
     <div id="spotify-embed"></div>
-    <button type="button">stop</button>
+    <button type="button" aria-label="Stop">stop</button>
   </div>
 
   <div id="toast" aria-live="polite"></div>
@@ -76,28 +76,27 @@
     </div>
   </div>
 
-  <!-- notes modal -->
-  <div class="modal" id="note-modal" aria-hidden="true" role="dialog" aria-labelledby="note-heading">
+  <!-- notes modal: a restaurant order pad -->
+  <div class="modal" id="note-modal" aria-hidden="true" role="dialog" aria-label="Leave a note">
     <div class="backdrop" data-close></div>
-    <div class="card">
+    <div class="pad-wrap">
+      <div class="pad" id="pad">
+        <div class="pad-depth"></div>
+        <form class="pad-page" id="note-form" autocomplete="off">
+          <label class="pad-name"><span>NAME</span><input name="name" maxlength="24" aria-label="Your name"></label>
+          <h2 class="pad-hey">Hey there!</h2>
+          <p class="pad-sub">THANKS FOR VISITING</p>
+          <textarea name="message" maxlength="140" rows="6" aria-label="Your note" required></textarea>
+        </form>
+        <div class="pad-flip f3"></div>
+        <div class="pad-flip f2"></div>
+        <div class="pad-flip cover"></div>
+        <div class="pad-binding"></div>
+      </div>
+      <div class="pad-actions">
+        <button type="submit" form="note-form" id="pad-pin">pin it to the board</button>
+      </div>
       <button class="x" data-close aria-label="Close">×</button>
-      <h2 id="note-heading" class="label-font">leave a note</h2>
-      <form id="note-form">
-        <div class="chips">
-          <label><input type="radio" name="topic" value="project idea" checked><span>project idea</span></label>
-          <label><input type="radio" name="topic" value="about the wall"><span>about the wall</span></label>
-          <label><input type="radio" name="topic" value="hello"><span>just saying hi</span></label>
-        </div>
-        <textarea name="message" maxlength="140" rows="3" placeholder="what would you like to see next?" required></textarea>
-        <div class="row">
-          <input name="name" maxlength="24" placeholder="your name (optional)">
-          <span id="note-count">0/140</span>
-          <button type="submit" class="btn">pin it</button>
-        </div>
-        <small id="note-shared"></small>
-      </form>
-      <h3>on the board</h3>
-      <ul id="note-list"></ul>
     </div>
   </div>
 
