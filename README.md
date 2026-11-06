@@ -1,8 +1,8 @@
 # mywebsite
 
 A warm, illustrated room that works as a personal site. The records on the wall are projects.
-Under them, a cabinet holds records you can play, there's a lamp you can switch on and off,
-a coffee station, a bulletin board where visitors leave notes, and Mochi the cat.
+Under them, a cabinet holds a rack of records you can play, a framed photo and a lamp you can
+switch on and off. There's a lounge chair, a bulletin board where visitors leave notes, and Mochi the cat.
 
 There's no build step. It's plain HTML, CSS and JS.
 
@@ -10,7 +10,8 @@ There's no build step. It's plain HTML, CSS and JS.
 index.html        page shell, modals
 css/style.css     UI styling (tooltips, modals, HUD)
 js/data.js        ← YOUR CONTENT: projects, music, cat name, Supabase keys
-js/art.js         SVG helpers, generated album covers, the cat
+js/art.js         SVG helpers, generated covers for the project records
+js/cat.js         the cat: shapes, generated fur, sleep + walk poses
 js/room.js        the room: layout, perspective, lighting, interactions, cat AI
 js/audio.js       record playback + built-in lo-fi synth + sound effects
 js/notes.js       bulletin-board storage (localStorage or Supabase)

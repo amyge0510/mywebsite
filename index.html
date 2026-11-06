@@ -13,19 +13,13 @@
 <body>
   <main id="stage-wrap">
     <svg id="room" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid meet" role="img"
-      aria-label="A warm room with a wall of records, a record player, a lamp, a coffee station, a bulletin board and a fluffy seal-point cat."></svg>
+      aria-label="A warm room with a wall of records, a record player, a lamp, a framed photo, a bulletin board, an orange lounge chair and a fluffy seal-point cat."></svg>
   </main>
   <div id="grain" aria-hidden="true"></div>
   <div id="tooltip" role="status" aria-live="polite"></div>
   <div id="record-card" aria-live="polite">
     <img alt="">
     <div class="meta"><b class="t"></b><span class="a"></span><button type="button">▶  play</button><small class="n"></small></div>
-  </div>
-  <div id="coffee-menu" class="pop">
-    <p>what are we having?</p>
-    <button data-drink="matcha"><i style="background:#8db45a"></i>matcha latte</button>
-    <button data-drink="cappuccino"><i style="background:#c99a70"></i>cappuccino</button>
-    <button data-drink="coffee"><i style="background:#4a2c18"></i>coffee</button>
   </div>
 
   <div id="hint">✦ hover &amp; click around ✦</div>
@@ -81,12 +75,22 @@
     </div>
   </div>
 
+  <!-- photo modal -->
+  <div class="modal" id="photo-modal" aria-hidden="true" role="dialog" aria-label="A and C">
+    <div class="backdrop" data-close></div>
+    <div class="card photo-card">
+      <button class="x" data-close aria-label="Close">×</button>
+      <img src="assets/img/us.jpg" alt="The two of us at a café, framed by red cross-stitched initials A and C">
+    </div>
+  </div>
+
   <nav id="a11y-nav" class="sr-only" aria-label="Room controls"></nav>
 
   <script src="js/data.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/notes.js"></script>
   <script src="js/art.js"></script>
+  <script src="js/cat.js"></script>
   <script src="js/room.js"></script>
 </body>
 </html>
