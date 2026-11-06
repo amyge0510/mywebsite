@@ -4,26 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>my little room</title>
-  <meta name="description" content="A cozy pixel room: records on the wall are my projects.">
+  <meta name="description" content="A cozy little room: the records on the wall are my projects.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <main id="stage-wrap">
-    <div id="stage">
-      <canvas id="scene" width="640" height="360" aria-label="A cozy pixel-art room with a wall of records, a record player, a lamp, a coffee station, a bulletin board and a white cat."></canvas>
-      <div id="tooltip" role="status" aria-live="polite"></div>
-
-      <div id="coffee-menu" class="pop">
-        <p>what are we having?</p>
-        <button data-drink="matcha"><i style="background:#8db45a"></i>matcha</button>
-        <button data-drink="cappuccino"><i style="background:#c99a70"></i>cappuccino</button>
-        <button data-drink="coffee"><i style="background:#4a2c18"></i>coffee</button>
-      </div>
-    </div>
+    <svg id="room" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" role="img"
+      aria-label="A warm room with a wall of records, a record player, a lamp, a coffee station, a bulletin board and a fluffy cat."></svg>
   </main>
+  <div id="grain" aria-hidden="true"></div>
+  <div id="tooltip" role="status" aria-live="polite"></div>
+  <div id="coffee-menu" class="pop">
+    <p>what are we having?</p>
+    <button data-drink="matcha"><i style="background:#8db45a"></i>matcha latte</button>
+    <button data-drink="cappuccino"><i style="background:#c99a70"></i>cappuccino</button>
+    <button data-drink="coffee"><i style="background:#4a2c18"></i>coffee</button>
+  </div>
 
   <div id="hint">✦ hover &amp; click around ✦</div>
 
@@ -83,6 +82,7 @@
   <script src="js/data.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/notes.js"></script>
-  <script src="js/scene.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/room.js"></script>
 </body>
 </html>

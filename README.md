@@ -1,6 +1,6 @@
 # mywebsite
 
-A cozy pixel-art room that works as a personal site. The records on the wall are projects.
+A warm, illustrated room that works as a personal site. The records on the wall are projects.
 Under them, a cabinet holds records you can play, there's a lamp you can switch on and off,
 a coffee station, a bulletin board where visitors leave notes, and Mochi the cat.
 
@@ -10,7 +10,8 @@ There's no build step. It's plain HTML, CSS and JS.
 index.html        page shell, modals
 css/style.css     UI styling (tooltips, modals, HUD)
 js/data.js        ← YOUR CONTENT: projects, music, cat name, Supabase keys
-js/scene.js       the room: pixel renderer, lighting, interactions, cat AI
+js/art.js         SVG helpers, generated album covers, the cat
+js/room.js        the room: layout, perspective, lighting, interactions, cat AI
 js/audio.js       record playback + built-in lo-fi synth + sound effects
 js/notes.js       bulletin-board storage (localStorage or Supabase)
 supabase/schema.sql
@@ -31,7 +32,7 @@ Everything lives in `js/data.js`:
 - **Projects** (records on the wall): title, subtitle, year, tags, blurb, and `url`.
   Set `url` (for example `"projects/01.html"`) once a project page exists, and the
   popup's button links to it. `wallSlots` controls how many slots show. Slots
-  without a project show "coming soon". Covers are generated pixel art (pick a
+  without a project show "coming soon". Covers are generated illustrations (pick a
   `motif` and a `palette`).
 - **Music** (records in the cabinet): set `src` to an audio file you're allowed to
   host, such as `assets/music/my-song.mp3`. While `src` is `null`, a built-in lo-fi
