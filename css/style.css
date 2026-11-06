@@ -32,9 +32,9 @@ body {
 .hot { cursor: pointer; }
 .hot .lift { transition: transform .25s cubic-bezier(.2, .8, .3, 1.3); }
 .hot:hover .lift { transform: translateY(-7px); }
-.hot[data-hot="lamp"], .hot[data-hot="turntable"], .hot[data-hot="cat"], .hot[data-hot="cup"] { transition: filter .2s; }
-.hot[data-hot="lamp"]:hover, .hot[data-hot="turntable"]:hover,
-.hot[data-hot="cat"]:hover, .hot[data-hot="cup"]:hover { filter: brightness(1.1); }
+/* interactive things softly light up instead of showing a pop-up */
+.hot:hover:not(:has(.hot:hover)) { filter: url(#glow); }
+.hot[data-hot="empty"]:hover { filter: none; }
 .hot[data-hot="empty"] { cursor: default; }
 
 #overlay .light-lamp, #overlay .night, .sun, .lamp-emit { transition: opacity .6s ease; }
@@ -68,28 +68,6 @@ body.lamp-off .sun { opacity: .15; }
 
 .wisp { opacity: 0; animation: wisp 2.7s ease-out infinite; }
 @keyframes wisp { 0% { opacity: 0; transform: translateY(6px); } 25% { opacity: .55; } 100% { opacity: 0; transform: translateY(-26px); } }
-
-/* ---------- tooltip ---------- */
-#tooltip {
-  position: fixed; left: 0; top: 0; z-index: 5;
-  transform: translate(-50%, calc(-100% - 12px)) scale(.96);
-  pointer-events: none; opacity: 0; transition: opacity .15s, transform .15s;
-  background: var(--paper); border-radius: 12px; box-shadow: var(--shadow);
-  padding: 9px 14px 10px; min-width: 140px; max-width: 260px;
-  text-align: center; line-height: 1.3; font-size: 13px;
-}
-#tooltip.show { opacity: 1; transform: translate(-50%, calc(-100% - 12px)) scale(1); }
-#tooltip b { display: block; font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 16px; }
-#tooltip span { display: block; color: var(--muted); }
-#tooltip em { display: block; font-style: normal; color: var(--accent); margin-top: 3px; font-size: 12px; font-weight: 500; }
-#tooltip .topic, #note-list .topic {
-  display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: .08em;
-  background: #f6dfbd; color: var(--ink); padding: 1px 7px; border-radius: 99px; margin-bottom: 4px;
-}
-#tooltip::after {
-  content: ""; position: absolute; left: 50%; bottom: -6px; width: 12px; height: 12px;
-  background: var(--paper); transform: translateX(-50%) rotate(45deg); border-radius: 2px;
-}
 
 /* ---------- glassy record card ---------- */
 #record-card {
@@ -205,6 +183,26 @@ button:disabled { opacity: .6; cursor: wait; }
 @media (max-width: 640px) { .gatefold { --S: 44vw; } .gf-back #project-blurb { font-size: 12px; } .gf-label { font-size: 15px; } }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
 .tags span { font-size: 12px; background: #f6dfbd; padding: 2px 10px; border-radius: 99px; }
+
+.label-font { font-family: "Archivo Black", "Arial Black", sans-serif !important; font-weight: 400 !important; text-transform: uppercase; letter-spacing: .06em; font-size: 24px !important; }
+
+/* instant camera */
+.cam-card { width: min(720px, 100%); }
+.cam-stage { position: relative; display: grid; place-items: center; margin: 12px 0 14px; }
+.viewfinder { position: relative; width: min(420px, 80vw); aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: #1a120c; box-shadow: inset 0 0 0 6px #2a2220, var(--shadow); }
+.viewfinder video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); filter: sepia(.18) saturate(1.1) contrast(.96) brightness(1.04); }
+.cam-msg { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: #f6e3c6; font-size: 15px; }
+.flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.flash.go { animation: flash .5s ease-out; }
+@keyframes flash { 0% { opacity: .95; } 100% { opacity: 0; } }
+.print-slot { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.print-slot img { width: min(330px, 66vw); opacity: 0; transform: translateY(-40px) rotate(-3deg) scale(.9); box-shadow: 0 24px 40px -16px rgba(30, 12, 4, .7); border-radius: 2px; }
+.cam-stage.printed .viewfinder { opacity: .25; transition: opacity .6s; }
+.cam-stage.printed .print-slot img { opacity: 1; transform: translateY(0) rotate(-3deg) scale(1); transition: transform 1s cubic-bezier(.2, .8, .3, 1), opacity .4s, filter 3.5s ease-out; filter: none; }
+.cam-stage.printed.developing .print-slot img { filter: brightness(1.7) contrast(.35) sepia(.4); }
+.cam-actions { display: flex; gap: 10px; justify-content: center; }
+.cam-actions .ghost { background: #f1e3cf; color: var(--ink); box-shadow: none; }
+.cam-actions [hidden] { display: none; }
 
 #note-form { display: grid; gap: 10px; margin-top: 12px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }

@@ -13,10 +13,9 @@
 <body>
   <main id="stage-wrap">
     <svg id="room" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid meet" role="img"
-      aria-label="A warm room with a wall of records, a record player, a lamp, a framed photo, a bulletin board, an orange lounge chair and a fluffy seal-point cat."></svg>
+      aria-label="A warm room with a wall of records, a record player, a lamp, a framed photo, a bulletin board, an orange beanbag, an instant camera and a fluffy seal-point cat."></svg>
   </main>
   <div id="grain" aria-hidden="true"></div>
-  <div id="tooltip" role="status" aria-live="polite"></div>
   <div id="record-card" aria-live="polite">
     <img alt="">
     <div class="meta"><b class="t"></b><span class="a"></span><button type="button">▶  play</button><small class="n"></small></div>
@@ -54,12 +53,34 @@
     </div>
   </div>
 
+  <!-- camera modal: take an instant photo -->
+  <div class="modal" id="camera-modal" aria-hidden="true" role="dialog" aria-labelledby="camera-heading">
+    <div class="backdrop" data-close></div>
+    <div class="card cam-card">
+      <button class="x" data-close aria-label="Close">×</button>
+      <h2 id="camera-heading" class="label-font">say cheese</h2>
+      <div class="cam-stage">
+        <div class="viewfinder" id="viewfinder">
+          <video id="cam-video" playsinline autoplay muted></video>
+          <div class="cam-msg" id="cam-msg">starting the camera…</div>
+          <div class="flash" id="cam-flash"></div>
+        </div>
+        <div class="print-slot"><img id="polaroid" alt="Your instant photo"></div>
+      </div>
+      <div class="cam-actions">
+        <button type="button" id="cam-snap">● snap</button>
+        <a class="btn" id="cam-save" download="my-little-room-polaroid.png" hidden>save photo</a>
+        <button type="button" id="cam-again" class="ghost" hidden>take another</button>
+      </div>
+    </div>
+  </div>
+
   <!-- notes modal -->
   <div class="modal" id="note-modal" aria-hidden="true" role="dialog" aria-labelledby="note-heading">
     <div class="backdrop" data-close></div>
     <div class="card">
       <button class="x" data-close aria-label="Close">×</button>
-      <h2 id="note-heading">leave a note</h2>
+      <h2 id="note-heading" class="label-font">leave a note</h2>
       <form id="note-form">
         <div class="chips">
           <label><input type="radio" name="topic" value="project idea" checked><span>project idea</span></label>
@@ -86,6 +107,7 @@
   <script src="js/notes.js"></script>
   <script src="js/art.js"></script>
   <script src="js/cat.js"></script>
+  <script src="js/camera.js"></script>
   <script src="js/room.js"></script>
 </body>
 </html>

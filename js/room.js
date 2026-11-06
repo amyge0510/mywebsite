@@ -164,60 +164,42 @@
       <g transform="translate(${b.x + b.w / 2} ${b.y + 42}) rotate(-2)">
         <rect x="-88" y="-20" width="176" height="40" fill="#1e0e05" opacity=".35" filter="url(#blur4)"/>
         <rect x="-90" y="-22" width="180" height="40" fill="#fbf3e4"/>
-        <text y="7" text-anchor="middle" font-family="Caveat, cursive" font-size="27" font-weight="700" fill="#8a4a2e">leave a note!</text>
+        <text y="6" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="17" letter-spacing="2" fill="#8a4a2e">LEAVE A NOTE!</text>
         <circle cx="-78" cy="-12" r="4.5" fill="#d9473b"/><circle cx="78" cy="-12" r="4.5" fill="#e0a43b"/>
       </g>
       <g id="notes"></g>
     </g>`;
   }
 
-  /* the orange lounge chair with a knot pillow, turned slightly toward the room.
-     One quilted piece: a tall back with rounded "ears", a sloping seat and a low front. */
-  function armchair() {
-    const back = "M92 -172 C84 -240 78 -320 74 -368 C72 -388 82 -400 100 -397 C160 -386 326 -386 390 -399 C410 -402 419 -389 416 -370 C412 -320 404 -240 398 -172 C330 -164 160 -164 92 -172 Z";
-    const backSide = "M74 -368 C58 -360 48 -318 48 -258 C48 -208 54 -178 64 -158 L92 -172 C84 -240 78 -320 74 -368 Z";
-    const seat = "M92 -172 C160 -164 330 -164 398 -172 C422 -160 440 -140 448 -122 C340 -106 150 -106 52 -124 C58 -146 72 -164 92 -172 Z";
-    const front = "M52 -124 C150 -106 340 -106 448 -122 C455 -80 452 -30 442 -4 C340 7 150 7 58 -2 C47 -30 45 -80 52 -124 Z";
-    const seatSide = "M52 -124 C40 -130 25 -128 17 -116 C10 -80 10 -30 19 -6 C30 -2 44 -2 58 -2 C47 -30 45 -80 52 -124 Z";
-    const all = clipShape(`<path d="${back}"/><path d="${backSide}"/><path d="${seat}"/><path d="${front}"/><path d="${seatSide}"/>`);
-    const backG = lin([[0, "#7a260a"], [0.18, "#b44618"], [0.62, "#d8622a"], [1, "#e9773c"]], 0, 0, 1, 0);
-    const channel = (d, w = 1) => `<path d="${d}" stroke="#ff9e60" stroke-width="${12 * w}" fill="none" opacity=".22" stroke-linecap="round" filter="url(#blur8)" transform="translate(0 -12)"/>
-      <path d="${d}" stroke="#4a1404" stroke-width="${6 * w}" fill="none" opacity=".42" stroke-linecap="round" filter="url(#blur4)"/>
-      <path d="${d}" stroke="#5a1a06" stroke-width="1.4" fill="none" opacity=".5" stroke-linecap="round"/>`;
-    const sag = (x0, x1, y, d = 9) => `M${x0} ${y} C${x0 + (x1 - x0) * 0.3} ${y + d} ${x0 + (x1 - x0) * 0.7} ${y + d} ${x1} ${y}`;
-    const r = rng(31);
-    let nap = "";
-    for (let i = 0; i < 900; i++) nap += `<circle cx="${(10 + r() * 445).toFixed(1)}" cy="${(-400 + r() * 400).toFixed(1)}" r="${(0.5 + r()).toFixed(2)}" fill="${r() < 0.5 ? "#ffb07a" : "#5a1806"}" opacity="${(0.12 + r() * 0.18).toFixed(2)}"/>`;
-    // knot pillow: soft rope looped into a ball
-    const tube = (d) => `<path d="${d}" stroke="#5f8fc0" stroke-width="27" fill="none" stroke-linecap="round"/>
-      <path d="${d}" stroke="#9fc6ee" stroke-width="22" fill="none" stroke-linecap="round"/>
-      <path d="${d}" stroke="#eaf5ff" stroke-width="7" fill="none" stroke-linecap="round" opacity=".85" transform="translate(-2 -5)" filter="url(#blur2)"/>`;
-    const knot = `<g transform="translate(244 -196)">
-      <ellipse cx="6" cy="44" rx="78" ry="13" fill="#3a0e02" opacity=".55" filter="url(#blur8)"/>
-      <ellipse cx="12" cy="0" rx="70" ry="58" fill="#3a0e02" opacity=".3" filter="url(#blur14)" transform="translate(14 -10)"/>
-      ${tube("M-44 22 C-56 -6 -30 -30 -4 -22 C22 -14 26 12 8 22")}
-      ${tube("M40 26 C58 2 44 -30 14 -30 C-14 -30 -24 -4 -10 14")}
-      ${tube("M-30 -18 C-20 -44 16 -48 30 -26 C42 -6 30 20 4 30")}
-      ${tube("M-48 4 C-40 30 -8 40 18 34 C40 28 52 14 50 0")}
-      ${tube("M-6 -36 C6 -16 6 10 -6 28")}
-    </g>`;
-    return `<g class="chair" transform="translate(24 994) skewY(-3)">
-      <ellipse cx="236" cy="2" rx="248" ry="22" fill="#000" opacity=".6" filter="url(#blur14)"/>
-      <path d="${backSide}" fill="${lin([[0, "#4a1404"], [1, "#8a3210"]], 0, 0, 1, 0)}"/>
-      <path d="${back}" fill="${backG}"/>
-      ${channel(sag(86, 410, -334))}${channel(sag(84, 408, -284))}${channel(sag(86, 404, -232))}${channel(sag(90, 400, -192, 6), 0.8)}
-      <path d="M246 -394 C247 -372 247 -352 246 -336" stroke="#5a1a06" stroke-width="3" fill="none" opacity=".45" filter="url(#blur2)"/>
-      <path d="M100 -397 C160 -386 326 -386 390 -399" stroke="#ffb27a" stroke-width="4" fill="none" opacity=".4" filter="url(#blur4)"/>
-      <path d="${seatSide}" fill="${lin([[0, "#3e1002"], [1, "#7a2a0c"]], 0, 0, 1, 0)}"/>
-      <path d="${seat}" fill="${lin([[0, "#a8401a"], [1, "#ef8446"]])}"/>
-      <path d="${seat}" fill="${lin([[0, "#000", 0.25], [0.5, "#000", 0], [1, "#fff", 0.06]], 0, 0, 1, 0)}"/>
-      ${channel(sag(98, 396, -158, 6), 0.8)}
-      <path d="${front}" fill="${lin([[0, "#e06c30"], [0.55, "#bf4f1e"], [1, "#7e2c0c"]])}"/>
-      <path d="${front}" fill="${lin([[0, "#000", 0.3], [0.45, "#000", 0], [1, "#fff", 0.05]], 0, 0, 1, 0)}"/>
-      ${channel(sag(54, 450, -84, 10))}${channel(sag(56, 448, -44, 10))}
-      <path d="M52 -124 C150 -106 340 -106 448 -122" stroke="#ffae70" stroke-width="5" fill="none" opacity=".35" filter="url(#blur4)"/>
-      <g clip-path="${all}">${nap}</g>
-      ${knot}
+  /* an orange leather beanbag with a big "5", slumped on the floor */
+  function beanbag() {
+    const body = "M-196 -26 C-214 -110 -186 -214 -104 -262 C-46 -296 52 -300 120 -268 C188 -236 218 -150 206 -64 C200 -16 170 6 6 10 C-150 8 -190 -2 -196 -26 Z";
+    const top = "M-120 -246 C-70 -268 30 -276 96 -252 C70 -232 20 -224 -30 -226 C-70 -228 -100 -234 -120 -246 Z";
+    const leather = rad([[0, "#f6924e"], [0.35, "#e0702e"], [0.75, "#bd5220"], [1, "#7e3010"]], 0.62, 0.3, 0.85);
+    const crease = (d, o = 0.5) => `<path d="${d}" stroke="#5e1e06" stroke-width="5" fill="none" stroke-linecap="round" opacity="${o}" filter="url(#blur4)"/>
+      <path d="${d}" stroke="#ffb27a" stroke-width="3" fill="none" stroke-linecap="round" opacity="${o * 0.5}" filter="url(#blur2)" transform="translate(-3 -4)"/>`;
+    const seam = (d) => `<path d="${d}" stroke="#7a2a0c" stroke-width="2.2" fill="none" opacity=".75"/>
+      <path d="${d}" stroke="#ffc08a" stroke-width="1" fill="none" opacity=".35" transform="translate(0 -2)"/>`;
+    return `<g class="beanbag" transform="translate(236 992)">
+      <ellipse cx="18" cy="2" rx="230" ry="24" fill="#000" opacity=".6" filter="url(#blur14)"/>
+      <path d="${body}" fill="${leather}"/>
+      <path d="${body}" fill="${lin([[0, "#2a0a02", 0.35], [0.45, "#2a0a02", 0], [1, "#fff", 0.05]], 0, 0, 1, 0)}"/>
+      <path d="${top}" fill="#a8441a" opacity=".55" filter="url(#blur6)"/>
+      ${crease("M-100 -240 C-60 -214 -10 -206 40 -214")}
+      ${crease("M-40 -226 C-30 -200 -36 -172 -58 -150", 0.4)}
+      ${crease("M60 -238 C80 -210 104 -196 140 -192", 0.4)}
+      ${crease("M-176 -120 C-150 -100 -130 -70 -128 -30", 0.35)}
+      ${crease("M150 -120 C160 -90 168 -60 160 -22", 0.3)}
+      ${seam("M-58 -282 C-120 -230 -150 -150 -132 -40 C-128 -16 -116 0 -100 6")}
+      ${seam("M-190 -48 C-120 -30 40 -26 200 -58")}
+      <path d="M-80 -270 C-20 -290 70 -288 120 -262" stroke="#ffd0a0" stroke-width="10" fill="none" opacity=".25" stroke-linecap="round" filter="url(#blur8)"/>
+      <path d="M150 -200 C176 -160 186 -110 180 -70" stroke="#ffc88e" stroke-width="12" fill="none" opacity=".25" stroke-linecap="round" filter="url(#blur8)"/>
+      <g transform="translate(36 -142) rotate(-7)">
+        <ellipse cx="4" cy="6" rx="94" ry="62" fill="#5e1e06" opacity=".35" filter="url(#blur6)"/>
+        <ellipse rx="92" ry="60" fill="${rad([[0, "#fffaf0"], [0.7, "#f2e8d4"], [1, "#d6c6a8"]], 0.45, 0.4, 0.7)}"/>
+        <text x="2" y="26" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-weight="700" font-size="84" fill="#141012">5</text>
+        <path d="M-70 -30 C-40 -54 30 -58 64 -40" stroke="#fff" stroke-width="5" fill="none" opacity=".5" filter="url(#blur2)"/>
+      </g>
     </g>`;
   }
 
@@ -307,44 +289,78 @@
   function rackRecords() {
     let s = "";
     for (let k = RACK.length - 1; k >= 0; k--) s += rackRecord(RACK[k]);
-    return s + rackWire();
+    return rackWire() + s;   // the wire sits behind the records, showing only between them
   }
 
-  // right cubby: a framed photo of the two of us, and the Harry Potter books stacked flat
+  // right cubby: a small framed photo of the two of us, and the Harry Potter box set stacked flat
   function cubbyRight() {
-    const fb = CUBR.y1 - 6, fx = CUBR.x0 + 16, w = 146, h = 116;
+    const fb = CUBR.y1 - 6, fx = CUBR.x0 + 30, w = 112, h = 88;
     const frame = `<g>
-      <rect x="${fx + 8}" y="${fb - h + 8}" width="${w}" height="${h}" fill="#000" opacity=".55" filter="url(#blur10)"/>
-      <ellipse cx="${fx + w / 2}" cy="${fb + 1}" rx="${w / 2 + 6}" ry="5" fill="#000" opacity=".6" filter="url(#blur4)"/>
-      <g transform="translate(${fx} ${fb - h})">
-        <rect width="${w}" height="${h}" rx="3" fill="${lin([[0, "#6a4630"], [0.5, "#3a2416"], [1, "#1e1008"]], 0, 0, 1, 1)}"/>
-        <rect x="2" y="2" width="${w - 4}" height="2" fill="#b0845e" opacity=".7"/>
-        <rect x="9" y="9" width="${w - 18}" height="${h - 18}" fill="#f6f1e8"/>
-        <image href="assets/img/us.jpg" x="15" y="15" width="${w - 30}" height="${h - 30}" preserveAspectRatio="xMidYMid slice"/>
-        <rect x="9" y="9" width="${w - 18}" height="${h - 18}" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="3" filter="url(#blur2)"/>
-        <rect x="9" y="9" width="${w - 18}" height="${h - 18}" fill="${lin([[0, "#fff", 0.26], [0.35, "#fff", 0], [1, "#fff", 0]], 0, 0, 1, 1)}"/>
+      <ellipse cx="${fx + w / 2}" cy="${fb + 1}" rx="${w / 2 + 4}" ry="4" fill="#000" opacity=".6" filter="url(#blur4)"/>
+      <g transform="translate(${fx} ${fb}) rotate(-6)">
+        <rect x="8" y="${-h + 6}" width="${w}" height="${h}" fill="#000" opacity=".55" filter="url(#blur8)"/>
+        <g transform="translate(0 ${-h})">
+          <rect width="${w}" height="${h}" rx="3" fill="${lin([[0, "#6a4630"], [0.5, "#3a2416"], [1, "#1e1008"]], 0, 0, 1, 1)}"/>
+          <rect x="2" y="2" width="${w - 4}" height="2" fill="#b0845e" opacity=".7"/>
+          <rect x="7" y="7" width="${w - 14}" height="${h - 14}" fill="#f6f1e8"/>
+          <image href="assets/img/us.jpg" x="12" y="12" width="${w - 24}" height="${h - 24}" preserveAspectRatio="xMidYMid slice"/>
+          <rect x="7" y="7" width="${w - 14}" height="${h - 14}" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="3" filter="url(#blur2)"/>
+          <rect x="7" y="7" width="${w - 14}" height="${h - 14}" fill="${lin([[0, "#fff", 0.26], [0.35, "#fff", 0], [1, "#fff", 0]], 0, 0, 1, 1)}"/>
+        </g>
       </g></g>`;
+    // top to bottom, as in the box set
     const books = [
-      ["Sorcerer's Stone", "#a3302a", 12], ["Chamber of Secrets", "#2e5e46", 13], ["Prisoner of Azkaban", "#5b3a78", 14],
-      ["Goblet of Fire", "#b5651e", 19], ["Order of the Phoenix", "#2c4a7a", 21], ["Half-Blood Prince", "#4f6e30", 16], ["Deathly Hallows", "#7a1f2e", 18]
+      ["Sorcerer's Stone", "#5a3b8e", 8], ["Chamber of Secrets", "#8e2c5c", 8], ["Prisoner of Azkaban", "#2f6a6c", 9],
+      ["Goblet of Fire", "#6c2632", 12], ["Order of the Phoenix", "#3b5cab", 13], ["Half-Blood Prince", "#2f6f4a", 10], ["Deathly Hallows", "#c65c32", 11]
     ];
-    const r = rng(9), x0 = fx + w + 16;
-    let y = fb, out = `<ellipse cx="${x0 + 62}" cy="${fb + 1}" rx="70" ry="5" fill="#000" opacity=".6" filter="url(#blur4)"/>`;
+    const len = 112, x0 = fx + w + 26;
+    let y = fb - books.reduce((a, b) => a + b[2], 0);
+    let out = `<ellipse cx="${x0 + len / 2}" cy="${fb + 1}" rx="${len / 2 + 6}" ry="4" fill="#000" opacity=".6" filter="url(#blur4)"/>`;
+    out += poly([[x0, y], [x0 + len, y], P(x0 + len, y, 0.03), P(x0, y, 0.03)], books[0][1]) + poly([[x0, y], [x0 + len, y], P(x0 + len, y, 0.03), P(x0, y, 0.03)], "#fff", `opacity=".18"`);
     books.forEach(([title, col, t], i) => {
-      const len = 118 + Math.floor(r() * 8), x = x0 + Math.floor(r() * 8) - 4;
-      y -= t;
-      out += `<rect x="${x + 3}" y="${y + 3}" width="${len}" height="${t}" fill="#000" opacity=".35" filter="url(#blur2)"/>
-        <rect x="${x}" y="${y}" width="${len}" height="${t}" rx="1.5" fill="${col}"/>
-        <rect x="${x}" y="${y}" width="${len}" height="${t}" rx="1.5" fill="${BOOK_SHEEN}"/>
-        <rect x="${x + 4}" y="${y + 1.5}" width="${len - 8}" height=".8" fill="#e8c46a" opacity=".8"/>
-        <rect x="${x + 4}" y="${y + t - 2.3}" width="${len - 8}" height=".8" fill="#e8c46a" opacity=".8"/>
-        <text x="${x + 8}" y="${y + t / 2 + 2.4}" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="${t > 15 ? 7.2 : 6.4}" letter-spacing=".4" fill="#f0d68c">${esc(title.toUpperCase())}</text>
-        <text x="${x + len - 8}" y="${y + t / 2 + 2.4}" text-anchor="end" font-family="Fraunces, Georgia, serif" font-size="6.6" fill="#f0d68c">${i + 1}</text>`;
-      if (i === books.length - 1) out += poly([[x, y], [x + len, y], P(x + len, y, 0.035), P(x, y, 0.035)], col, `opacity=".9"`) + poly([[x, y], [x + len, y], P(x + len, y, 0.035), P(x, y, 0.035)], "#fff", `opacity=".18"`);
+      const x = x0 + (i % 2 ? 1 : -1);
+      out += `<rect x="${x}" y="${y}" width="${len}" height="${t}" fill="${col}"/>
+        <rect x="${x}" y="${y}" width="${len}" height="${t}" fill="url(#hp-diamonds)"/>
+        <rect x="${x}" y="${y}" width="${len}" height="${t}" fill="${BOOK_SHEEN}"/>
+        <rect x="${x}" y="${y + t - 0.8}" width="${len}" height=".8" fill="#000" opacity=".45"/>
+        <rect x="${x + 5}" y="${y + t / 2 - 2.6}" width="5.2" height="5.2" fill="none" stroke="#e2c27a" stroke-width=".6"/>
+        <text x="${x + 7.6}" y="${y + t / 2 + 1.5}" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="4.4" fill="#e2c27a">${i + 1}</text>
+        <text x="${x + len / 2 + 2}" y="${y + t / 2 + (t > 10 ? 0.4 : 1.6)}" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="${t > 10 ? 4.6 : 4.2}" letter-spacing=".5" fill="#e8cc86">HARRY POTTER</text>
+        ${t > 10 ? `<text x="${x + len / 2 + 2}" y="${y + t / 2 + 4.6}" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="3" letter-spacing=".3" fill="#e8cc86">AND THE ${esc(title.toUpperCase())}</text>` : ""}
+        <rect x="${x + len - 9}" y="${y + t / 2 - 1.8}" width="5" height="3.6" fill="#d8302a"/>`;
+      y += t;
     });
     return frame + out;
   }
   let BOOK_SHEEN = "";
+
+  // a boxy vintage instant camera; click it to take a photo
+  function camera() {
+    const x = 930, b = 632, k = 0.06;
+    const tl = P(x, b - 44, k), tr = P(x + 118, b - 44, k);
+    const black = lin([[0, "#3a3634"], [0.5, "#1e1b1a"], [1, "#0e0c0c"]]);
+    return `<g class="hot" data-hot="camera">
+      <ellipse cx="${x + 54}" cy="${b + 2}" rx="70" ry="7" fill="#000" opacity=".55" filter="url(#blur4)"/>
+      ${poly([[x, b - 44], [x + 118, b - 44], tr, tl], "#2c2826")}
+      <rect x="${x}" y="${b - 44}" width="118" height="44" rx="6" fill="${black}"/>
+      <rect x="${x + 6}" y="${b - 14}" width="106" height="5" rx="2" fill="#050404"/>
+      <text x="${x + 10}" y="${b - 22}" font-family="DM Sans, sans-serif" font-weight="700" font-size="7" fill="#c9b07a">660</text>
+      <text x="${x + 108}" y="${b - 22}" text-anchor="end" font-family="DM Sans, sans-serif" font-weight="700" font-size="6" letter-spacing=".6" fill="#c0392b">AUTOFOCUS</text>
+      <rect x="${x + 12}" y="${b - 96}" width="96" height="54" rx="5" fill="${black}"/>
+      <circle cx="${x + 34}" cy="${b - 69}" r="13" fill="${rad([[0, "#d8b46a"], [1, "#6a5020"]], 0.4, 0.35, 0.7)}"/>
+      <circle cx="${x + 34}" cy="${b - 69}" r="13" fill="url(#cam-mesh)"/>
+      <circle cx="${x + 70}" cy="${b - 69}" r="19" fill="#0c0a0a"/>
+      <circle cx="${x + 70}" cy="${b - 69}" r="15" fill="${rad([[0, "#5a6e8a"], [0.5, "#1c2230"], [1, "#050608"]], 0.35, 0.3, 0.7)}"/>
+      <ellipse cx="${x + 65}" cy="${b - 74}" rx="5" ry="3.4" fill="#fff" opacity=".55"/>
+      <rect x="${x + 92}" y="${b - 88}" width="10" height="9" rx="1.5" fill="#3a4250"/>
+      <rect x="${x + 6}" y="${b - 122}" width="106" height="26" rx="4" fill="${black}"/>
+      <rect x="${x + 62}" y="${b - 118}" width="44" height="18" rx="2" fill="${lin([[0, "#f4f4f0"], [0.5, "#b8bcc0"], [1, "#e8eaec"]], 0, 0, 1, 1)}"/>
+      ${["#e8443a", "#f2a23a", "#f6d84a", "#5cb85c", "#3a8fd8"].map((c, i) => `<rect x="${x + 12}" y="${b - 116 + i * 2.4}" width="12" height="2.4" fill="${c}"/>`).join("")}
+      <rect x="${x + 6}" y="${b - 122}" width="106" height="2" rx="1" fill="#fff" opacity=".25"/>
+      <rect x="${x + 112}" y="${b - 80}" width="6" height="20" rx="2" fill="#2a2624"/>
+      <circle cx="${x + 100}" cy="${b - 47}" r="4" fill="#d8302a"/>
+    </g>`;
+  }
 
   function turntable() {
     const fl = 580, fr = 840, ft = 606, fb = 634, k = 0.1;
@@ -473,11 +489,12 @@
     ${rackRecords()}
     ${cubbyRight()}
     <g transform="translate(0 ${DY})">
+      ${camera()}
       ${turntable()}
       ${lampMarkup()}
     </g>
     ${catCorner()}
-    ${armchair()}
+    ${beanbag()}
     <g id="cat" class="hot" data-hot="cat" data-state="sleep">${CatArt.markup()}</g>
     <g id="flydisc" opacity="0"></g>
     <g id="overlay" pointer-events="none">${lighting()}</g>
@@ -490,6 +507,14 @@
   const filters = `
     ${[2, 4, 6, 8, 10, 14, 30].map((d) => `<filter id="blur${d}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${d / 2}"/></filter>`).join("")}
     <clipPath id="labelclip"><circle r="17"/></clipPath>
+    <pattern id="hp-diamonds" width="14" height="10" patternUnits="userSpaceOnUse"><path d="M7 0 L14 5 L7 10 L0 5 Z" fill="#000" opacity=".16"/><path d="M7 1.5 L12 5 L7 8.5 L2 5 Z" fill="#fff" opacity=".06"/></pattern>
+    <pattern id="cam-mesh" width="2.4" height="2.4" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".6" fill="#3a2a10" opacity=".8"/></pattern>
+    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="b"/>
+      <feFlood flood-color="#ffc47e" flood-opacity=".9"/><feComposite in2="b" operator="in" result="g"/>
+      <feComponentTransfer in="SourceGraphic" result="s"><feFuncR type="linear" slope="1.16"/><feFuncG type="linear" slope="1.12"/><feFuncB type="linear" slope="1.06"/></feComponentTransfer>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="s"/></feMerge>
+    </filter>
     ${CatArt.defs()}`;
 
   const svg = document.getElementById("room");
@@ -662,7 +687,7 @@
   }
 
   /* ---------------- DOM wiring ---------------- */
-  const tipEl = document.getElementById("tooltip"), hudEl = document.getElementById("hud");
+  const hudEl = document.getElementById("hud");
   const toastEl = document.getElementById("toast"), hintEl = document.getElementById("hint");
   const cardEl = document.getElementById("record-card");
   const card = { i: null, hideT: null };
@@ -672,28 +697,10 @@
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     S.t += dt;
     updateDisc(dt); updateCat(dt); updateParts(dt);
-    if (S.hover) placeTip(S.hover.el);
     if (card.i !== null) placeCard();
     requestAnimationFrame(loop);
   }
 
-  function tipFor(kind, i) {
-    switch (kind) {
-      case "project": { const p = projects[i]; return `<b>${esc(p.title)}</b><span>${esc(p.subtitle || "")}${p.year ? " · " + esc(p.year) : ""}</span><em>click to open</em>`; }
-      case "empty": return `<b>coming soon</b><span>a new record is on its way</span>`;
-      case "turntable": return S.disc && S.disc.phase === "play" ? `<b>now spinning</b><span>${esc(music[S.disc.id].title)}</span><em>click to stop</em>` : `<b>record player</b><span>pull a record from the rack below</span>`;
-      case "lamp": return `<b>lamp</b><em>click to turn ${S.lamp ? "off" : "on"}</em>`;
-      case "note": { const n = S.notes[i]; return `<span class="topic">${esc(n.topic)}</span><b>“${esc(n.message)}”</b><span>— ${esc(n.name)}</span>`; }
-      case "board": return `<b>bulletin board</b><em>click to leave a note</em>`;
-      case "cat": return `<b>${esc(SITE.catName)}</b><span>${cat.state === "walk" ? "stretching her legs" : CAT_SPOTS[cat.spot].says}</span><em>click to pet</em>`;
-    }
-    return "";
-  }
-  function placeTip(el) {
-    const r = el.getBoundingClientRect();
-    tipEl.style.left = r.left + r.width / 2 + "px";
-    tipEl.style.top = r.top + "px";
-  }
   const hotFrom = (t) => (t.closest ? t.closest("[data-hot]") : null);
 
   // glassy record card
@@ -732,16 +739,10 @@
   svg.addEventListener("pointermove", (e) => {
     const el = hotFrom(e.target);
     const kind = el && el.dataset.hot, i = el ? +el.dataset.i : null;
-    if (kind === "music") { S.hover = null; tipEl.classList.remove("show"); showCard(i); return; }
-    if (kind === "project" || kind === "empty") { S.hover = null; tipEl.classList.remove("show"); if (card.i !== null) hideCardSoon(); return; }
+    if (kind === "music") return showCard(i);
     if (card.i !== null) hideCardSoon();
-    if (!el) { if (S.hover) { S.hover = null; tipEl.classList.remove("show"); } return; }
-    S.hover = { el, kind, i };
-    tipEl.innerHTML = tipFor(kind, i);
-    tipEl.classList.add("show");
-    placeTip(el);
   });
-  svg.addEventListener("pointerleave", () => { S.hover = null; tipEl.classList.remove("show"); hideCardSoon(); });
+  svg.addEventListener("pointerleave", hideCardSoon);
   svg.addEventListener("click", (e) => {
     hintEl.classList.add("gone");
     const el = hotFrom(e.target);
@@ -749,7 +750,6 @@
     const kind = el.dataset.hot, i = +el.dataset.i;
     if (kind === "music" && e.pointerType === "touch" && card.i !== i) { showCard(i); return; }
     act(kind, i);
-    if (S.hover && S.hover.el === el) tipEl.innerHTML = tipFor(kind, i);
   });
   function act(kind, i) {
     switch (kind) {
@@ -757,6 +757,7 @@
       case "music": pickRecord(i); return refreshCard();
       case "turntable": return S.disc && returnDisc();
       case "lamp": return toggleLamp();
+      case "camera": openModal("camera-modal"); return window.InstantCamera.start();
       case "note": case "board": return openNotes();
       case "cat": return petCat();
     }
@@ -783,12 +784,12 @@
   function openModal(id) {
     const m = document.getElementById(id);
     m.classList.add("open"); m.setAttribute("aria-hidden", "false");
-    tipEl.classList.remove("show");
     const f = m.querySelector("textarea, .x"); if (f) setTimeout(() => f.focus(), 50);
   }
   function closeModals() {
     document.querySelectorAll(".modal.open").forEach((m) => {
       if (m.id === "project-modal") return closeProject();
+      if (m.id === "camera-modal") window.InstantCamera.stop();
       m.classList.remove("open"); m.setAttribute("aria-hidden", "true");
     });
   }
@@ -849,7 +850,7 @@
   const nav = document.getElementById("a11y-nav");
   nav.innerHTML = "<h2>Projects</h2>" + projects.map((p, i) => `<button data-p="${i}">${esc(p.title)}</button>`).join("") +
     "<h2>Music</h2>" + music.map((m, i) => `<button data-m="${i}">Play ${esc(m.title)} by ${esc(m.artist)}</button>`).join("") +
-    `<button data-a="lamp">Toggle lamp</button><button data-a="notes">Leave a note</button><button data-a="cat">Pet ${esc(SITE.catName)}</button>`;
+    `<button data-a="lamp">Toggle lamp</button><button data-a="notes">Leave a note</button><button data-a="cat">Pet ${esc(SITE.catName)}</button><button data-a="camera">Take an instant photo</button>`;
   nav.addEventListener("click", (e) => {
     const b = e.target.closest("button"); if (!b) return;
     if (b.dataset.p) openProject(projects[+b.dataset.p]);
@@ -857,6 +858,7 @@
     else if (b.dataset.a === "lamp") toggleLamp();
     else if (b.dataset.a === "notes") openNotes();
     else if (b.dataset.a === "cat") petCat();
+    else if (b.dataset.a === "camera") { openModal("camera-modal"); window.InstantCamera.start(); }
   });
 
   const wrapEl = document.getElementById("stage-wrap");

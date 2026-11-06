@@ -5,7 +5,6 @@
 window.NotesStore = (() => {
   const LS_KEY = "room-notes-v1";
   const SEED = [
-    { id: "seed-1", name: "me", topic: "hello", message: "welcome in! grab a coffee and leave a note :)", created_at: "2026-01-01T00:00:00Z" },
     { id: "seed-2", name: "me", topic: "project idea", message: "what should I build next? tell me here!", created_at: "2026-01-02T00:00:00Z" }
   ];
   let client = null, loading = null;
@@ -29,7 +28,8 @@ window.NotesStore = (() => {
   function readLocal() {
     try {
       const raw = localStorage.getItem(LS_KEY);
-      return raw ? JSON.parse(raw) : SEED.slice();
+      // the old "grab a coffee" welcome note was retired along with the coffee station
+      return raw ? JSON.parse(raw).filter((n) => n.id !== "seed-1") : SEED.slice();
     } catch (e) { return SEED.slice(); }
   }
   function writeLocal(list) {
