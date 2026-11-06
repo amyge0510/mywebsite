@@ -28,7 +28,7 @@
   const PLAT_W = { x: TT.cx + (PLAT.x - TT.cx) * TT.s, y: DY + TT.cy + (PLAT.y - DY - TT.cy) * TT.s };
   const LAMP = { x: 1130, base: 620, drop: 44 };     // drop = how much shorter than before
   const LAMP_GLOW = { x: 1130, y: 490 + DY + LAMP.drop };
-  const BOARD = { x: 36, y: 170, w: 360, h: 350 };
+  const BOARD = { x: 30, y: 170, w: 452, h: 350 };
   const SLEEVE = 104;                                // record sleeve size in the rack
 
   const projects = SITE.projects;
@@ -136,11 +136,11 @@
     let speck = "";
     for (let i = 0; i < 330; i++) speck += `<circle cx="${b.x + 12 + r() * (b.w - 24)}" cy="${b.y + 12 + r() * (b.h - 24)}" r="${0.6 + r() * 1.3}" fill="${r() < 0.5 ? "#8e5f36" : "#d8aa74"}" opacity=".7"/>`;
     const deco = `
-      <g transform="translate(${b.x + b.w - 168} ${b.y + b.h - 128}) rotate(4)">
-        <rect x="3" y="5" width="140" height="84" fill="#1e0e05" opacity=".45" filter="url(#blur4)"/>
-        <rect width="140" height="84" fill="#fbf8f2"/>
-        <image href="assets/img/us.jpg" x="7" y="7" width="126" height="70" preserveAspectRatio="xMidYMid slice"/>
-        <rect x="7" y="7" width="126" height="70" fill="none" stroke="#000" stroke-opacity=".12"/>
+      <g transform="translate(${b.x + b.w - 166} ${b.y + b.h - 152}) rotate(4)">
+        <rect x="3" y="5" width="140" height="118" fill="#1e0e05" opacity=".45" filter="url(#blur4)"/>
+        <rect width="140" height="118" fill="#fbf8f2"/>
+        <image href="assets/img/us.jpg" x="8" y="8" width="124" height="93" preserveAspectRatio="xMidYMid slice"/>
+        <rect x="8" y="8" width="124" height="93" fill="none" stroke="#000" stroke-opacity=".12"/>
         <circle cx="70" cy="4" r="5" fill="#3a7bd5"/><circle cx="68.5" cy="2.5" r="1.6" fill="#fff" opacity=".7"/>
       </g>
       <g transform="translate(${b.x + 34} ${b.y + b.h - 78}) rotate(-8) scale(.9)">
@@ -175,7 +175,7 @@
       <path d="${d}" stroke="#ffb27a" stroke-width="3" fill="none" stroke-linecap="round" opacity="${o * 0.5}" filter="url(#blur2)" transform="translate(-3 -4)"/>`;
     const seam = (d) => `<path d="${d}" stroke="#7a2a0c" stroke-width="2.2" fill="none" opacity=".75"/>
       <path d="${d}" stroke="#ffc08a" stroke-width="1" fill="none" opacity=".35" transform="translate(0 -2)"/>`;
-    return `<g class="beanbag" transform="translate(236 992)">
+    return `<g class="beanbag" transform="translate(250 912) scale(.9)">
       <ellipse cx="18" cy="2" rx="230" ry="24" fill="#000" opacity=".6" filter="url(#blur14)"/>
       <path d="${body}" fill="${leather}"/>
       <path d="${body}" fill="${lin([[0, "#2a0a02", 0.35], [0.45, "#2a0a02", 0], [1, "#fff", 0.05]], 0, 0, 1, 0)}"/>
@@ -437,10 +437,10 @@
 
   // a red iPod-shaped floor mirror leaning against the wall
   function ipodMirror() {
-    const w = 132, h = 262, x = 1430, b = 946;
+    const w = 132, h = 262, x = 1404, b = 946, k = 1.32;
     const red = lin([[0, "#e2333a"], [0.5, "#c41c26"], [1, "#8e0e18"]], 0, 0, 1, 0);
     const sx = 12, sy = 14, sw = w - 24, sh = 122;
-    return `<g class="ipod" transform="translate(${x} ${b}) rotate(-3)">
+    return `<g class="ipod" transform="translate(${x} ${b}) scale(${k})">
       <ellipse cx="${w / 2 + 8}" cy="0" rx="${w * 0.62}" ry="9" fill="#000" opacity=".6" filter="url(#blur6)"/>
       <rect x="${-6}" y="${-h + 14}" width="${w}" height="${h - 8}" rx="12" fill="#1e0e05" opacity=".5" filter="url(#blur10)"/>
       <g transform="translate(0 ${-h})">
@@ -476,20 +476,20 @@
 
   // a slim bar sconce above the bulletin board, washing light down over it
   function barSconce() {
-    const cx = BOARD.x + BOARD.w / 2, y = BOARD.y - 30, half = 150;
+    const cx = BOARD.x + BOARD.w / 2, y = BOARD.y - 26, half = 78;
     const bronze = lin([[0, "#5a4636"], [0.5, "#2e241c"], [1, "#1a140e"]]);
     return {
       fixture: `<g class="sconce">
-        <rect x="${cx - 20}" y="${y - 22}" width="40" height="15" rx="1.5" fill="${bronze}"/>
-        <rect x="${cx - 4}" y="${y - 8}" width="8" height="9" fill="#241c16"/>
+        <rect x="${cx - 13}" y="${y - 17}" width="26" height="11" rx="1.5" fill="${bronze}"/>
+        <rect x="${cx - 3}" y="${y - 7}" width="6" height="8" fill="#241c16"/>
         <rect x="${cx - half + 6}" y="${y + 5}" width="${half * 2}" height="9" fill="#000" opacity=".35" filter="url(#blur4)"/>
-        <rect x="${cx - half}" y="${y}" width="${half * 2}" height="8" rx="1.5" fill="${bronze}"/>
+        <rect x="${cx - half}" y="${y}" width="${half * 2}" height="6" rx="1.5" fill="${bronze}"/>
         <rect x="${cx - half}" y="${y}" width="${half * 2}" height="1.5" fill="#8a7058" opacity=".7"/>
       </g>`,
       glow: `<g class="sconce-glow" style="mix-blend-mode:screen">
-        <path d="M${cx - half} ${y + 8} L${cx + half} ${y + 8} L${cx + half + 30} ${y + 190} L${cx - half - 30} ${y + 190} Z" fill="${lin([[0, "#ffc27e", 0.26], [0.45, "#ffa860", 0.07], [1, "#ffa860", 0]])}" filter="url(#blur14)"/>
-        <path d="M${cx - half + 10} ${y} L${cx + half - 10} ${y} L${cx + half - 40} ${y - 70} L${cx - half + 40} ${y - 70} Z" fill="${lin([[0, "#ffb070", 0], [1, "#ffc888", 0.2]])}" filter="url(#blur14)"/>
-        <rect x="${cx - half + 2}" y="${y + 7}" width="${half * 2 - 4}" height="1.4" fill="#ffe8c4" opacity=".75"/>
+        <path d="M${cx - half} ${y + 8} L${cx + half} ${y + 8} L${cx + half + 70} ${y + 200} L${cx - half - 70} ${y + 200} Z" fill="${lin([[0, "#ff9a40", 0.34], [0.45, "#ff7e2a", 0.09], [1, "#ff7e2a", 0]])}" filter="url(#blur14)"/>
+        <path d="M${cx - half + 10} ${y} L${cx + half - 10} ${y} L${cx + half - 40} ${y - 70} L${cx - half + 40} ${y - 70} Z" fill="${lin([[0, "#ff9a40", 0], [1, "#ffae5a", 0.22]])}" filter="url(#blur14)"/>
+        <rect x="${cx - half + 2}" y="${y + 5}" width="${half * 2 - 4}" height="1.4" fill="#ffc27a" opacity=".85"/>
       </g>`
     };
   }
@@ -654,9 +654,9 @@
     return lines;
   }
   function renderNotes() {
-    $("#notes").innerHTML = S.notes.slice(0, 6).map((n, i) => {
+    $("#notes").innerHTML = S.notes.slice(0, 7).map((n, i) => {
       const h = hash(n.id), col = NOTE_COLS[h % NOTE_COLS.length];
-      const x = BOARD.x + 30 + (i % 3) * 104, y = BOARD.y + 88 + Math.floor(i / 3) * 106;
+      const x = BOARD.x + 32 + (i % 4) * 104, y = BOARD.y + 88 + Math.floor(i / 4) * 106;
       const rot = ((h >> 4) % 9) - 4;
       return `<g class="hot note" data-hot="note" data-i="${i}" transform="translate(${x} ${y}) rotate(${rot} 42 36) scale(.92)">
         <g class="lift">
@@ -733,7 +733,7 @@
 
   /* ---------------- DOM wiring ---------------- */
   const hudEl = document.getElementById("hud");
-  const toastEl = document.getElementById("toast"), hintEl = document.getElementById("hint");
+  const toastEl = document.getElementById("toast");
 
   let last = performance.now();
   function loop(now) {
@@ -748,7 +748,6 @@
   function refreshCard() {}
 
   svg.addEventListener("click", (e) => {
-    hintEl.classList.add("gone");
     const el = hotFrom(e.target);
     if (!el) return;
     const kind = el.dataset.hot, i = +el.dataset.i;
