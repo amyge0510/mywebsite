@@ -32,8 +32,7 @@ window.SITE = {
       year: "2026", tags: ["research"],
       blurb: "Describe what you built, why, and what you learned. Edit me in js/data.js.",
       url: null,
-      cover: { motif: "face", label: "PROJECT 02",
-               palette: { bg: "#efe7da", a: "#c44536", b: "#2a2a2a", c: "#e8c4a8", ink: "#2a2a2a" } }
+      cover: { image: "assets/covers/project-02.jpg", palette: { bg: "#efe1c4", a: "#c8202a", b: "#3a2a1e", c: "#e8d2a8", ink: "#2a2a2a" } }
     },
     {
       id: "project-03", title: "Project 03", subtitle: "a short tagline",

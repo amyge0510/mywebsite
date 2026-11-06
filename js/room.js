@@ -15,9 +15,10 @@
   const clipShape = (shapes) => A.clip(shapes);
 
   /* ---------------- layout ---------------- */
-  const COVER = 150, GAP = 60;
-  const COLS = [0, 1, 2, 3].map((i) => 510 + i * (COVER + GAP));
-  const ROWS = [110, 330];
+  const COVER = 135, GAP = 60;                      // 10% smaller records, to make room for the lightbox
+  const COLS = [0, 1, 2, 3].map((i) => 900 - (4 * COVER + 3 * GAP) / 2 + i * (COVER + GAP));
+  const ROWS = [176, 372];
+  const SIGN = { x0: 640, x1: 1160, y0: 44, y1: 128 };
   const CAB = { x0: 560, x1: 1240, top: 730, k: 0.1 };
   CAB.bot = (FLOOR - VP.y * CAB.k) / (1 - CAB.k);
   const CUBL = { x0: 580, x1: 896, y0: CAB.top + 28, y1: CAB.bot - 24 };
@@ -370,7 +371,8 @@
     const latch = (x) => `<rect x="${x - 9}" y="${ft + 12}" width="18" height="13" rx="2" fill="${chrome}"/><rect x="${x - 5}" y="${ft + 15}" width="10" height="7" rx="1" fill="#6a645e"/>`;
     const grille = (x) => `<rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="#cfcac4"/><rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="url(#grille)"/>
       <rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="none" stroke="#000" stroke-opacity=".25"/>`;
-    return `<g class="hot" data-hot="turntable" transform="translate(${TT.cx} ${TT.cy}) scale(${TT.s}) translate(${-TT.cx} ${-TT.cy})">
+    return `<g class="hot beckon" data-hot="turntable" transform="translate(${TT.cx} ${TT.cy}) scale(${TT.s}) translate(${-TT.cx} ${-TT.cy})">
+      <rect class="tt-halo" x="${fl - 26}" y="${tl[1] - 34}" width="${fr - fl + 52}" height="${fb - tl[1] + 46}" rx="26" fill="#ffc06a" filter="url(#blur14)"/>
       <ellipse cx="${(fl + fr) / 2 - 6}" cy="${fb + 2}" rx="${(fr - fl) / 2 + 20}" ry="7" fill="#000" opacity=".6" filter="url(#blur4)"/>
       <!-- lid when it's raised (behind the deck); points are animated -->
       <g id="lid-back">${lidShapes(velvet, chrome)}</g>
@@ -504,6 +506,28 @@
     };
   }
 
+  // a glowing "PROJECTS" lightbox above the record wall
+  function lightbox() {
+    const { x0, x1, y0, y1 } = SIGN, d = 14;
+    const sideR = [[x1, y0], [x1 + d * 0.5, y0 + d * 0.6], [x1 + d * 0.5, y1 + d * 0.6], [x1, y1]];
+    const bottom = [[x0, y1], [x1, y1], [x1 + d * 0.5, y1 + d * 0.6], [x0 + d * 0.5, y1 + d * 0.6]];
+    return {
+      body: `<g class="lightbox">
+        <rect x="${x0 + 14}" y="${y0 + 22}" width="${x1 - x0}" height="${y1 - y0}" fill="#1e0e05" opacity=".45" filter="url(#blur14)"/>
+        ${poly(sideR, lin([[0, "#d8d0c4"], [1, "#a89e90"]], 0, 0, 1, 0))}
+        ${poly(bottom, "#b8ae9e")}
+        <rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="2" fill="#f2ece0"/>
+      </g>`,
+      glow: `<g class="lightbox-glow">
+        <rect x="${x0 - 30}" y="${y0 - 26}" width="${x1 - x0 + 60}" height="${y1 - y0 + 70}" rx="30" fill="#ffe8c0" opacity=".28" filter="url(#blur30)"/>
+        <rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="2" fill="${lin([[0, "#fffdf6"], [0.55, "#fff5e2"], [1, "#f6e6c8"]])}"/>
+        <rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="2" fill="none" stroke="#e6d8c0" stroke-width="1.5"/>
+        <text x="${(x0 + x1) / 2}" y="${(y0 + y1) / 2 + 20}" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="58" letter-spacing="3" fill="#c8202a">PROJECTS</text>
+        <rect x="${x0}" y="${y1 - 3}" width="${x1 - x0}" height="3" fill="#fff" opacity=".7"/>
+      </g>`
+    };
+  }
+
   /* ---------------- lighting ---------------- */
   function lighting() {
     const L = LAMP_GLOW;
@@ -528,7 +552,7 @@
   REC_SHADE = lin([[0, "#fff", 0.12], [0.5, "#000", 0.05], [1, "#000", 0.42]], 0, 0, 1, 0.4);
   const NOTE_SHEEN = lin([[0, "#fff", 0.35], [1, "#000", 0.1]], 0, 0, 1, 1);
   const vinyls = music.map((m) => vinylMarkup(m, "spin"));
-  const donut = donutLamp(), sconce = barSconce();
+  const donut = donutLamp(), sconce = barSconce(), sign = lightbox();
 
   const body = `
     ${wall()}
@@ -536,6 +560,7 @@
     ${sunlight()}
     ${board()}
     ${sconce.fixture}
+    ${sign.body}
     ${Array.from({ length: Math.min(SITE.wallSlots, 8) }, (_, i) => record(i)).join("")}
     ${floor()}
     ${rug()}
@@ -554,6 +579,7 @@
     <g id="emissive" pointer-events="none">
       ${lampEmissive()}
       ${donut.emit}
+      ${sign.glow}
       ${sconce.glow}
       <g id="fx"></g>
     </g>`;
@@ -644,12 +670,15 @@
     el.classList.add("halo");
     el.addEventListener("pointerenter", () => el.classList.remove("halo"), { once: true });
   }
+  function stopBeckon() { const t = svg.querySelector('[data-hot="turntable"]'); if (t) t.classList.remove("beckon"); }
   function clickTurntable() {
+    stopBeckon();
     if (S.disc) return returnDisc();
     setLid(LID.target !== 1);
   }
 
   function pickRecord(i) {
+    stopBeckon();
     if (LID.t < 1) {                                    // open the lid first, then play
       prompted = true; svg.querySelectorAll(".rec.halo").forEach((e) => e.classList.remove("halo"));
       return setLid(true, () => pickRecord(i));

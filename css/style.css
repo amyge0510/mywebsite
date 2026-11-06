@@ -81,6 +81,10 @@ body.lamp-off .sun { opacity: .15; }
 .beanbag.wobble .squish { animation: squish .7s ease-out; }
 @keyframes squish { 20% { transform: scale(1.03, .96) rotate(-1.2deg); } 45% { transform: scale(.985, 1.02) rotate(.9deg); } 70% { transform: scale(1.01, .99) rotate(-.4deg); } }
 
+/* on arrival the record player glows, inviting a click */
+.tt-halo { opacity: 0; pointer-events: none; transition: opacity .5s; }
+.beckon .tt-halo { animation: halo 1.8s ease-in-out infinite; }
+
 /* a record glows to invite a hover once the lid is open */
 .rec .rec-halo { opacity: 0; pointer-events: none; transition: opacity .5s; }
 .rec.halo .rec-halo { animation: halo 1.8s ease-in-out infinite; }
