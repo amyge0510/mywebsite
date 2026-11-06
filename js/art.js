@@ -39,7 +39,8 @@ window.Art = (() => {
   function cover(spec, withLabel = true) {
     const p = spec.palette, r = rng(hash(spec.label || spec.motif));
     let s = `<rect width="100" height="100" fill="${p.bg}"/>`;
-    switch (spec.motif) {
+    if (spec.image) s += `<image href="${spec.image}" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>`;
+    switch (spec.image ? null : spec.motif) {
       case "sunset": {
         s += `<rect width="100" height="58" fill="${lin([[0, p.bg], [0.55, p.b], [1, p.a]])}"/>`;
         s += `<circle cx="50" cy="58" r="22" fill="${p.c}"/><circle cx="50" cy="58" r="32" fill="${p.c}" opacity=".18"/>`;
@@ -119,6 +120,8 @@ window.Art = (() => {
         break;
       }
     }
+    if (withLabel && spec.label && spec.image)
+      s += `<rect x="4" y="4" width="${spec.label.length * 6.6 + 6}" height="12.5" rx="1.5" fill="#1a1012" opacity=".72"/>`;
     if (withLabel && spec.label)
       s += `<text x="7" y="13" font-family="'Archivo Black', 'Arial Black', sans-serif" font-size="8.5" letter-spacing=".5" fill="${p.ink}">${esc(spec.label)}</text>`;
     // printed-card finish: sheen + edge

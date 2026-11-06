@@ -136,7 +136,7 @@
     let speck = "";
     for (let i = 0; i < 330; i++) speck += `<circle cx="${b.x + 12 + r() * (b.w - 24)}" cy="${b.y + 12 + r() * (b.h - 24)}" r="${0.6 + r() * 1.3}" fill="${r() < 0.5 ? "#8e5f36" : "#d8aa74"}" opacity=".7"/>`;
     const deco = `
-      <g transform="translate(${b.x + b.w - 166} ${b.y + b.h - 152}) rotate(4)">
+      <g transform="translate(${b.x + b.w - 128} ${b.y + b.h - 120}) rotate(4) scale(.68)">
         <rect x="3" y="5" width="140" height="118" fill="#1e0e05" opacity=".45" filter="url(#blur4)"/>
         <rect width="140" height="118" fill="#fbf8f2"/>
         <image href="assets/img/us.jpg" x="8" y="8" width="124" height="93" preserveAspectRatio="xMidYMid slice"/>
@@ -175,7 +175,7 @@
       <path d="${d}" stroke="#ffb27a" stroke-width="3" fill="none" stroke-linecap="round" opacity="${o * 0.5}" filter="url(#blur2)" transform="translate(-3 -4)"/>`;
     const seam = (d) => `<path d="${d}" stroke="#7a2a0c" stroke-width="2.2" fill="none" opacity=".75"/>
       <path d="${d}" stroke="#ffc08a" stroke-width="1" fill="none" opacity=".35" transform="translate(0 -2)"/>`;
-    return `<g class="beanbag" transform="translate(250 912) scale(.9)">
+    return `<g class="hot beanbag" data-hot="beanbag" transform="translate(250 912) scale(.9)"><g class="squish">
       <ellipse cx="18" cy="2" rx="230" ry="24" fill="#000" opacity=".6" filter="url(#blur14)"/>
       <path d="${body}" fill="${leather}"/>
       <path d="${body}" fill="${lin([[0, "#2a0a02", 0.35], [0.45, "#2a0a02", 0], [1, "#fff", 0.05]], 0, 0, 1, 0)}"/>
@@ -193,7 +193,7 @@
         <text x="2" y="26" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-weight="700" font-size="84" fill="#141012">5</text>
         <path d="M-70 -30 C-40 -54 30 -58 64 -40" stroke="#fff" stroke-width="5" fill="none" opacity=".5" filter="url(#blur2)"/>
       </g>
-    </g>`;
+    </g></g>`;
   }
 
   /* records standing in a wavy chrome rack (left cubby) */
@@ -437,7 +437,7 @@
 
   // a red iPod-shaped floor mirror leaning against the wall
   function ipodMirror() {
-    const w = 132, h = 262, x = 1412, b = CAB.bot - 2, k = 1.22;   // back against the wall, base in line with the cabinet
+    const w = 132, h = 262, x = 1398, b = CAB.bot - 2, k = 1.5;   // back against the wall, base in line with the cabinet
     const red = lin([[0, "#e2333a"], [0.5, "#c41c26"], [1, "#8e0e18"]], 0, 0, 1, 0);
     const sx = 12, sy = 14, sw = w - 24, sh = 122;
     return `<g class="ipod" transform="translate(${x} ${b}) scale(${k})">
@@ -509,6 +509,10 @@
       </g>
       <rect x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="#ec9660" opacity=".74"/>
       <rect x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="${rad([[0, "#ffffff", 0], [0.22, "#e8a87a", 0.38], [0.55, "#5a2410", 0.78], [1, "#080201", 0.98]], 920, 620, 1150, true)}"/>
+      <g class="sunset" style="mix-blend-mode:screen">
+        <rect x="-1400" y="-900" width="4400" height="2600" fill="${rad([[0, "#ff8a3a", 0.5], [0.35, "#e8642a", 0.22], [1, "#c84a1a", 0]], -120, 330, 760, true)}"/>
+        <ellipse cx="200" cy="${FLOOR + 60}" rx="300" ry="70" fill="#ff9a4a" opacity=".22" filter="url(#blur30)"/>
+      </g>
       <rect class="night" x="-1400" y="-900" width="4400" height="2600" style="mix-blend-mode:multiply" fill="${rad([[0, "#6a5a8a"], [0.5, "#3e3458"], [1, "#1e1830"]], 300, 200, 1700, true)}"/>`;
   }
 
@@ -760,9 +764,22 @@
       case "turntable": return S.disc && returnDisc();
       case "lamp": return toggleLamp();
       case "camera": openModal("camera-modal"); return window.InstantCamera.start();
+      case "beanbag": return rustle();
       case "note": case "board": return openNotes();
     }
   }
+  // the beanbag rustles when you brush past it
+  const bag = $(".beanbag");
+  let rustleAt = 0;
+  function rustle() {
+    const now = performance.now();
+    if (now - rustleAt < 700) return;
+    rustleAt = now;
+    bag.classList.remove("wobble"); void bag.getBBox(); bag.classList.add("wobble");
+    AE.sfx("rustle");
+  }
+  bag.addEventListener("pointerenter", rustle);
+
   function toggleLamp() {
     S.lamp = !S.lamp;
     document.body.classList.toggle("lamp-off", !S.lamp);

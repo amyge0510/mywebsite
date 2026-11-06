@@ -237,6 +237,13 @@ window.AudioEngine = (() => {
         g2.gain.setValueAtTime(0.06, tt); g2.gain.exponentialRampToValueAtTime(0.0001, tt + 0.1);
         a.connect(g2); g2.connect(out); a.start(tt); a.stop(tt + 0.12);
       }
+    } else if (name === "rustle") {
+      // leather + beans shifting: a few soft, filtered noise crunches
+      for (let i = 0; i < 7; i++) {
+        const tt = t + i * 0.05 + Math.random() * 0.04;
+        noise(tt, 0.07 + Math.random() * 0.08, "bandpass", 1800 + Math.random() * 2600, 1.4, 0.07 + Math.random() * 0.06, out);
+      }
+      noise(t, 0.35, "lowpass", 500, 0.7, 0.08, out);
     } else if (name === "sip") {
       noise(t, 0.12, "bandpass", 900, 2, 0.12, out);
       noise(t + 0.18, 0.12, "bandpass", 700, 2, 0.1, out);
