@@ -20,9 +20,9 @@ window.SITE = {
      url:   set this when the project page exists (e.g. "projects/01.html") */
   projects: [
     {
-      id: "project-01", title: "Project 01", subtitle: "a short tagline",
+      id: "project-01", title: "Cher’s Closet", subtitle: "the computerized wardrobe from Clueless",
       year: "2026", tags: ["web", "design"],
-      blurb: "Describe what you built, why, and what you learned. Edit me in js/data.js.",
+      blurb: "Cher’s Closet is a faithful recreation of Cher’s computerized wardrobe from Clueless. Upload photos of your clothes, and we handle the rest. Mix and match outfits and press DRESS ME to see them on you!",
       url: null,
       cover: { image: "assets/covers/project-01.jpg",
                palette: { bg: "#2b3a67", a: "#f4a259", b: "#e76f51", c: "#ffe8a3", ink: "#fff4e0" } }
