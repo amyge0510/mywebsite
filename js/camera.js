@@ -82,7 +82,7 @@ window.InstantCamera = (() => {
     g.fillStyle = "#3b2a20";
     g.font = '34px "Archivo Black", "Arial Black", sans-serif';
     if ("letterSpacing" in g) g.letterSpacing = "3px";
-    g.fillText(((window.SITE && SITE.title) || "my little room").toUpperCase(), pad + 66, y);
+    g.fillText(((window.SITE && SITE.title) || "my small corner").toUpperCase(), pad + 66, y);
     if ("letterSpacing" in g) g.letterSpacing = "0px";
     g.font = '40px Caveat, cursive';
     g.fillStyle = "#8a5a3a";
