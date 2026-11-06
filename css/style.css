@@ -91,6 +91,9 @@ body.lamp-off .sun { opacity: .15; }
 #cat .ear-r.twitch { animation: twitch .5s ease-in-out; }
 @keyframes twitch { 30% { transform: rotate(-14deg); } 65% { transform: rotate(6deg); } }
 
+/* lift the board's paper notes so they read as white sheets under the warm light */
+#notes-lit { opacity: .42; transition: opacity .6s; }
+body.lamp-off #notes-lit { opacity: .14; }
 #lamp-halo { opacity: 0; transition: opacity .6s; }
 body.lamp-beckon #lamp-halo { opacity: 1; }
 
