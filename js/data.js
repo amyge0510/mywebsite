@@ -22,7 +22,7 @@ window.SITE = {
     {
       id: "project-01", title: "Cher's Closet", subtitle: "a short tagline",
       year: "2026", tags: ["web", "design"],
-      blurb: "Describe what you built, why, and what you learned. Edit me in js/data.js.",
+      blurb: "Cher’s Closet is a faithful recreation of Cher’s computerized wardrobe from Clueless. Upload photos of your clothes, and we handle the rest. Mix and match outfits and press DRESS ME to see them on you!",
       url: "https://cher-closet.vercel.app/",
       /* the inside of the sleeve: a two-page design (left page holds the blurb on its lines);
          github / site fill in the two round icons on the right page, url fills in "link" */
