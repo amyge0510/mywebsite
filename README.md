@@ -16,7 +16,8 @@ js/art.js         SVG helpers, generated covers for the project records
 js/camera.js      the instant camera: webcam, signature filter, printed frame
 js/room.js        the room: layout, perspective, lighting, interactions
 js/cat.js         the cat: drawing, poses and behaviour (sleep, yawn, meow, walk, drink)
-js/audio.js       record playback + built-in lo-fi synth + sound effects
+js/audio.js       sound effects + built-in lo-fi fallback tune
+js/spotify.js     plays each record's track through the Spotify embed
 js/notes.js       bulletin-board storage (localStorage or Supabase)
 supabase/schema.sql
 ```
@@ -38,9 +39,10 @@ Everything lives in `js/data.js`:
   popup's button links to it. `wallSlots` controls how many slots show. Slots
   without a project show "coming soon". Covers are generated illustrations (pick a
   `motif` and a `palette`).
-- **Music** (records in the cabinet): set `src` to an audio file you're allowed to
-  host, such as `assets/music/my-song.mp3`. While `src` is `null`, a built-in lo-fi
-  synth plays that record's `synth` recipe, so every record makes sound out of the box.
+- **Music** (records in the cabinet rack): each has a `cover` image and a `spotify` track ID
+  (the part after `open.spotify.com/track/` in a share link). Putting a record on the player
+  plays that track in a small Spotify player — full songs for visitors logged into Spotify,
+  30-second previews otherwise. If Spotify can't load, a built-in lo-fi tune plays instead.
 
 ## What you'll need ("connectors")
 

@@ -68,41 +68,22 @@ window.SITE = {
     }
   ],
 
-  /* MUSIC — the records in the cabinet, stored spine-out like books.
-     cover: path to the album art. spine/ink: spine colour and its text colour.
-     spineLabel: optional shorter title for the spine.
-     src:   an audio file you have the rights to (e.g. "assets/music/song.mp3").
-            While src is null, a built-in lo-fi synth plays a stand-in tune. */
+  /* MUSIC — the records in the cabinet rack.
+     spotify: the Spotify track ID (from a share link: open.spotify.com/track/<ID>).
+              When a record lands on the player, that track plays in a small
+              Spotify player (full songs for listeners logged into Spotify,
+              30-second previews otherwise).
+     cover:   path to the album art. */
   music: [
-    {
-      id: "melophobia", title: "Melophobia", artist: "Cage the Elephant",
-      cover: "assets/covers/melophobia.jpg", spine: "#1f1c1a", ink: "#f3ede2", src: null,
-      synth: { bpm: 92, seed: 5, lead: "square", density: 0.45,
-               chords: [[52,55,59,62],[48,52,55,59],[50,53,57,60],[47,50,55,59]], scale: [64,67,69,71,74,76] }
-    },
-    {
-      id: "la-la-land", title: "La La Land (Score)", spineLabel: "La La Land", artist: "Justin Hurwitz",
-      cover: "assets/covers/la-la-land.jpg", spine: "#3aa9a6", ink: "#f6efe0", src: null,
-      synth: { bpm: 72, seed: 27, lead: "triangle", density: 0.4,
-               chords: [[45,48,52,55],[41,45,48,52],[50,53,57,60],[52,56,59,62]], scale: [69,72,74,76,79,81] }
-    },
-    {
-      id: "doo-wops", title: "Doo-Wops & Hooligans", spineLabel: "Doo-Wops", artist: "Bruno Mars",
-      cover: "assets/covers/doo-wops.jpg", spine: "#e8b23f", ink: "#2a2018", src: null,
-      synth: { bpm: 84, seed: 11, lead: "triangle", density: 0.45,
-               chords: [[50,54,57,61],[47,50,54,57],[43,47,50,54],[45,50,52,55]], scale: [74,76,78,81,83,86] }
-    },
-    {
-      id: "i-must-be-dreaming", title: "I Must Be Dreaming", artist: "Alabama Shakes",
-      cover: "assets/covers/i-must-be-dreaming.jpg", spine: "#d23f4c", ink: "#f8d66a", src: null,
-      synth: { bpm: 76, seed: 3, lead: "triangle", density: 0.45,
-               chords: [[53,57,60,64],[52,55,59,62],[50,53,57,60],[48,52,55,59]], scale: [72,74,76,79,81,84] }
-    },
-    {
-      id: "head-first", title: "Head First", artist: "The Babys",
-      cover: "assets/covers/head-first.jpg", spine: "#9fd4df", ink: "#b8232c", src: null,
-      synth: { bpm: 70, seed: 42, lead: "triangle", density: 0.4,
-               chords: [[51,55,58,62],[48,51,55,58],[44,48,51,55],[46,50,53,55]], scale: [75,77,79,82,84,87] }
-    }
+    { id: "home", title: "Home", artist: "Edward Sharpe & The Magnetic Zeros",
+      cover: "assets/covers/home.jpg", spotify: "7w5cxTEzp1rfV3KCy0Bd5N" },
+    { id: "la-la-land", title: "La La Land", artist: "Justin Hurwitz",
+      cover: "assets/covers/la-la-land.jpg", spotify: "5kRBzRZmZTXVg8okC7SJFZ" },
+    { id: "from-the-start", title: "From the Start", artist: "Laufey",
+      cover: "assets/covers/from-the-start.jpg", spotify: "43iIQbw5hx986dUEZbr3eN" },
+    { id: "little-lion-man", title: "Little Lion Man", artist: "Mumford & Sons",
+      cover: "assets/covers/sigh-no-more.jpg", spotify: "37jCwWbb32w46aS5pKZZbe" },
+    { id: "doo-wops", title: "Doo-Wops & Hooligans", artist: "Bruno Mars",
+      cover: "assets/covers/doo-wops.jpg", spotify: "3w3y8KPTfNeOKPiqUTakBh" }
   ]
 };
