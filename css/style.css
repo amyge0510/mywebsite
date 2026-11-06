@@ -235,8 +235,8 @@ button:disabled { opacity: .6; cursor: wait; }
 .gatefold.spread #project-blurb {
   /* written on the ruled lines, starting below the torn plaid strip and clear of the camera */
   position: absolute; left: 20%; right: 9%; top: 59%; margin: 0; padding: 0;
-  font: calc(var(--S) * .036)/calc(var(--S) * .0672) "Special Elite", "Courier New", monospace; color: #3a2630;
-  max-height: calc(var(--S) * .0672 * 4); overflow: hidden;
+  font: calc(var(--S) * .029)/calc(var(--S) * .0672) "Special Elite", "Courier New", monospace; color: #3a2630;
+  max-height: calc(var(--S) * .0672 * 5); overflow: hidden;
 }
 .gatefold.spread .gf-spread-links { display: block; position: absolute; inset: 0; z-index: 2; }
 .gf-spread-links a { position: absolute; border-radius: 50%; cursor: pointer; transition: transform .2s, filter .2s; }
