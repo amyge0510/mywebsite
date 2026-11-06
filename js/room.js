@@ -1138,7 +1138,7 @@
       const links = p.links || {};
       [["sp-gh", links.github], ["sp-web", links.site], ["sp-link", p.url]].forEach(([id, href]) => {
         const a = document.getElementById(id);
-        if (href) { a.href = href; a.classList.remove("off"); } else { a.removeAttribute("href"); a.classList.add("off"); }
+        if (href) { a.href = href; a.target = "_blank"; a.rel = "noopener"; a.classList.remove("off"); } else { a.removeAttribute("href"); a.classList.add("off"); }
       });
     }
     gate.classList.remove("opened");
