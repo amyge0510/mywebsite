@@ -23,7 +23,7 @@
   const CUBL = { x0: 580, x1: 896, y0: CAB.top + 28, y1: CAB.bot - 24 };
   const CUBR = { x0: 914, x1: 1220, y0: CAB.top + 28, y1: CAB.bot - 24 };
   const DY = CAB.top - 640;                          // cabinet-top objects are drawn for a top at y=640
-  const PLAT = { x: 700, y: 586 + DY, rx: 96, ry: 16 };
+  const PLAT = { x: 672, y: 574 + DY, rx: 78, ry: 12 };
   const LAMP = { x: 1130, base: 620, drop: 44 };     // drop = how much shorter than before
   const LAMP_GLOW = { x: 1130, y: 490 + DY + LAMP.drop };
   const BOARD = { x: 36, y: 170, w: 360, h: 350 };
@@ -53,7 +53,7 @@
     const X = [230, 400, 414, 584], Y = [40, 270, 284, 540];
     for (const [xa, xb] of [[X[0], X[1]], [X[2], X[3]]]) for (const [ya, yb] of [[Y[0], Y[1]], [Y[2], Y[3]]])
       panes.push(poly([sk(xa, ya), sk(xb, ya), sk(xb, yb), sk(xa, yb)], "#ffd38e"));
-    return `<g class="sun" opacity=".75" filter="url(#blur14)" style="mix-blend-mode:screen">${panes.join("")}</g>`;
+    return `<g class="sun" opacity=".8" filter="url(#blur14)" style="mix-blend-mode:screen">${panes.join("")}</g>`;
   }
 
   function floor() {
@@ -294,20 +294,8 @@
 
   // right cubby: a small framed photo of the two of us, and the Harry Potter box set stacked flat
   function cubbyRight() {
-    const fb = CUBR.y1 - 6, fx = CUBR.x0 + 30, w = 112, h = 88;
-    const frame = `<g>
-      <ellipse cx="${fx + w / 2}" cy="${fb + 1}" rx="${w / 2 + 4}" ry="4" fill="#000" opacity=".6" filter="url(#blur4)"/>
-      <g transform="translate(${fx} ${fb}) rotate(-6)">
-        <rect x="8" y="${-h + 6}" width="${w}" height="${h}" fill="#000" opacity=".55" filter="url(#blur8)"/>
-        <g transform="translate(0 ${-h})">
-          <rect width="${w}" height="${h}" rx="3" fill="${lin([[0, "#6a4630"], [0.5, "#3a2416"], [1, "#1e1008"]], 0, 0, 1, 1)}"/>
-          <rect x="2" y="2" width="${w - 4}" height="2" fill="#b0845e" opacity=".7"/>
-          <rect x="7" y="7" width="${w - 14}" height="${h - 14}" fill="#f6f1e8"/>
-          <image href="assets/img/us.jpg" x="12" y="12" width="${w - 24}" height="${h - 24}" preserveAspectRatio="xMidYMid slice"/>
-          <rect x="7" y="7" width="${w - 14}" height="${h - 14}" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="3" filter="url(#blur2)"/>
-          <rect x="7" y="7" width="${w - 14}" height="${h - 14}" fill="${lin([[0, "#fff", 0.26], [0.35, "#fff", 0], [1, "#fff", 0]], 0, 0, 1, 1)}"/>
-        </g>
-      </g></g>`;
+    const fb = CUBR.y1 - 6, fx = CUBR.x0 + 30, w = 112;
+    const frame = flipClock(fx + w / 2, fb);
     // top to bottom, as in the box set
     const books = [
       ["Sorcerer's Stone", "#5a3b8e", 8], ["Chamber of Secrets", "#8e2c5c", 8], ["Prisoner of Azkaban", "#2f6a6c", 9],
@@ -334,12 +322,51 @@
   }
   let BOOK_SHEEN = "";
 
+  // a chrome flip clock standing on two books; its cards show the time in Los Angeles
+  function flipClock(cx, fb) {
+    const chrome = lin([[0, "#5a5652"], [0.25, "#f6f4f0"], [0.45, "#9a958e"], [0.7, "#ffffff"], [1, "#6a655e"]], 0, 0, 1, 0);
+    const chromeV = lin([[0, "#ffffff"], [0.5, "#8e8982"], [1, "#d8d4ce"]]);
+    const books = `
+      <ellipse cx="${cx + 4}" cy="${fb + 1}" rx="70" ry="4" fill="#000" opacity=".6" filter="url(#blur4)"/>
+      <rect x="${cx - 62}" y="${fb - 13}" width="124" height="13" rx="1.5" fill="#b8262e"/>
+      <rect x="${cx - 62}" y="${fb - 13}" width="124" height="13" rx="1.5" fill="${BOOK_SHEEN}"/>
+      <rect x="${cx + 56}" y="${fb - 12}" width="5" height="11" fill="#f2ead8"/>
+      <rect x="${cx - 40}" y="${fb - 7.5}" width="60" height="1.6" fill="#f2d79a" opacity=".85"/>
+      <rect x="${cx - 58}" y="${fb - 25}" width="116" height="12" rx="1.5" fill="#24365a"/>
+      <rect x="${cx - 58}" y="${fb - 25}" width="116" height="12" rx="1.5" fill="${BOOK_SHEEN}"/>
+      <rect x="${cx + 52}" y="${fb - 24}" width="5" height="10" fill="#f2ead8"/>
+      <rect x="${cx - 46}" y="${fb - 20}" width="74" height="1.5" fill="#f2d79a" opacity=".85"/>
+      ${poly([[cx - 58, fb - 25], [cx + 58, fb - 25], P(cx + 58, fb - 25, 0.03), P(cx - 58, fb - 25, 0.03)], "#2e4470")}`;
+    const drum = (x0, id, ap) => `
+      <rect x="${x0}" y="-150" width="86" height="70" rx="6" fill="${lin([[0, "#2a2828"], [0.5, "#0e0d0d"], [1, "#222020"]])}"/>
+      <rect x="${x0 + 3}" y="-146" width="80" height="62" rx="4" fill="#141313"/>
+      <g class="flipcard" id="${id}-card">
+        <text id="${id}" x="${x0 + 45}" y="-96" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-weight="700" font-size="46" fill="#f4f2ee">00</text>
+      </g>
+      <rect x="${x0 + 3}" y="-116" width="80" height="1.6" fill="#000"/>
+      ${[0, 1, 2].map((i) => `<rect x="${x0 + 3}" y="${-83 + i * 1.4}" width="80" height=".6" fill="#3a3838"/>`).join("")}
+      ${ap ? `<text id="clock-ap" x="${x0 + 7}" y="-134" font-family="DM Sans, Arial, sans-serif" font-weight="700" font-size="8" fill="#f4f2ee">AM</text>` : ""}
+      <rect x="${x0}" y="-150" width="86" height="14" rx="6" fill="#fff" opacity=".07"/>`;
+    const clock = `<g transform="translate(${cx} ${fb - 25}) scale(.6)">
+      ${drum(-104, "clock-h", true)}${drum(18, "clock-m", false)}
+      <g transform="translate(110 -115)">${Array.from({ length: 12 }, (_, i) => `<rect x="-3" y="-20" width="6" height="8" fill="#141212" transform="rotate(${i * 30})"/>`).join("")}<circle r="15" fill="#1c1a1a"/><circle r="5" fill="#6a6460"/></g>
+      <rect x="-9" y="-170" width="18" height="122" rx="3" fill="${chrome}"/>
+      <rect x="-60" y="-178" width="120" height="9" rx="3" fill="${chromeV}"/>
+      <path d="M-52 -170 v20 h-6 M52 -170 v20 h6" stroke="#cfcac3" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <rect x="-13" y="-56" width="26" height="12" rx="3" fill="${chrome}"/>
+      <path d="M-50 0 C-50 -30 -27 -46 0 -46 C27 -46 50 -30 50 0 Z" fill="${chrome}"/>
+      <path d="M-40 -14 C-36 -30 -20 -40 -4 -42" stroke="#fff" stroke-width="5" fill="none" opacity=".7" stroke-linecap="round" filter="url(#blur2)"/>
+      <ellipse cx="0" cy="0" rx="50" ry="4" fill="#5a5652"/>
+    </g>`;
+    return `<g class="flip-clock">${books}${clock}</g>`;
+  }
+
   // a boxy vintage instant camera; click it to take a photo
   function camera() {
-    const x = 930, b = 632, k = 0.06;
+    const x = 914, b = 632, k = 0.06;
     const tl = P(x, b - 44, k), tr = P(x + 118, b - 44, k);
     const black = lin([[0, "#3a3634"], [0.5, "#1e1b1a"], [1, "#0e0c0c"]]);
-    return `<g class="hot" data-hot="camera">
+    return `<g class="hot" data-hot="camera" transform="translate(${x + 59} ${b}) scale(.6) translate(${-x - 59} ${-b})">
       <ellipse cx="${x + 54}" cy="${b + 2}" rx="70" ry="7" fill="#000" opacity=".55" filter="url(#blur4)"/>
       ${poly([[x, b - 44], [x + 118, b - 44], tr, tl], "#2c2826")}
       <rect x="${x}" y="${b - 44}" width="118" height="44" rx="6" fill="${black}"/>
@@ -362,37 +389,61 @@
     </g>`;
   }
 
+  // a burgundy velvet suitcase record player with its lid open
   function turntable() {
-    const fl = 580, fr = 840, ft = 606, fb = 634, k = 0.1;
+    const fl = 588, fr = 832, ft = 590, fb = 634, k = 0.1;
     const tl = P(fl, ft, k), tr = P(fr, ft, k);
     const sc = PLAT.ry / PLAT.rx, py = PLAT.y - DY;
-    const lid = [P(fl + 4, ft, k), P(fr - 4, ft, k), [tr[0] - 6, tr[1] - 96], [tl[0] + 6, tl[1] - 96]];
+    const velvet = lin([[0, "#8e2230"], [0.5, "#6e1622"], [1, "#4a0c16"]]);
+    const lidTop = 108;
+    const lid = [[tl[0] - 2, tl[1] + 2], [tr[0] + 2, tr[1] + 2], [tr[0] + 6, tr[1] - lidTop], [tl[0] - 6, tl[1] - lidTop]];
+    const lidIn = [[tl[0] + 9, tl[1] - 4], [tr[0] - 9, tr[1] - 4], [tr[0] - 6, tr[1] - lidTop + 12], [tl[0] + 6, tl[1] - lidTop + 12]];
+    const inset = (pts, d) => [P(pts[0][0] + d, pts[0][1] - 3, 0.02), P(pts[1][0] - d, pts[1][1] - 3, 0.02)];
+    const deckIn = [[fl + 8, ft - 3], [fr - 8, ft - 3], [tr[0] - 6, tr[1] + 3], [tl[0] + 6, tl[1] + 3]];
+    void inset;
+    const chrome = lin([[0, "#f4f1ec"], [0.5, "#a9a39b"], [1, "#e2ded7"]]);
+    const latch = (x) => `<rect x="${x - 9}" y="${ft + 12}" width="18" height="13" rx="2" fill="${chrome}"/><rect x="${x - 5}" y="${ft + 15}" width="10" height="7" rx="1" fill="#6a645e"/>`;
+    const grille = (x) => `<rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="#cfcac4"/><rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="url(#grille)"/>
+      <rect x="${x}" y="${ft + 9}" width="44" height="26" rx="4" fill="none" stroke="#000" stroke-opacity=".25"/>`;
     return `<g class="hot" data-hot="turntable">
-      <ellipse cx="${(fl + fr) / 2 - 6}" cy="${fb + 2}" rx="${(fr - fl) / 2 + 18}" ry="7" fill="#000" opacity=".55" filter="url(#blur4)"/>
-      ${poly(lid, lin([[0, "#fff", 0.1], [1, "#fff", 0.03]]), `stroke="#fff" stroke-opacity=".3" stroke-width="1.5"`)}
-      <line x1="${lid[3][0] + 10}" y1="${lid[3][1] + 8}" x2="${lid[0][0] + 30}" y2="${lid[0][1] - 10}" stroke="#fff" stroke-opacity=".25" stroke-width="3"/>
-      ${poly([[fl, ft], [fr, ft], tr, tl], lin([[0, "#1e1a19"], [1, "#3c3532"]], 0, 1, 0, 0))}
-      <rect x="${fl}" y="${ft}" width="${fr - fl}" height="${fb - ft}" rx="2" fill="${lin([[0, "#ece8e1"], [0.45, "#c2bcb2"], [1, "#7e776d"]])}"/>
-      <rect x="${fl}" y="${ft}" width="${fr - fl}" height="1.5" fill="#fff"/>
-      <circle cx="${fl + 18}" cy="${ft + 14}" r="4" fill="#4a4440"/><circle cx="${fl + 32}" cy="${ft + 14}" r="4" fill="#4a4440"/>
-      <circle id="tt-led" cx="${fl + 46}" cy="${ft + 14}" r="2.4" fill="#5a2a2a"/>
-      <text x="${fr - 14}" y="${ft + 18}" text-anchor="end" font-family="DM Sans, sans-serif" font-size="9" letter-spacing="2" fill="#5d564e">AUDIO</text>
+      <ellipse cx="${(fl + fr) / 2 - 6}" cy="${fb + 2}" rx="${(fr - fl) / 2 + 20}" ry="7" fill="#000" opacity=".6" filter="url(#blur4)"/>
+      <!-- lid, standing open behind the deck -->
+      ${poly(lid, velvet)}
+      ${poly(lidIn, lin([[0, "#7a1a28"], [1, "#5a1020"]]))}
+      ${poly(lidIn, "url(#velvet-nap)")}
+      <rect x="${(tl[0] + tr[0]) / 2 - 8}" y="${tl[1] - lidTop - 2}" width="16" height="8" rx="1.5" fill="${chrome}"/>
+      <text x="${(tl[0] + tr[0]) / 2}" y="${tl[1] - lidTop * 0.55}" text-anchor="middle" font-family="Caveat, cursive" font-size="17" fill="#f3e4d6" opacity=".85">my little room</text>
+      <!-- deck -->
+      ${poly([[fl, ft], [fr, ft], tr, tl], velvet)}
+      ${poly(deckIn, lin([[0, "#121010"], [1, "#2a2626"]], 0, 1, 0, 0))}
+      <!-- case front -->
+      <rect x="${fl}" y="${ft}" width="${fr - fl}" height="${fb - ft}" rx="4" fill="${velvet}"/>
+      <rect x="${fl}" y="${ft}" width="${fr - fl}" height="${fb - ft}" rx="4" fill="url(#velvet-nap)"/>
+      <rect x="${fl}" y="${ft}" width="${fr - fl}" height="2" fill="#b8485a" opacity=".7"/>
+      ${grille(fl + 12)}${grille(fr - 56)}
+      ${latch((fl + fr) / 2 - 42)}${latch((fl + fr) / 2 + 42)}
+      <rect x="${(fl + fr) / 2 - 7}" y="${ft + 3}" width="14" height="12" rx="2" fill="${chrome}"/>
+      <rect x="${(fl + fr) / 2 - 24}" y="${fb - 12}" width="48" height="16" rx="7" fill="${lin([[0, "#7e1a28"], [1, "#3e0a12"]])}"/>
+      <rect x="${fl - 1}" y="${fb - 9}" width="12" height="10" rx="3" fill="${chrome}"/><rect x="${fr - 11}" y="${fb - 9}" width="12" height="10" rx="3" fill="${chrome}"/>
+      <circle id="tt-led" cx="${fr - 66}" cy="${ft + 30}" r="2.2" fill="#5a2a2a"/>
+      <!-- platter + arm -->
       <g transform="translate(${PLAT.x} ${py})">
-        <ellipse cx="0" cy="3" rx="${PLAT.rx}" ry="${PLAT.ry}" fill="#6f6a63"/>
-        <ellipse cx="0" cy="0" rx="${PLAT.rx}" ry="${PLAT.ry}" fill="${lin([[0, "#ece8e2"], [1, "#8f897f"]], 0, 0, 1, 0)}"/>
-        <ellipse cx="0" cy="-.5" rx="${PLAT.rx - 4}" ry="${PLAT.ry - 1}" fill="#221e1d"/>
-        <g id="platter-disc" transform="scale(${(PLAT.rx - 6) / 50} ${((PLAT.rx - 6) / 50) * sc})" opacity="0"></g>
-        <ellipse cx="0" cy="-1" rx="3" ry="1" fill="#ddd"/>
+        <ellipse cx="0" cy="2" rx="${PLAT.rx}" ry="${PLAT.ry}" fill="#050404"/>
+        <ellipse cx="0" cy="0" rx="${PLAT.rx}" ry="${PLAT.ry}" fill="${lin([[0, "#2e2a2a"], [1, "#141212"]], 0, 0, 1, 0)}"/>
+        <ellipse cx="0" cy="-.5" rx="${PLAT.rx - 6}" ry="${PLAT.ry - 1}" fill="#1c1a1a" stroke="#333" stroke-width=".6"/>
+        <g id="platter-disc" transform="scale(${(PLAT.rx - 4) / 50} ${((PLAT.rx - 4) / 50) * sc})" opacity="0"></g>
+        <rect x="-1.2" y="-8" width="2.4" height="8" fill="#d8d2ca"/>
         <g transform="scale(1 ${sc})">
           <g id="tonearm" transform="rotate(0 112 -70)">
-            <line x1="112" y1="-70" x2="112" y2="50" stroke="#e6e1d9" stroke-width="2.4" vector-effect="non-scaling-stroke"/>
-            <rect x="104" y="44" width="16" height="22" rx="3" fill="#2e2a28"/>
+            <line x1="112" y1="-70" x2="112" y2="44" stroke="#1a1818" stroke-width="3.4" vector-effect="non-scaling-stroke"/>
+            <line x1="112" y1="-70" x2="112" y2="44" stroke="#6a6460" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="104" y="40" width="16" height="24" rx="3" fill="#121010"/><rect x="108" y="56" width="8" height="10" fill="#c0302a"/>
           </g>
         </g>
       </g>
-      <ellipse cx="${PLAT.x + 112}" cy="${py - 70 * sc - 2}" rx="9" ry="4" fill="#7f7a73"/>
-      <rect x="${PLAT.x + 107}" y="${py - 70 * sc - 14}" width="10" height="12" rx="3" fill="${lin([[0, "#f4f1ec"], [1, "#7f7a73"]], 0, 0, 1, 0)}"/>
-      <rect x="${PLAT.x + 120}" y="${py + 48 * sc - 9}" width="4" height="9" fill="#7f7a73"/>
+      <rect x="${PLAT.x + 104}" y="${py - 70 * sc - 16}" width="16" height="14" rx="3" fill="#121010"/>
+      <rect x="${PLAT.x + 108}" y="${py - 70 * sc - 22}" width="8" height="8" rx="2" fill="#2a2626"/>
+      <circle cx="${PLAT.x + 136}" cy="${py + 6}" r="5" fill="#2a2626"/><circle cx="${PLAT.x + 136}" cy="${py + 5}" r="3" fill="#4a4442"/>
     </g>`;
   }
 
@@ -494,6 +545,7 @@
       ${lampMarkup()}
     </g>
     ${catCorner()}
+    <g id="curtains" pointer-events="none"></g>
     ${beanbag()}
     <g id="cat" class="hot" data-hot="cat" data-state="sleep">${CatArt.markup()}</g>
     <g id="flydisc" opacity="0"></g>
@@ -508,6 +560,8 @@
     ${[2, 4, 6, 8, 10, 14, 30].map((d) => `<filter id="blur${d}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${d / 2}"/></filter>`).join("")}
     <clipPath id="labelclip"><circle r="17"/></clipPath>
     <pattern id="hp-diamonds" width="14" height="10" patternUnits="userSpaceOnUse"><path d="M7 0 L14 5 L7 10 L0 5 Z" fill="#000" opacity=".16"/><path d="M7 1.5 L12 5 L7 8.5 L2 5 Z" fill="#fff" opacity=".06"/></pattern>
+    <pattern id="grille" width="3" height="3" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".7" fill="#7a746e"/></pattern>
+    <pattern id="velvet-nap" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="2" r=".6" fill="#fff" opacity=".07"/><circle cx="4" cy="5" r=".6" fill="#000" opacity=".12"/></pattern>
     <pattern id="cam-mesh" width="2.4" height="2.4" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".6" fill="#3a2a10" opacity=".8"/></pattern>
     <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="b"/>
@@ -668,6 +722,71 @@
     }).join("");
   }
 
+  /* ---------------- sheer curtains drifting in from the window ---------------- */
+  const curtainsEl = $("#curtains"), sunEl = svg.querySelector(".sun");
+  const CURTAIN = { top: -80, bot: 960, rows: 24, strips: 12 };
+  const layers = [
+    { x0: -150, w: 190, amp: 175, phase: 0, a: [0.5, 0.34] },
+    { x0: -195, w: 190, amp: 125, phase: 1.9, a: [0.36, 0.24] }
+  ].map((L) => {
+    const g = document.createElementNS(SVGNS, "g");
+    L.paths = Array.from({ length: CURTAIN.strips }, (_, i) => {
+      const p = document.createElementNS(SVGNS, "path");
+      p.setAttribute("fill", i % 2 ? "#fffaf2" : "#ffeed8");
+      p.setAttribute("opacity", L.a[i % 2]);
+      g.appendChild(p);
+      return p;
+    });
+    curtainsEl.appendChild(g);
+    return L;
+  }).reverse();
+  function curtainX(L, u, y, t, gust) {
+    const v = (y - CURTAIN.top) / (CURTAIN.bot - CURTAIN.top);
+    const gather = 0.55 + 0.45 * v;                       // gathered at the rod, fuller toward the hem
+    const billow = L.amp * gust * Math.pow(u, 0.9) * (0.25 + 0.75 * v);
+    const ripple = 7 * Math.sin(y * 0.011 + t * 1.4 + u * 4 + L.phase) * (0.3 + v);
+    return L.x0 + u * L.w * gather + billow + ripple;
+  }
+  function updateCurtains(t) {
+    let gustMain = 0;
+    layers.forEach((L) => {
+      // slow, irregular breeze
+      const gust = Math.max(0, 0.45 + 0.35 * Math.sin(t * 0.37 + L.phase) + 0.2 * Math.sin(t * 0.91 + L.phase * 2));
+      if (L.phase === 0) gustMain = gust;
+      const ys = Array.from({ length: CURTAIN.rows + 1 }, (_, j) => CURTAIN.top + (j / CURTAIN.rows) * (CURTAIN.bot - CURTAIN.top));
+      L.paths.forEach((p, i) => {
+        const u0 = i / CURTAIN.strips, u1 = (i + 1) / CURTAIN.strips;
+        let d = "";
+        ys.forEach((y, j) => { d += (j ? "L" : "M") + curtainX(L, u0, y, t, gust).toFixed(1) + " " + y.toFixed(1); });
+        for (let j = ys.length - 1; j >= 0; j--) d += "L" + curtainX(L, u1, ys[j], t, gust).toFixed(1) + " " + ys[j].toFixed(1);
+        p.setAttribute("d", d + "Z");
+      });
+    });
+    // the window light shifts as the curtains move
+    if (sunEl) { sunEl.setAttribute("opacity", (0.82 - gustMain * 0.25).toFixed(3)); sunEl.setAttribute("transform", `translate(${(gustMain * 14).toFixed(1)} 0)`); }
+  }
+
+  /* ---------------- the flip clock keeps Los Angeles time ---------------- */
+  const laFmt = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", minute: "2-digit", hour12: true });
+  const clk = { h: $("#clock-h"), m: $("#clock-m"), ap: $("#clock-ap"), last: {} };
+  function flip(el, value, key) {
+    if (clk.last[key] === value) return;
+    const first = clk.last[key] === undefined;
+    clk.last[key] = value;
+    if (first) { el.textContent = value; return; }
+    const card = el.parentNode;
+    card.classList.remove("flipping"); void card.getBBox(); card.classList.add("flipping");
+    setTimeout(() => (el.textContent = value), 160);
+  }
+  function tickClock() {
+    const parts = Object.fromEntries(laFmt.formatToParts(new Date()).map((p) => [p.type, p.value]));
+    flip(clk.h, parts.hour, "h");
+    flip(clk.m, parts.minute, "m");
+    clk.ap.textContent = (parts.dayPeriod || "").toUpperCase();
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
   /* ---------------- hearts ---------------- */
   const fxEl = $("#fx"), parts = [];
   function spawn(x, y) {
@@ -696,7 +815,7 @@
   function loop(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     S.t += dt;
-    updateDisc(dt); updateCat(dt); updateParts(dt);
+    updateDisc(dt); updateCat(dt); updateParts(dt); updateCurtains(S.t);
     if (card.i !== null) placeCard();
     requestAnimationFrame(loop);
   }
