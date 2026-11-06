@@ -206,8 +206,38 @@ window.AudioEngine = (() => {
   }
 
   /* ---------------- sound effects ---------------- */
-  function sfx(name) {
+  /* recorded cat sounds; the synthesized versions below are only a fallback */
+  const SAMPLES = {
+    meow: ["assets/sounds/meow-1.mp3", "assets/sounds/meow-2.mp3", "assets/sounds/meow-3.mp3"],
+    purr: ["assets/sounds/purr.mp3"]
+  };
+  const sampleBufs = {};
+  function loadSample(url) {
+    if (!sampleBufs[url]) sampleBufs[url] = fetch(url).then((r) => (r.ok ? r.arrayBuffer() : Promise.reject()))
+      .then((a) => new Promise((res, rej) => ctx.decodeAudioData(a, res, rej))).catch(() => null);
+    return sampleBufs[url];
+  }
+  let lastPurr = null;
+  function playSample(name) {
+    const list = SAMPLES[name], url = list[Math.floor(Math.random() * list.length)];
+    return loadSample(url).then((buf) => {
+      if (!buf) return false;
+      if (name === "purr" && lastPurr) { try { lastPurr.stop(); } catch (e) {} }
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      if (name === "meow") src.playbackRate.value = 0.94 + Math.random() * 0.14;   // a little variety
+      const g = ctx.createGain(); g.gain.value = name === "purr" ? 0.9 : 1;
+      src.connect(g); g.connect(out); src.start();
+      if (name === "purr") { lastPurr = src; src.onended = () => { if (lastPurr === src) lastPurr = null; }; }
+      return true;
+    });
+  }
+
+  function sfx(name, synthOnly) {
     if (!init()) return;
+    if (SAMPLES[name] && !synthOnly) {
+      playSample(name).then((ok) => { if (!ok) sfx(name, true); });
+      return;
+    }
     const t = ctx.currentTime;
     const o = () => ctx.createOscillator(), gn = () => ctx.createGain();
     if (name === "click") {

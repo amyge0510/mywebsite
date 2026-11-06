@@ -612,6 +612,7 @@
       ${lampEmissive()}
       ${donut.emit}
       ${sign.glow}
+      <use id="notes-lit" href="#notes" pointer-events="none"/>
       <use id="lamp-halo" href="#lamp" transform="translate(0 ${DY})" filter="url(#outline-only)"/>
       ${wandMarkup()}
       ${sconce.glow}
@@ -622,6 +623,9 @@
     ${[2, 4, 6, 8, 10, 14, 30].map((d) => `<filter id="blur${d}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${d / 2}"/></filter>`).join("")}
     <clipPath id="labelclip"><circle r="17"/></clipPath>
     <pattern id="hp-diamonds" width="14" height="10" patternUnits="userSpaceOnUse"><path d="M7 0 L14 5 L7 10 L0 5 Z" fill="#000" opacity=".16"/><path d="M7 1.5 L12 5 L7 8.5 L2 5 Z" fill="#fff" opacity=".06"/></pattern>
+    <pattern id="note-paper" width="88" height="113" patternUnits="userSpaceOnUse"><rect width="88" height="113" fill="#faf8f2"/><image href="assets/img/paper.jpg" width="88" height="113" preserveAspectRatio="none"/></pattern>
+    <pattern id="note-hatch" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width=".8" height="3" fill="#23386e" opacity=".05"/></pattern>
+    <clipPath id="note-tear"><polygon points="${Array.from({ length: 23 }, (_, j) => `${(j * 4).toFixed(0)},${j % 2 ? 1.2 : 2.6}`).join(" ")} 88,2 88,88 0,88"/></clipPath>
     <pattern id="grille" width="3" height="3" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".7" fill="#7a746e"/></pattern>
     <pattern id="velvet-nap" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="2" r=".6" fill="#fff" opacity=".07"/><circle cx="4" cy="5" r=".6" fill="#000" opacity=".12"/></pattern>
     <pattern id="cam-mesh" width="2.4" height="2.4" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".6" fill="#3a2a10" opacity=".8"/></pattern>
@@ -794,6 +798,7 @@
 
   /* ---------------- notes ---------------- */
   const NOTE_COLS = ["#fff1a6", "#ffd0dc", "#cfeeff", "#d9f3c6", "#ffdcb0"];
+  const NOTE = { S: 88, k: 0.92 };   // board notes: little order-pad sheets
   function wrap(text, n = 17, max = 4) {
     const words = String(text).split(/\s+/), lines = [];
     let cur = "";
@@ -810,13 +815,27 @@
       const h = hash(n.id), col = NOTE_COLS[h % NOTE_COLS.length];
       const x = BOARD.x + 30 + (i % 3) * 104, y = BOARD.y + 88 + Math.floor(i / 3) * 106;
       const rot = ((h >> 4) % 9) - 4;
-      return `<g class="hot note${n.id === S.freshId ? " fresh" : ""}" data-hot="note" data-i="${i}" transform="translate(${x} ${y}) rotate(${rot} 42 36) scale(.92)">
+      void col;
+      const ink = "#23386e", N = NOTE.S, lowY = N * 0.44;
+      const lines = wrap(n.message, 23, 4);
+      return `<g class="hot note${n.id === S.freshId ? " fresh" : ""}" data-hot="note" data-i="${i}" transform="translate(${x} ${y}) rotate(${rot} ${N / 2} ${N / 2}) scale(${NOTE.k})">
         <g class="lift">
-        <rect x="3" y="6" width="92" height="78" fill="#1e0e05" opacity=".45" filter="url(#blur4)"/>
-        <rect width="92" height="78" fill="${col}"/><rect width="92" height="78" fill="${NOTE_SHEEN}"/>
-        ${wrap(n.message).map((l, j) => `<text x="9" y="${24 + j * 14}" font-family="Caveat, cursive" font-size="16" fill="#3a2a2a">${esc(l)}</text>`).join("")}
-        <text x="84" y="72" text-anchor="end" font-family="Caveat, cursive" font-size="13" fill="#7a6058">— ${esc(String(n.name).slice(0, 14))}</text>
-        <circle cx="46" cy="5" r="5" fill="${["#d9473b", "#e0a43b", "#3a7bd5", "#4aa36a"][h % 4]}"/><circle cx="44.5" cy="3.5" r="1.6" fill="#fff" opacity=".7"/>
+        <rect x="3" y="6" width="${N}" height="${N}" fill="#1e0e05" opacity=".45" filter="url(#blur4)"/>
+        <g clip-path="url(#note-tear)">
+          <rect width="${N}" height="${N}" fill="url(#note-paper)"/>
+          <rect y="${lowY}" width="${N}" height="${N - lowY}" fill="#c4e2d2" opacity=".55"/>
+          <rect y="${lowY}" width="${N}" height="${N - lowY}" fill="url(#note-hatch)"/>
+          <text x="7" y="13.5" font-family="DM Sans, sans-serif" font-weight="700" font-size="3.4" letter-spacing=".3" fill="${ink}">NAME</text>
+          <text x="19" y="13.6" font-family="'Special Elite', 'Courier New', monospace" font-size="5.6" fill="#1c1a24">${esc(String(n.name).slice(0, 18))}</text>
+          <rect x="7" y="15" width="${N - 14}" height=".5" fill="${ink}"/>
+          <text x="${N / 2}" y="29" text-anchor="middle" font-family="Yellowtail, cursive" font-size="12.5" fill="${ink}" transform="rotate(-6 ${N / 2} 26)">Hey there!</text>
+          <text x="${N / 2}" y="35.6" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="2.5" letter-spacing=".5" fill="${ink}">THANKS FOR VISITING</text>
+          <rect x="0" y="${lowY}" width="${N}" height=".55" fill="${ink}"/>
+          ${[1, 2, 3, 4, 5].map((j) => `<rect x="7" y="${lowY + j * 7.4}" width="${N - 14}" height=".35" fill="${ink}" opacity=".5"/>`).join("")}
+          ${lines.map((l, j) => `<text x="7" y="${lowY + 6.2 + j * 7.4}" font-family="'Special Elite', 'Courier New', monospace" font-size="4.6" fill="#1c1a24">${esc(l)}</text>`).join("")}
+          <rect width="${N}" height="${N}" fill="${NOTE_SHEEN}" opacity=".5"/>
+        </g>
+        <circle cx="${N / 2}" cy="4" r="4.4" fill="${["#d9473b", "#e0a43b", "#3a7bd5", "#4aa36a"][h % 4]}"/><circle cx="${N / 2 - 1.3}" cy="2.7" r="1.4" fill="#fff" opacity=".7"/>
         </g></g>`;
     }).join("");
   }
@@ -1086,8 +1105,9 @@
     await wait(320);
     const from = form.getBoundingClientRect();
     const ctm = svg.getScreenCTM();
-    const tx = ctm.e + ctm.a * (BOARD.x + 30 + 42), ty = ctm.f + ctm.d * (BOARD.y + 88 + 36);
-    const s = (ctm.a * 92 * 0.92) / from.width;
+    const half = (NOTE.S * NOTE.k) / 2;
+    const tx = ctm.e + ctm.a * (BOARD.x + 30 + half), ty = ctm.f + ctm.d * (BOARD.y + 88 + half);
+    const s = (ctm.a * NOTE.S * NOTE.k) / from.width;
     const dx = tx - (from.left + from.width / 2), dy = ty - (from.top + from.height / 2);
     pad.style.setProperty("--fly", `translate(${dx.toFixed(0)}px, ${dy.toFixed(0)}px) rotate(-8deg) scale(${s.toFixed(3)})`);
     document.getElementById("note-modal").classList.add("landing");

@@ -149,9 +149,9 @@ window.Cat = (() => {
           cat.meowT -= dt;
           if (cat.meowT <= 0 && cat.meowT > -dt * 1.5) AE && AE.sfx("meow");
           if (cat.meowT <= 0) {
-            const k = Math.max(0, Math.sin(Math.min(1, -cat.meowT / 0.55) * Math.PI)) * 0.5;
+            const k = Math.max(0, Math.sin(Math.min(1, -cat.meowT / 0.8) * Math.PI)) * 0.5;
             mouthOpen(k);
-            if (cat.meowT < -0.55) { cat.meowT = -1; mouthOpen(0); }
+            if (cat.meowT < -0.8) { cat.meowT = -1; mouthOpen(0); }
           }
         }
         parts.sitHead.setAttribute("transform", `translate(0 -160) rotate(${(tilt + Math.sin(cat.t * 0.8) * 1.5).toFixed(2)})`);
