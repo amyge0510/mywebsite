@@ -1,5 +1,7 @@
 # mywebsite
 
+Live at **https://mysmallcorner.vercel.app**. Vercel redeploys it on every push to `main`.
+
 my small corner — a warm, illustrated room that works as a personal site. The records on the wall are projects.
 Under them, a cabinet holds a rack of records you can play, a framed photo and a lamp you can
 switch on and off. There's a beanbag, a bulletin board where visitors leave notes, and an orange cat who mostly naps.
