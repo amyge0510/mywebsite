@@ -238,6 +238,14 @@ button:disabled { opacity: .6; cursor: wait; }
   font: calc(var(--S) * .029)/calc(var(--S) * .0672) "Special Elite", "Courier New", monospace; color: #3a2630;
   max-height: calc(var(--S) * .0672 * 5); overflow: hidden;
 }
+/* spreads without ruled lines: the blurb goes on the open right page instead */
+.sp-text { display: none; }
+.gatefold.spread.text-right #project-blurb { display: none; }
+.gatefold.spread.text-right .sp-text {
+  display: block; position: absolute; left: 10%; right: 14%; top: 16%; margin: 0; z-index: 1;
+  font: calc(var(--S) * .04)/1.65 "Special Elite", "Courier New", monospace; color: #6e1218;
+  max-height: 46%; overflow: hidden;
+}
 .gatefold.spread .gf-spread-links { display: block; position: absolute; inset: 0; z-index: 2; }
 .gf-spread-links a { position: absolute; border-radius: 50%; cursor: pointer; transition: transform .2s, filter .2s; }
 .gf-spread-links a.off { cursor: default; pointer-events: none; }

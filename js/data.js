@@ -22,7 +22,7 @@ window.SITE = {
     {
       id: "project-01", title: "Cher's Closet", subtitle: "a short tagline",
       year: "2026", tags: ["web", "design"],
-      blurb: "Cher’s Closet is a faithful recreation of Cher’s computerized wardrobe from Clueless. Upload photos of your clothes, and we handle the rest. Mix and match outfits and press DRESS ME to see them on you!",
+      blurb: "Cher’s Closet is a faithful recreation of Cher’s computerized wardrobe from Clueless. Upload photos of your clothes, and we handle the rest.",
       url: "https://cher-closet.vercel.app/",
       /* the inside of the sleeve: a two-page design (left page holds the blurb on its lines);
          github / site fill in the two round icons on the right page, url fills in "link" */
@@ -34,10 +34,13 @@ window.SITE = {
                palette: { bg: "#2b3a67", a: "#f4a259", b: "#e76f51", c: "#ffe8a3", ink: "#fff4e0" } }
     },
     {
-      id: "project-02", title: "Project 02", subtitle: "a short tagline",
+      id: "project-02", title: "Cross Stitch Generator", subtitle: "a short tagline",
       year: "2026", tags: ["research"],
       blurb: "Describe what you built, why, and what you learned. Edit me in js/data.js.",
       url: null,
+      /* this spread has no ruled lines, so the blurb is typed onto the open right page */
+      spread: { left: "assets/spreads/cross-stitch-left.jpg", right: "assets/spreads/cross-stitch-right.jpg", text: "right" },
+      links: { github: null, site: null },
       cover: { image: "assets/covers/project-02.jpg", palette: { bg: "#efe1c4", a: "#c8202a", b: "#3a2a1e", c: "#e8d2a8", ink: "#2a2a2a" } }
     },
     {
